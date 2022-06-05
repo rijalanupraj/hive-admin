@@ -4,7 +4,9 @@ import { BrowserRouter } from "react-router-dom";
 import "./App.css";
 
 // theme
+import ThemeProvider from './theme';
 
+import ThemeColorPresets from './components/ThemeColorPresets';
 
 // colors
 
@@ -15,12 +17,14 @@ import AdminRoute from "./routes/adminRoute";
 
 const App = () => {
 
-  return (   
-
+  return (
+    <ThemeProvider>
+      <ThemeColorPresets>
           <BrowserRouter>          
             <AdminRoute />
           </BrowserRouter>
-
+      </ThemeColorPresets>
+    </ThemeProvider>
   );
 };
 
