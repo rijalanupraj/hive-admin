@@ -10,7 +10,6 @@ import ThemeColorPresets from "./components/ThemeColorPresets";
 
 import ThemeLocalization from "./components/ThemeLocalization";
 
-import RtlLayout from "./components/RtlLayout";
 
 import NotistackProvider from "./components/NotistackProvider";
 // colors
@@ -23,13 +22,11 @@ const App = () => {
     <ThemeProvider>
       <ThemeColorPresets>
         <ThemeLocalization>
-          <RtlLayout>
             <NotistackProvider>
               <BrowserRouter>
                 <AdminRoute />
               </BrowserRouter>
             </NotistackProvider>
-          </RtlLayout>
         </ThemeLocalization>
       </ThemeColorPresets>
     </ThemeProvider>
