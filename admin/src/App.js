@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+// External Import
+import { BrowserRouter } from "react-router-dom";
 
-function App() {
+import "./App.css";
+
+// theme
+import ThemeProvider from "./theme";
+
+import ThemeColorPresets from "./components/ThemeColorPresets";
+
+import ThemeLocalization from "./components/ThemeLocalization";
+
+import RtlLayout from "./components/RtlLayout";
+
+import NotistackProvider from "./components/NotistackProvider";
+// colors
+
+// Route Import
+import AdminRoute from "./routes/adminRoute";
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider>
+      <ThemeColorPresets>
+        <ThemeLocalization>
+          <RtlLayout>
+            <NotistackProvider>
+              <BrowserRouter>
+                <AdminRoute />
+              </BrowserRouter>
+            </NotistackProvider>
+          </RtlLayout>
+        </ThemeLocalization>
+      </ThemeColorPresets>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
