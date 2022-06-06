@@ -9,6 +9,10 @@ import {
 
 } from '../pages';
 
+import DashboardHeader from '../layouts/dashboard/header';
+
+
+
 
 
 // Internal Import
@@ -22,7 +26,7 @@ const adminRoute = () => {
 
   return (
     <>
-      
+    <DashboardHeader>
       <main>
         <Routes>
           {/* Normal Routes Starts */}
@@ -41,6 +45,8 @@ const adminRoute = () => {
           {/* Remaining Route Ends */}
         </Routes>
       </main>
+      </DashboardHeader>
+
     </>
   );
 };

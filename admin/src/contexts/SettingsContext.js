@@ -10,7 +10,7 @@ import { defaultSettings } from '../config';
 // ----------------------------------------------------------------------
 
 const initialState = {
-  ...defaultSettings,
+  themeMode: 'dark',
   onChangeMode: () => {},
   onToggleMode: () => {},
   onChangeDirection: () => {},
