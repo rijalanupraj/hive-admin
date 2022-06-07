@@ -9,6 +9,10 @@ import {
 
 } from '../pages';
 
+import {
+  UserList
+} from "../pages"
+
 import DashboardHeader from '../layouts/dashboard/header';
 import DashboardLayout from '../layouts/dashboard';
 
@@ -27,12 +31,13 @@ const adminRoute = () => {
   return (
     <>
  
-    <DashboardLayout>
+    <DashboardLayout />
       <main>
         
         <Routes>
           {/* Normal Routes Starts */}
-          <Route exact path='/' element={<Home />} />
+          <Route exact path='/home' element={<Home />} />
+          <Route exact path='/user' element={<UserList />} />
 
          
           {/* Normal Routes Ends */}
@@ -48,7 +53,6 @@ const adminRoute = () => {
         </Routes>
         
       </main>
-      </DashboardLayout>
      
 
     </>
