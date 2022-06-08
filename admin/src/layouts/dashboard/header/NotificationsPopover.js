@@ -94,6 +94,7 @@ export default function NotificationsPopover() {
               </ListSubheader>
             }
           >
+            
             {notifications.slice(0, 2).map((notification) => (
               <NotificationItem key={notification.id} notification={notification} />
             ))}
@@ -107,7 +108,7 @@ export default function NotificationsPopover() {
               </ListSubheader>
             }
           >
-            {notifications.slice(2, 5).map((notification) => (
+            {notifications.slice(2, 4).map((notification) => (
               <NotificationItem key={notification.id} notification={notification} />
             ))}
           </List>

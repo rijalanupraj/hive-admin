@@ -7,7 +7,7 @@ import { Box, Divider, Typography, Stack, MenuItem } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // hooks
-import useAuth from '../../../hooks/useAuth';
+
 import useIsMountedRef from '../../../hooks/useIsMountedRef';
 // components
 import MyAvatar from '../../../components/MyAvatar';
@@ -35,8 +35,6 @@ const MENU_OPTIONS = [
 
 export default function AccountPopover() {
   const navigate = useNavigate();
-
-  const { user, logout } = useAuth();
 
   const isMountedRef = useIsMountedRef();
 
@@ -104,10 +102,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {user?.displayName}
+            {/* {user?.displayName} */} Mamba
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {user?.email}
+            {/* {user?.email} */} mamba@gmail.com
           </Typography>
         </Box>
 

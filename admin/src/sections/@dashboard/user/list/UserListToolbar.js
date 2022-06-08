@@ -63,13 +63,7 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName,
             <Iconify icon={'eva:trash-2-outline'} />
           </IconButton>
         </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <Iconify icon={'ic:round-filter-list'} />
-          </IconButton>
-        </Tooltip>
-      )}
+      ) : null}
     </RootStyle>
   );
 }

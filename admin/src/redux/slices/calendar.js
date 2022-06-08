@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 // utils
-import axios from '../../utils/axios';
+// import axios from '../../utils/axios';
 //
 import { dispatch } from '../store';
 
@@ -103,12 +103,12 @@ export const { openModal, closeModal, selectEvent } = slice.actions;
 export function getEvents() {
   return async () => {
     dispatch(slice.actions.startLoading());
-    try {
-      const response = await axios.get('/api/calendar/events');
-      dispatch(slice.actions.getEventsSuccess(response.data.events));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
-    }
+    // try {
+    //   const response = await axios.get('/api/calendar/events');
+    //   dispatch(slice.actions.getEventsSuccess(response.data.events));
+    // } catch (error) {
+    //   dispatch(slice.actions.hasError(error));
+    // }
   };
 }
 
@@ -117,12 +117,12 @@ export function getEvents() {
 export function createEvent(newEvent) {
   return async () => {
     dispatch(slice.actions.startLoading());
-    try {
-      const response = await axios.post('/api/calendar/events/new', newEvent);
-      dispatch(slice.actions.createEventSuccess(response.data.event));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
-    }
+    // try {
+    //   const response = await axios.post('/api/calendar/events/new', newEvent);
+    //   dispatch(slice.actions.createEventSuccess(response.data.event));
+    // } catch (error) {
+    //   dispatch(slice.actions.hasError(error));
+    // }
   };
 }
 
@@ -131,15 +131,15 @@ export function createEvent(newEvent) {
 export function updateEvent(eventId, updateEvent) {
   return async () => {
     dispatch(slice.actions.startLoading());
-    try {
-      const response = await axios.post('/api/calendar/events/update', {
-        eventId,
-        updateEvent,
-      });
-      dispatch(slice.actions.updateEventSuccess(response.data.event));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
-    }
+    // try {
+    //   const response = await axios.post('/api/calendar/events/update', {
+    //     eventId,
+    //     updateEvent,
+    //   });
+    //   dispatch(slice.actions.updateEventSuccess(response.data.event));
+    // } catch (error) {
+    //   dispatch(slice.actions.hasError(error));
+    // }
   };
 }
 

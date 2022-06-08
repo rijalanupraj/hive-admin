@@ -29,7 +29,7 @@ UserCard.propTypes = {
 };
 
 export default function UserCard({ user }) {
-  const { name, cover, position, follower, totalPost, avatarUrl, following } = user;
+  const { name, cover, follower, avatarUrl, following } = user;
 
   return (
     <Card sx={{ textAlign: 'center' }}>
@@ -70,9 +70,7 @@ export default function UserCard({ user }) {
         {name}
       </Typography>
 
-      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-        {position}
-      </Typography>
+    
 
       <Stack alignItems="center">
         <SocialsButton initialColor sx={{ my: 2.5 }} />
@@ -97,9 +95,9 @@ export default function UserCard({ user }) {
 
         <div>
           <Typography variant="caption" component="div" sx={{ mb: 0.75, color: 'text.disabled' }}>
-            Total Post
+            Total Solutions
           </Typography>
-          <Typography variant="subtitle1">{fShortenNumber(totalPost)}</Typography>
+          <Typography variant="subtitle1">100</Typography>
         </div>
       </Box>
     </Card>

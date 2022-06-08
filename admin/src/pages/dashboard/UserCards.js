@@ -40,7 +40,7 @@ export default function UserCards() {
             },
           }}
         >
-          {_userCards.map((user) => (
+          {_userCards.slice(0,10).map((user) => (
             <UserCard key={user.id} user={user} />
           ))}
         </Box>

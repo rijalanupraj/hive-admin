@@ -18,8 +18,7 @@ import {
   InputAdornment,
   FormControlLabel,
 } from '@mui/material';
-// hooks
-import useAuth from '../../../../hooks/useAuth';
+
 // utils
 import { fDate } from '../../../../utils/formatTime';
 import { fShortenNumber } from '../../../../utils/formatNumber';
@@ -36,7 +35,6 @@ ProfilePostCard.propTypes = {
 };
 
 export default function ProfilePostCard({ post }) {
-  const { user } = useAuth();
 
   const commentInputRef = useRef(null);
 
@@ -79,7 +77,7 @@ export default function ProfilePostCard({ post }) {
         avatar={<MyAvatar />}
         title={
           <Link to="#" variant="subtitle2" color="text.primary" component={RouterLink}>
-            {user?.displayName}
+            Mamba
           </Link>
         }
         subheader={
