@@ -1,5 +1,5 @@
 // routes
-
+import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
 import Label from '../../../components/Label';
 import SvgIconStyle from '../../../components/SvgIconStyle';
@@ -15,7 +15,6 @@ const ICONS = {
   mail: getIcon('ic_mail'),
   user: getIcon('ic_user'),
   kanban: getIcon('ic_kanban'),
-  banking: getIcon('ic_banking'),
   calendar: getIcon('ic_calendar'),
   ecommerce: getIcon('ic_ecommerce'),
   analytics: getIcon('ic_analytics'),
@@ -29,11 +28,8 @@ const navConfig = [
   {
     subheader: 'general',
     items: [
-      { title: 'app', path: '/', icon: ICONS.dashboard },
-      { title: 'e-commerce', path: '/', icon: ICONS.ecommerce },
-      { title: 'analytics', path: '/', icon: ICONS.analytics },
-      { title: 'banking', path: '/', icon: ICONS.banking },
-      { title: 'booking', path: '/', icon: ICONS.booking },
+      { title: 'analytics website', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
+      { title: 'analytics post', path: PATH_DASHBOARD.general.booking, icon: ICONS.booking },
     ],
   },
 
@@ -45,45 +41,19 @@ const navConfig = [
       // MANAGEMENT : USER
       {
         title: 'user',
-        path: '/',
+        path: PATH_DASHBOARD.user.root,
         icon: ICONS.user,
         children: [
-          { title: 'profile', path: '/' },
-          { title: 'cards', path: '/' },
-          { title: 'list', path: '/' },
-          { title: 'create', path: '/' },
-          { title: 'edit', path: '/' },
-          { title: 'account', path: '/' },
+        
+          { title: 'Top User', path: PATH_DASHBOARD.user.cards },
+          { title: 'list', path: PATH_DASHBOARD.user.list },
+          { title: 'create', path: PATH_DASHBOARD.user.newUser },
+          { title: 'edit', path: PATH_DASHBOARD.user.editById },
+          { title: 'account', path: PATH_DASHBOARD.user.account },
         ],
       },
 
-      // MANAGEMENT : E-COMMERCE
-      {
-        title: 'e-commerce',
-        path: '/',
-        icon: ICONS.cart,
-        children: [
-          { title: 'shop', path: '/' },
-          { title: 'product', path: '/' },
-          { title: 'list', path: '/' },
-          { title: 'create', path: '/' },
-          { title: 'edit', path: '/' },
-          { title: 'checkout', path: '/' },
-          { title: 'invoice', path: '/' },
-        ],
-      },
-
-      // MANAGEMENT : BLOG
-      {
-        title: 'blog',
-        path: '/',
-        icon: ICONS.blog,
-        children: [
-          { title: 'posts', path: '/' },
-          { title: 'post', path: '/' },
-          { title: 'new post', path: '/' },
-        ],
-      },
+      
     ],
   },
 
@@ -92,21 +62,12 @@ const navConfig = [
   {
     subheader: 'app',
     items: [
-      {
-        title: 'mail',
-        path: '/',
-        icon: ICONS.mail,
-        info: (
-          <Label variant="outlined" color="error">
-            +32
-          </Label>
-        ),
-      },
-      { title: 'chat', path: '/', icon: ICONS.chat },
-      { title: 'calendar', path: '/', icon: ICONS.calendar },
+      
+      { title: 'chat', path: PATH_DASHBOARD.chat.root, icon: ICONS.chat },
+      { title: 'calendar', path: PATH_DASHBOARD.calendar, icon: ICONS.calendar },
       {
         title: 'kanban',
-        path: '/',
+        path: PATH_DASHBOARD.kanban,
         icon: ICONS.kanban,
       },
     ],
