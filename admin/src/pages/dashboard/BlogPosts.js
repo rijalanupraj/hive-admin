@@ -7,7 +7,7 @@ import { Grid, Button, Container, Stack } from '@mui/material';
 import useSettings from '../../hooks/useSettings';
 import useIsMountedRef from '../../hooks/useIsMountedRef';
 // utils
-import axios from '../../utils/axios';
+// import axios from '../../utils/axios';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // components
@@ -54,7 +54,7 @@ export default function BlogPosts() {
 
   const getAllPosts = useCallback(async () => {
     try {
-      const response = await axios.get('/api/blog/posts/all');
+      // const response = await axios.get('/api/blog/posts/all');
 
       if (isMountedRef.current) {
         setPosts(response.data.posts);

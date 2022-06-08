@@ -62,7 +62,7 @@ export default function ContactsPopover() {
         }}
       >
         <Typography variant="h6" sx={{ p: 1.5 }}>
-          Contacts <Typography component="span">({_contacts.length})</Typography>
+          Moderators <Typography component="span">({_contacts.length})</Typography>
         </Typography>
 
         <Scrollbar sx={{ height: ITEM_HEIGHT * 6 }}>

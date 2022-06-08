@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { createContext, useCallback, useEffect, useReducer } from 'react';
 import { CognitoUser, CognitoUserPool, AuthenticationDetails } from 'amazon-cognito-identity-js';
 // utils
-import axios from '../utils/axios';
+// import axios from '../utils/axios';
 // routes
 import { PATH_AUTH } from '../routes/paths';
 //
@@ -91,7 +91,7 @@ function AuthProvider({ children }) {
               const attributes = await getUserAttributes(user);
               const token = session.getIdToken().getJwtToken();
               // use the token or Bearer depend on the wait BE handle, by default amplify API only need to token.
-              axios.defaults.headers.common.Authorization = token;
+              // axios.defaults.headers.common.Authorization = token;
               dispatch({
                 type: 'AUTHENTICATE',
                 payload: { isAuthenticated: true, user: attributes },

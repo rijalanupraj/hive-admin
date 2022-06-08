@@ -9,7 +9,7 @@ import { Link, Typography, Autocomplete, InputAdornment, Popper } from '@mui/mat
 // hooks
 import useIsMountedRef from '../../../../hooks/useIsMountedRef';
 // utils
-import axios from '../../../../utils/axios';
+// import axios from '../../../../utils/axios';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 // components
@@ -35,22 +35,22 @@ export default function ShopProductSearch() {
 
   const [searchResults, setSearchResults] = useState([]);
 
-  const handleChangeSearch = async (value) => {
-    try {
-      setSearchQuery(value);
-      if (value) {
-        const response = await axios.get('/api/products/search', {
-          params: { query: value },
-        });
+  // const handleChangeSearch = async (value) => {
+  //   try {
+  //     setSearchQuery(value);
+  //     if (value) {
+  //       const response = await axios.get('/api/products/search', {
+  //         params: { query: value },
+  //       });
 
-        if (isMountedRef.current) {
-          setSearchResults(response.data.results);
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //       if (isMountedRef.current) {
+  //         setSearchResults(response.data.results);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   const handleClick = (name) => {
     navigate(`${PATH_DASHBOARD.eCommerce.root}/product/${paramCase(name)}`);
@@ -69,7 +69,7 @@ export default function ShopProductSearch() {
       popupIcon={null}
       PopperComponent={PopperStyle}
       options={searchResults}
-      onInputChange={(event, value) => handleChangeSearch(value)}
+      // onInputChange={(event, value) => handleChangeSearch(value)}
       getOptionLabel={(product) => product.name}
       noOptionsText={<SearchNotFound searchQuery={searchQuery} />}
       isOptionEqualToValue={(option, value) => option.id === value.id}

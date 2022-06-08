@@ -40,7 +40,7 @@ export default function Image({ ratio, disabledEffect = false, effect = 'blur', 
           component={LazyLoadImage}
           wrapperClassName="wrapper"
           effect={disabledEffect ? undefined : effect}
-          placeholderSrc="https://zone-assets-api.vercel.app/assets/img_placeholder.svg"
+          placeholderSrc="https://pbs.twimg.com/media/EYUhsP4U0AATo-h?format=jpg&name=900x900"
           sx={{ width: 1, height: 1, objectFit: 'cover' }}
           {...other}
         />

@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import sum from 'lodash/sum';
 import uniqBy from 'lodash/uniqBy';
 // utils
-import axios from '../../utils/axios';
+// import axios from '../../utils/axios';
 //
 import { dispatch } from '../store';
 
@@ -213,12 +213,12 @@ export const {
 export function getProducts() {
   return async () => {
     dispatch(slice.actions.startLoading());
-    try {
-      const response = await axios.get('/api/products');
-      dispatch(slice.actions.getProductsSuccess(response.data.products));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
-    }
+    // try {
+    //   const response = await axios.get('/api/products');
+    //   dispatch(slice.actions.getProductsSuccess(response.data.products));
+    // } catch (error) {
+    //   dispatch(slice.actions.hasError(error));
+    // }
   };
 }
 
@@ -227,14 +227,14 @@ export function getProducts() {
 export function getProduct(name) {
   return async () => {
     dispatch(slice.actions.startLoading());
-    try {
-      const response = await axios.get('/api/products/product', {
-        params: { name },
-      });
-      dispatch(slice.actions.getProductSuccess(response.data.product));
-    } catch (error) {
-      console.error(error);
-      dispatch(slice.actions.hasError(error));
-    }
+    // try {
+    //   const response = await axios.get('/api/products/product', {
+    //     params: { name },
+    //   });
+    //   dispatch(slice.actions.getProductSuccess(response.data.product));
+    // } catch (error) {
+    //   console.error(error);
+    //   dispatch(slice.actions.hasError(error));
+    // }
   };
 }

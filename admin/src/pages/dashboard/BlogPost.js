@@ -9,7 +9,7 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 import useSettings from '../../hooks/useSettings';
 import useIsMountedRef from '../../hooks/useIsMountedRef';
 // utils
-import axios from '../../utils/axios';
+// import axios from '../../utils/axios';
 // components
 import Page from '../../components/Page';
 import Markdown from '../../components/Markdown';
@@ -41,9 +41,9 @@ export default function BlogPost() {
 
   const getPost = useCallback(async () => {
     try {
-      const response = await axios.get('/api/blog/post', {
-        params: { title },
-      });
+      // const response = await axios.get('/api/blog/post', {
+      //   params: { title },
+      // });
 
       if (isMountedRef.current) {
         setPost(response.data.post);
@@ -56,9 +56,9 @@ export default function BlogPost() {
 
   const getRecentPosts = useCallback(async () => {
     try {
-      const response = await axios.get('/api/blog/posts/recent', {
-        params: { title },
-      });
+      // const response = await axios.get('/api/blog/posts/recent', {
+      //   params: { title },
+      // });
 
       if (isMountedRef.current) {
         setRecentPosts(response.data.recentPosts);

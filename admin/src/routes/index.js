@@ -4,12 +4,9 @@ import { Navigate, useRoutes, useLocation } from 'react-router-dom';
 
 import DashboardLayout from '../layouts/dashboard';
 
-// guards
-import GuestGuard from '../guards/GuestGuard';
 
-// import RoleBasedGuard from '../guards/RoleBasedGuard';
 // config
-import { PATH_AFTER_LOGIN } from '../config';
+
 // components
 import LoadingScreen from '../components/LoadingScreen';
 
@@ -28,32 +25,7 @@ const Loadable = (Component) => (props) => {
 
 export default function Router() {
   return useRoutes([
-    // {
-    //   path: 'auth',
-    //   children: [
-    //     {
-    //       path: 'login',
-    //       element: (
-    //         <GuestGuard>
-    //           <Login />
-    //         </GuestGuard>
-    //       ),
-    //     },
-    //     {
-    //       path: 'register',
-    //       element: (
-    //         <GuestGuard>
-    //           <Register />
-    //         </GuestGuard>
-    //       ),
-    //     },
-    //     { path: 'login-unprotected', element: <Login /> },
-    //     { path: 'register-unprotected', element: <Register /> },
-    //     { path: 'reset-password', element: <ResetPassword /> },
-    //     { path: 'verify', element: <VerifyCode /> },
-    //   ],
-    // },
-
+    
     // Dashboard Routes
     {
       path: 'dashboard',
@@ -125,32 +97,6 @@ export default function Router() {
       ],
     },
 
-    // Main Routes
-
-    // {
-    //   path: '*',
-    //   element: <LogoOnlyLayout />,
-    //   children: [
-    //     { path: 'coming-soon', element: <ComingSoon /> },
-    //     { path: 'maintenance', element: <Maintenance /> },
-    //     { path: 'pricing', element: <Pricing /> },
-    //     { path: 'payment', element: <Payment /> },
-    //     { path: '500', element: <Page500 /> },
-    //     { path: '404', element: <NotFound /> },
-    //     { path: '*', element: <Navigate to="/404" replace /> },
-    //   ],
-    // },
-    // {
-    //   path: '/',
-    //   element: <MainLayout />,
-    //   children: [
-    //     { element: <HomePage />, index: true },
-    //     { path: 'about-us', element: <About /> },
-    //     { path: 'contact-us', element: <Contact /> },
-    //     { path: 'faqs', element: <Faqs /> },
-    //   ],
-    // },
-    // { path: '*', element: <Navigate to="/404" replace /> },
   ]);
 }
 
@@ -182,7 +128,7 @@ const Chat = Loadable(lazy(() => import('../pages/dashboard/Chat')));
 const Mail = Loadable(lazy(() => import('../pages/dashboard/Mail')));
 const Calendar = Loadable(lazy(() => import('../pages/dashboard/Calendar')));
 const Kanban = Loadable(lazy(() => import('../pages/dashboard/Kanban')));
-// Main
+
 
 
 
