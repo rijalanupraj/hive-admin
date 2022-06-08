@@ -12,7 +12,7 @@ import { HEADER, NAVBAR } from '../../config';
 //
 import DashboardHeader from './header';
 import NavbarVertical from './navbar/NavbarVertical';
-
+import NavbarHorizontal from './navbar/NavbarHorizontal';
 
 // ----------------------------------------------------------------------
 
@@ -53,11 +53,13 @@ export default function DashboardLayout() {
   if (verticalLayout) {
     return (
       <>
-        {/* <DashboardHeader onOpenSidebar={() => setOpen(true)} verticalLayout={verticalLayout} />
+        <DashboardHeader onOpenSidebar={() => setOpen(true)} verticalLayout={verticalLayout} />
 
-        
-          <NavbarVertical isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} /> */}
-      
+        {isDesktop ? (
+          <NavbarHorizontal />
+        ) : (
+          <NavbarVertical isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
+        )}
 
         <Box
           component="main"

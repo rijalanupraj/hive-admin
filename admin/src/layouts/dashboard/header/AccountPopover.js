@@ -5,10 +5,10 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem } from '@mui/material';
 // routes
-// import { PATH_DASHBOARD, PATH_AUTH } from '../../../routes/paths';
+import { PATH_DASHBOARD } from '../../../routes/paths';
 // hooks
-// import useAuth from '../../../hooks/useAuth';
-// import useIsMountedRef from '../../../hooks/useIsMountedRef';
+import useAuth from '../../../hooks/useAuth';
+import useIsMountedRef from '../../../hooks/useIsMountedRef';
 // components
 import MyAvatar from '../../../components/MyAvatar';
 import MenuPopover from '../../../components/MenuPopover';
@@ -23,22 +23,22 @@ const MENU_OPTIONS = [
   },
   {
     label: 'Profile',
-    linkTo: "/",
+    linkTo: PATH_DASHBOARD.user.profile,
   },
   {
     label: 'Settings',
-    linkTo: "/",
+    linkTo: PATH_DASHBOARD.user.account,
   },
 ];
 
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  // const { user, logout } = useAuth();
+  const { user, logout } = useAuth();
 
-  // const isMountedRef = useIsMountedRef();
+  const isMountedRef = useIsMountedRef();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -52,19 +52,19 @@ export default function AccountPopover() {
     setOpen(null);
   };
 
-  // const handleLogout = async () => {
-  //   try {
-  //     await logout();
-  //     navigate(PATH_AUTH.login, { replace: true });
+  const handleLogout = async () => {
+    try {
+      // await logout();
+      // navigate(PATH_AUTH.login, { replace: true });
 
-  //     if (isMountedRef.current) {
-  //       handleClose();
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     enqueueSnackbar('Unable to logout!', { variant: 'error' });
-  //   }
-  // };
+      if (isMountedRef.current) {
+        handleClose();
+      }
+    } catch (error) {
+      console.error(error);
+      enqueueSnackbar('Unable to logout!', { variant: 'error' });
+    }
+  };
 
   return (
     <>
@@ -104,10 +104,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {/* {user?.displayName} */} Name
+            {user?.displayName}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {/* {user?.email} */} Email
+            {user?.email}
           </Typography>
         </Box>
 
@@ -123,8 +123,7 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        {/* <MenuItem onClick={handleLogout} sx={{ m: 1 }}> */}
-        <MenuItem sx={{ m: 1 }}>
+        <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
           Logout
         </MenuItem>
       </MenuPopover>

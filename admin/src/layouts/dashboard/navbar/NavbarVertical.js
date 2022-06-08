@@ -17,6 +17,7 @@ import Scrollbar from '../../../components/Scrollbar';
 import { NavSectionVertical } from '../../../components/nav-section';
 //
 import navConfig from './NavConfig';
+
 import NavbarAccount from './NavbarAccount';
 import CollapseButton from './CollapseButton';
 
@@ -41,19 +42,19 @@ NavbarVertical.propTypes = {
 export default function NavbarVertical({ isOpenSidebar, onCloseSidebar }) {
   const theme = useTheme();
 
-  // const { pathname } = useLocation();
+  const { pathname } = useLocation();
 
   const isDesktop = useResponsive('up', 'lg');
 
   const { isCollapse, collapseClick, collapseHover, onToggleCollapse, onHoverEnter, onHoverLeave } =
     useCollapseDrawer();
 
-  // useEffect(() => {
-  //   if (isOpenSidebar) {
-  //     onCloseSidebar();
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [pathname]);
+  useEffect(() => {
+    if (isOpenSidebar) {
+      onCloseSidebar();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
   const renderContent = (
     <Scrollbar
@@ -72,15 +73,13 @@ export default function NavbarVertical({ isOpenSidebar, onCloseSidebar }) {
           ...(isCollapse && { alignItems: 'center' }),
         }}
       >
-
-        {/*  logo */}
-        {/* <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Logo />
 
           {isDesktop && !isCollapse && (
             <CollapseButton onToggleCollapse={onToggleCollapse} collapseClick={collapseClick} />
           )}
-        </Stack> */}
+        </Stack>
 
         <NavbarAccount isCollapse={isCollapse} />
       </Stack>
@@ -88,7 +87,6 @@ export default function NavbarVertical({ isOpenSidebar, onCloseSidebar }) {
       <NavSectionVertical navConfig={navConfig} isCollapse={isCollapse} />
 
       <Box sx={{ flexGrow: 1 }} />
-
     </Scrollbar>
   );
 
