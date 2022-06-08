@@ -16,6 +16,7 @@ import {
   Typography,
   TableContainer,
   TablePagination,
+  Link,
 } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
@@ -36,9 +37,10 @@ import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@das
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
+  { id: 'name', label: 'UserName', alignRight: false },
+  { id: 'email', label: 'Email', alignRight: false },
+  { id: 'following', label: 'Following', alignRight: false },
+  { id: 'follower', label: 'Follower', alignRight: false },
   { id: 'isVerified', label: 'Verified', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
   { id: '' },
@@ -123,7 +125,7 @@ export default function UserList() {
           heading="User List"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.root },
+            { name: 'Profile', href: PATH_DASHBOARD.user.root },
             { name: 'List' },
           ]}
           action={
@@ -145,6 +147,7 @@ export default function UserList() {
             onFilterName={handleFilterByName}
             onDeleteUsers={() => handleDeleteMultiUser(selected)}
           />
+          
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -160,7 +163,7 @@ export default function UserList() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, company, avatarUrl, isVerified } = row;
+                    const { id, name, email, follower, status, following, avatarUrl, isVerified } = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -176,13 +179,14 @@ export default function UserList() {
                           <Checkbox checked={isItemSelected} onClick={() => handleClick(name)} />
                         </TableCell>
                         <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-                          <Avatar alt={name} src={avatarUrl} sx={{ mr: 2 }} />
+                          <Avatar alt={name} src={avatarUrl} sx={{ mr: 2 }}/>
                           <Typography variant="subtitle2" noWrap>
-                            {name}
+                          <Link href={PATH_DASHBOARD.user.root}>{name}</Link>
                           </Typography>
                         </TableCell>
-                        <TableCell align="left">{company}</TableCell>
-                        <TableCell align="left">{role}</TableCell>
+                        <TableCell align="left">{email}</TableCell>
+                        <TableCell align="left">{following}</TableCell>
+                        <TableCell align="left">{follower}</TableCell>
                         <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
                         <TableCell align="left">
                           <Label
