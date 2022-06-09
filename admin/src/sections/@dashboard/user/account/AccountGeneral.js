@@ -36,7 +36,7 @@ export default function AccountGeneral() {
     city: "Patan" || '',
     zipCode: "010010" || '',
     about: "IT Guy" || '',
-    isPublic: "No" || '',
+    isDone: "No" || '',
   };
 
   const methods = useForm({
@@ -102,7 +102,7 @@ export default function AccountGeneral() {
               }
             />
 
-            <RHFSwitch name="isPublic" labelPlacement="start" label="Public Profile" sx={{ mt: 5 }} />
+            <RHFSwitch name="isDone" labelPlacement="start" label="Done" sx={{ mt: 5 }} />
           </Card>
         </Grid>
 

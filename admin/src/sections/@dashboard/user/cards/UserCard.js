@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Card, Avatar, Divider, Typography, Stack } from '@mui/material';
+import { Box, Card, Avatar, Divider, Typography, Stack, Link } from '@mui/material';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 // utils
 import cssStyles from '../../../../utils/cssStyles';
 import { fShortenNumber } from '../../../../utils/formatNumber';
@@ -67,7 +68,7 @@ export default function UserCard({ user }) {
       </Box>
 
       <Typography variant="subtitle1" sx={{ mt: 6 }}>
-        {name}
+       <Link href={PATH_DASHBOARD.user.root}>{name}</Link>
       </Typography>
 
     
