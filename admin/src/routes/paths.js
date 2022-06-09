@@ -5,7 +5,7 @@ function path(root, sublink) {
 }
 
 
-const ROOTS_AUTH = '/';
+const ROOTS_AUTH = '/auth';
 const ROOTS_DASHBOARD = '/dashboard';
 
 // ----------------------------------------------------------------------
