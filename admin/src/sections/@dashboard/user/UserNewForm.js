@@ -1,23 +1,37 @@
-import PropTypes from 'prop-types';
-import * as Yup from 'yup';
-import { useCallback, useEffect, useMemo } from 'react';
-import { useSnackbar } from 'notistack';
-import { useNavigate } from 'react-router-dom';
+import PropTypes from "prop-types";
+import * as Yup from "yup";
+import { useCallback, useEffect, useMemo } from "react";
+import { useSnackbar } from "notistack";
+import { useNavigate } from "react-router-dom";
 // form
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 // @mui
-import { LoadingButton } from '@mui/lab';
-import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel } from '@mui/material';
+import { LoadingButton } from "@mui/lab";
+import {
+  Box,
+  Card,
+  Grid,
+  Stack,
+  Switch,
+  Typography,
+  FormControlLabel,
+} from "@mui/material";
 // utils
-import { fData } from '../../../utils/formatNumber';
+import { fData } from "../../../utils/formatNumber";
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import { PATH_DASHBOARD } from "../../../routes/paths";
 // _mock
-import { countries } from '../../../_mock';
+import { countries } from "../../../_mock";
 // components
-import Label from '../../../components/Label';
-import { FormProvider, RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../components/hook-form';
+import Label from "../../../components/Label";
+import {
+  FormProvider,
+  RHFSelect,
+  RHFSwitch,
+  RHFTextField,
+  RHFUploadAvatar,
+} from "../../../components/hook-form";
 
 // ----------------------------------------------------------------------
 
@@ -32,33 +46,24 @@ export default function UserNewForm({ isEdit, currentUser }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    email: Yup.string().required('Email is required').email(),
-    phoneNumber: Yup.string().required('Phone number is required'),
-    address: Yup.string().required('Address is required'),
-    country: Yup.string().required('country is required'),
-    company: Yup.string().required('Company is required'),
-    state: Yup.string().required('State is required'),
-    city: Yup.string().required('City is required'),
-    role: Yup.string().required('Role Number is required'),
-    avatarUrl: Yup.mixed().test('required', 'Avatar is required', (value) => value !== ''),
+    name: Yup.string().required("Name is required"),
+    email: Yup.string().required("Email is required").email(),
+    username: Yup.string().required("User name is required"),
+    avatarUrl: Yup.mixed().test(
+      "required",
+      "Avatar is required",
+      (value) => value !== ""
+    ),
   });
 
   const defaultValues = useMemo(
     () => ({
-      name: currentUser?.name || '',
-      email: currentUser?.email || '',
-      phoneNumber: currentUser?.phoneNumber || '',
-      address: currentUser?.address || '',
-      country: currentUser?.country || '',
-      state: currentUser?.state || '',
-      city: currentUser?.city || '',
-      zipCode: currentUser?.zipCode || '',
-      avatarUrl: currentUser?.avatarUrl || '',
+      name: currentUser?.name || "",
+      username: currentUser?.name || "",
+      email: currentUser?.phoneNumber || "",
+      avatarUrl: currentUser?.avatarUrl || "",
       isVerified: currentUser?.isVerified || true,
       status: currentUser?.status,
-      company: currentUser?.company || '',
-      role: currentUser?.role || '',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser]
@@ -94,7 +99,7 @@ export default function UserNewForm({ isEdit, currentUser }) {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
-      enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
+      enqueueSnackbar(!isEdit ? "Create success!" : "Update success!");
       navigate(PATH_DASHBOARD.user.list);
     } catch (error) {
       console.error(error);
@@ -107,7 +112,7 @@ export default function UserNewForm({ isEdit, currentUser }) {
 
       if (file) {
         setValue(
-          'avatarUrl',
+          "avatarUrl",
           Object.assign(file, {
             preview: URL.createObjectURL(file),
           })
@@ -124,8 +129,13 @@ export default function UserNewForm({ isEdit, currentUser }) {
           <Card sx={{ py: 10, px: 3 }}>
             {isEdit && (
               <Label
-                color={values.status !== 'active' ? 'error' : 'success'}
-                sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
+                color={values.status !== "active" ? "error" : "success"}
+                sx={{
+                  textTransform: "uppercase",
+                  position: "absolute",
+                  top: 24,
+                  right: 24,
+                }}
               >
                 {values.status}
               </Label>
@@ -142,10 +152,10 @@ export default function UserNewForm({ isEdit, currentUser }) {
                     variant="caption"
                     sx={{
                       mt: 2,
-                      mx: 'auto',
-                      display: 'block',
-                      textAlign: 'center',
-                      color: 'text.secondary',
+                      mx: "auto",
+                      display: "block",
+                      textAlign: "center",
+                      color: "text.secondary",
                     }}
                   >
                     Allowed *.jpeg, *.jpg, *.png, *.gif
@@ -165,8 +175,12 @@ export default function UserNewForm({ isEdit, currentUser }) {
                     render={({ field }) => (
                       <Switch
                         {...field}
-                        checked={field.value !== 'active'}
-                        onChange={(event) => field.onChange(event.target.checked ? 'banned' : 'active')}
+                        checked={field.value !== "active"}
+                        onChange={(event) =>
+                          field.onChange(
+                            event.target.checked ? "banned" : "active"
+                          )
+                        }
                       />
                     )}
                   />
@@ -176,12 +190,15 @@ export default function UserNewForm({ isEdit, currentUser }) {
                     <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
                       Banned
                     </Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: "text.secondary" }}
+                    >
                       Apply disable account
                     </Typography>
                   </>
                 }
-                sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
+                sx={{ mx: 0, mb: 3, width: 1, justifyContent: "space-between" }}
               />
             )}
 
@@ -193,12 +210,13 @@ export default function UserNewForm({ isEdit, currentUser }) {
                   <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
                     Email Verified
                   </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    Disabling this will automatically send the user a verification email
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    Disabling this will automatically send the user a
+                    verification email
                   </Typography>
                 </>
               }
-              sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
+              sx={{ mx: 0, width: 1, justifyContent: "space-between" }}
             />
           </Card>
         </Grid>
@@ -207,37 +225,42 @@ export default function UserNewForm({ isEdit, currentUser }) {
           <Card sx={{ p: 3 }}>
             <Box
               sx={{
-                display: 'grid',
+                display: "grid",
                 columnGap: 2,
                 rowGap: 3,
-                gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
+                gridTemplateColumns: {
+                  xs: "repeat(1, 1fr)",
+                  sm: "repeat(2, 1fr)",
+                },
               }}
             >
-              <RHFTextField name="name" label="Full Name" />
-              <RHFTextField name="email" label="Email Address" />
-              <RHFTextField name="phoneNumber" label="Phone Number" />
-
-              <RHFSelect name="country" label="Country" placeholder="Country">
-                <option value="" />
-                {countries.map((option) => (
-                  <option key={option.code} value={option.label}>
-                    {option.label}
-                  </option>
-                ))}
-              </RHFSelect>
-
-              <RHFTextField name="state" label="State/Region" />
-              <RHFTextField name="city" label="City" />
-              <RHFTextField name="address" label="Address" />
-              <RHFTextField name="zipCode" label="Zip/Code" />
-              <RHFTextField name="company" label="Company" />
-              <RHFTextField name="role" label="Role" />
+              <RHFTextField
+                name="name"
+                label="Name"
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
+              <RHFTextField
+                name="username"
+                label="User Name"
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
+              <RHFTextField
+                name="email"
+                label="Email"
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+              {/* <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                 {!isEdit ? 'Create User' : 'Save Changes'}
-              </LoadingButton>
+              </LoadingButton> */}
             </Stack>
           </Card>
         </Grid>

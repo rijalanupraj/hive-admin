@@ -15,7 +15,6 @@ import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 // sections
 import {
   AccountGeneral,
-  AccountBilling,
   AccountSocialLinks,
   AccountNotifications,
   AccountChangePassword,
@@ -33,11 +32,6 @@ export default function UserAccount() {
       value: 'general',
       icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
       component: <AccountGeneral />,
-    },
-    {
-      value: 'billing',
-      icon: <Iconify icon={'ic:round-receipt'} width={20} height={20} />,
-      component: <AccountBilling cards={_userPayment} addressBook={_userAddressBook} invoices={_userInvoices} />,
     },
     {
       value: 'notifications',
@@ -63,7 +57,7 @@ export default function UserAccount() {
           heading="Account"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.root },
+            { name: 'Admin', href: PATH_DASHBOARD.user.root },
             { name: 'Account Settings' },
           ]}
         />
