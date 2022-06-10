@@ -10,3 +10,8 @@ export const LOGIN_WITH_EMAIL_FAIL = "LOGIN_WITH_EMAIL_FAIL";
 export const ME_LOADING = "ME_LOADING";
 export const ME_SUCCESS = "ME_SUCCESS";
 export const ME_FAIL = "ME_FAIL";
+
+// ALl Users
+export const ALL_USERS_LOADING = "ALL_USERS_LOADING";
+export const ALL_USERS_SUCCESS = "ALL_USERS_SUCCESS";
+export const ALL_USERS_FAIL = "ALL_USERS_FAIL";

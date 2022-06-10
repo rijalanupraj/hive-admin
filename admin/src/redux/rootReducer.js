@@ -8,6 +8,7 @@ import productReducer from "./slices/product";
 import calendarReducer from "./slices/calendar";
 import kanbanReducer from "./slices/kanban";
 import AuthReducer from "./reducers/authReducer";
+import UsersReducer from "./reducers/usersReducer";
 
 // ----------------------------------------------------------------------
 
@@ -31,7 +32,8 @@ const rootReducer = combineReducers({
   calendar: calendarReducer,
   kanban: kanbanReducer,
   product: persistReducer(productPersistConfig, productReducer),
-  auth: AuthReducer
+  auth: AuthReducer,
+  users: UsersReducer
 });
 
 export { rootPersistConfig, rootReducer };

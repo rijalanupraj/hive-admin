@@ -18,6 +18,7 @@ export const loadMe = navigate => async (dispatch, getState) => {
       type: TYPES.ME_SUCCESS,
       payload: { me: response.data.me }
     });
+    navigate("/dashboard");
   } catch (err) {
     dispatch({
       type: TYPES.ME_FAIL,
