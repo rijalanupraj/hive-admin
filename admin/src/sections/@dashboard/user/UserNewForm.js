@@ -21,8 +21,7 @@ import {
 import { fData } from "../../../utils/formatNumber";
 // routes
 import { PATH_DASHBOARD } from "../../../routes/paths";
-// _mock
-import { countries } from "../../../_mock";
+
 // components
 import Label from "../../../components/Label";
 import {

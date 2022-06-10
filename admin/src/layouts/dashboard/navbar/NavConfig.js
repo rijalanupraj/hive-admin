@@ -49,6 +49,15 @@ const navConfig = [
           { title: 'list', path: PATH_DASHBOARD.user.list },
         ],
       },
+       // MANAGEMENT : QUESTION
+       {
+        title: 'question',
+        path: PATH_DASHBOARD.question.root,
+        icon: ICONS.booking,
+        children: [
+          { title: 'list', path: PATH_DASHBOARD.question.list },
+        ],
+      },
 
       
     ],
