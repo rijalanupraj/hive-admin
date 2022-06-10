@@ -40,6 +40,8 @@ const TABLE_HEAD = [
   { id: 'name', label: 'UserName', alignRight: false },
   { id: 'id', label: 'Question ID', alignRight: false },
   { id: 'id', label: 'Solution ID/Solution', alignRight: false },
+  { id: 'upvote', label: 'Upvote', alignRight: false },
+  { id: 'downvote', label: 'Downvote', alignRight: false },
   { id: 'comment', label: 'Comment', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
   {}
@@ -151,7 +153,7 @@ export default function SolutionList() {
                 />
                 <TableBody>
                   {filterSolutions.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, comment, status, avatarUrl } = row;
+                    const { id, name,upvote, downvote, comment, status, avatarUrl } = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -174,6 +176,8 @@ export default function SolutionList() {
                         </TableCell>
                         <TableCell align="left">{id}</TableCell>
                         <TableCell align="left">{id}</TableCell>
+                        <TableCell align="left">{upvote}</TableCell>
+                        <TableCell align="left">{downvote}</TableCell>
                         <TableCell align="left">{comment}</TableCell>
                         <TableCell align="left">
                           <Label
