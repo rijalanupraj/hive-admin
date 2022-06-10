@@ -58,11 +58,20 @@ export default function Router() {
           ],
         },
 
+        //question
         {
           path: 'question',
           children: [
             { element: <Navigate to="/dashboard/question/list" replace />, index: true },
             { path: 'list', element: <QuestionList /> },
+          ],
+        },
+        //solution
+        {
+          path: 'solution',
+          children: [
+            { element: <Navigate to="/dashboard/solution/list" replace />, index: true },
+            { path: 'list', element: <SolutionList /> },
           ],
         },
        
@@ -99,6 +108,8 @@ const UserCards = Loadable(lazy(() => import('../pages/dashboard/UserCards')));
 const UserList = Loadable(lazy(() => import('../pages/dashboard/UserList')));
 
 const QuestionList = Loadable(lazy(() => import('../pages/dashboard/QuestionList')));
+
+const SolutionList = Loadable(lazy(() => import('../pages/dashboard/SolutionList')));
 
 const UserAccount = Loadable(lazy(() => import('../pages/dashboard/UserAccount')));
 const UserCreate = Loadable(lazy(() => import('../pages/dashboard/UserCreate')));
