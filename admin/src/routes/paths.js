@@ -45,6 +45,11 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/question'),
     list: path(ROOTS_DASHBOARD, '/question/list'),
   },
+
+  solution: {
+    root: path(ROOTS_DASHBOARD, '/solution'),
+    list: path(ROOTS_DASHBOARD, '/solution/list'),
+  },
   
 };
 
