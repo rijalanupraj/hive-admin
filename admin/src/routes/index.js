@@ -1,71 +1,110 @@
-import { Suspense, lazy } from 'react';
-import { Navigate, useRoutes, useLocation } from 'react-router-dom';
+import { Suspense, lazy, useEffect } from "react";
+import { Navigate, useRoutes, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { CircularProgress, Grid } from "@mui/material";
 // layouts
 
-import DashboardLayout from '../layouts/dashboard';
-
+import DashboardLayout from "../layouts/dashboard";
 
 // config
 
 // components
-import LoadingScreen from '../components/LoadingScreen';
+import LoadingScreen from "../components/LoadingScreen";
+import { loadMe } from "../redux/actions/authActions";
 
 // ----------------------------------------------------------------------
 
-const Loadable = (Component) => (props) => {
+const Loadable = Component => props => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { pathname } = useLocation();
 
   return (
-    <Suspense fallback={<LoadingScreen isDashboard={pathname.includes('/dashboard')} />}>
+    <Suspense fallback={<LoadingScreen isDashboard={pathname.includes("/dashboard")} />}>
       <Component {...props} />
     </Suspense>
   );
 };
 
 export default function Router() {
-  return useRoutes([
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const auth = useSelector(state => state.auth);
+
+  // Render Loading Spinner while app is loading
+  const renderLoadingSpinner = () => {
+    return (
+      <Grid
+        container
+        spacing={0}
+        direction='column'
+        alignItems='center'
+        justifyContent='center'
+        style={{ minHeight: "100vh" }}
+      >
+        <Grid item xs={3}>
+          <CircularProgress />;
+        </Grid>
+      </Grid>
+    );
+  };
+
+  useEffect(() => {
+    dispatch(loadMe(navigate));
+  }, [loadMe]);
+
+  useEffect(() => {
+    if (auth.token === null && !auth.isAuthenticated) {
+      dispatch(loadMe(navigate));
+    }
+  }, [auth.token, auth.isAuthenticated]);
+
+  // Not authenticated routes
+  const notAuthenticatedRoutes = useRoutes([
     {
-      path: '/',
-          element:
-              <Login />
-          
+      path: "/login",
+      element: <Login />
+    }
+  ]);
+
+  const authenticatedRoutes = useRoutes([
+    {
+      path: "/",
+      element: <Login />
     },
-    
+
     // Dashboard Routes
     {
-      path: 'dashboard',
-      element: 
-          <DashboardLayout />
-    ,
+      path: "dashboard",
+      element: <DashboardLayout />,
       children: [
         { element: <Navigate to='/dashboard/analytics' replace />, index: true },
-      
-        { path: 'analytics', element: <GeneralAnalytics /> },
-        { path: 'booking', element: <GeneralBooking /> },
 
-        
+        { path: "analytics", element: <GeneralAnalytics /> },
+        { path: "booking", element: <GeneralBooking /> },
+
         {
-          path: 'user',
+          path: "user",
           children: [
-            { element: <Navigate to="/dashboard/user/profile" replace />, index: true },
-            { path: 'profile', element: <UserProfile /> },
-            { path: 'cards', element: <UserCards /> },
-            { path: 'list', element: <UserList /> },
-            { path: 'new', element: <UserCreate /> },
-            { path: ':name/edit', element: <UserCreate /> },
-            { path: 'account', element: <UserAccount /> },
-          ],
+            { element: <Navigate to='/dashboard/user/profile' replace />, index: true },
+            { path: "profile", element: <UserProfile /> },
+            { path: "cards", element: <UserCards /> },
+            { path: "list", element: <UserList /> },
+            { path: "new", element: <UserCreate /> },
+            { path: ":name/edit", element: <UserCreate /> },
+            { path: "account", element: <UserAccount /> }
+          ]
         },
 
         //question
         {
-          path: 'question',
+          path: "question",
           children: [
-            { element: <Navigate to="/dashboard/question/list" replace />, index: true },
-            { path: 'list', element: <QuestionList /> },
-          ],
+            { element: <Navigate to='/dashboard/question/list' replace />, index: true },
+            { path: "list", element: <QuestionList /> }
+          ]
         },
+
+
         //solution
         {
           path: 'solution',
@@ -77,28 +116,36 @@ export default function Router() {
        
         
         {
-          path: 'chat',
+          path: "chat",
           children: [
             { element: <Chat />, index: true },
-            { path: 'new', element: <Chat /> },
-            { path: ':conversationKey', element: <Chat /> },
-          ],
+            { path: "new", element: <Chat /> },
+            { path: ":conversationKey", element: <Chat /> }
+          ]
         },
-        { path: 'calendar', element: <Calendar /> },
-        { path: 'kanban', element: <Kanban /> },
-      ],
-    },
-
+        { path: "calendar", element: <Calendar /> },
+        { path: "kanban", element: <Kanban /> }
+      ]
+    }
   ]);
+
+  if (!auth.appLoaded) {
+    return renderLoadingSpinner();
+  }
+
+  return auth.isAuthenticated ? authenticatedRoutes : notAuthenticatedRoutes;
 }
 
 // IMPORT COMPONENTS
 
 // Authentication
-const Login = Loadable(lazy(() => import('../pages/auth/Login')));
+const Login = Loadable(lazy(() => import("../pages/auth/Login")));
 
 // Dashboard
 
+const GeneralAnalytics = Loadable(lazy(() => import("../pages/dashboard/GeneralAnalytics")));
+const GeneralBooking = Loadable(lazy(() => import("../pages/dashboard/GeneralBooking")));
+=======
 const GeneralAnalytics = Loadable(lazy(() => import('../pages/dashboard/GeneralAnalytics')));
 const GeneralBooking = Loadable(lazy(() => import('../pages/dashboard/GeneralBooking')));
 
@@ -119,6 +166,15 @@ const Calendar = Loadable(lazy(() => import('../pages/dashboard/Calendar')));
 const Kanban = Loadable(lazy(() => import('../pages/dashboard/Kanban')));
 
 
+const UserProfile = Loadable(lazy(() => import("../pages/dashboard/UserProfile")));
+const UserCards = Loadable(lazy(() => import("../pages/dashboard/UserCards")));
+const UserList = Loadable(lazy(() => import("../pages/dashboard/UserList")));
 
+const QuestionList = Loadable(lazy(() => import("../pages/dashboard/QuestionList")));
 
+const UserAccount = Loadable(lazy(() => import("../pages/dashboard/UserAccount")));
+const UserCreate = Loadable(lazy(() => import("../pages/dashboard/UserCreate")));
+const Chat = Loadable(lazy(() => import("../pages/dashboard/Chat")));
 
+const Calendar = Loadable(lazy(() => import("../pages/dashboard/Calendar")));
+const Kanban = Loadable(lazy(() => import("../pages/dashboard/Kanban")));
