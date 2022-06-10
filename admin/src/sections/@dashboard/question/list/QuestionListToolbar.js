@@ -17,14 +17,14 @@ const RootStyle = styled(Toolbar)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-UserListToolbar.propTypes = {
+QuestionListToolbar.propTypes = {
   numSelected: PropTypes.number,
-  filterName: PropTypes.string,
-  onFilterName: PropTypes.func,
-  onDeleteUsers: PropTypes.func,
+  filterQuestion: PropTypes.string,
+  onFilterQuestion: PropTypes.func,
+  onDeleteQuestions: PropTypes.func,
 };
 
-export default function UserListToolbar({ numSelected, filterName, onFilterName, onDeleteUsers }) {
+export default function QuestionListToolbar({ numSelected, filterQuestion, onFilterQuestion, onDeleteQuestions }) {
   const theme = useTheme();
   const isLight = theme.palette.mode === 'light';
 
@@ -44,8 +44,8 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName,
       ) : (
         <InputStyle
           stretchStart={240}
-          value={filterName}
-          onChange={(event) => onFilterName(event.target.value)}
+          value={filterQuestion}
+          onChange={(event) => onFilterQuestion(event.target.value)}
           placeholder="Search user..."
           InputProps={{
             startAdornment: (
@@ -59,7 +59,7 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName,
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton onClick={onDeleteUsers}>
+          <IconButton onClick={onDeleteQuestions}>
             <Iconify icon={'eva:trash-2-outline'} />
           </IconButton>
         </Tooltip>

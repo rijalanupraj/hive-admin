@@ -57,6 +57,14 @@ export default function Router() {
             { path: 'account', element: <UserAccount /> },
           ],
         },
+
+        {
+          path: 'question',
+          children: [
+            { element: <Navigate to="/dashboard/question/list" replace />, index: true },
+            { path: 'list', element: <QuestionList /> },
+          ],
+        },
        
         
         {
@@ -89,6 +97,9 @@ const GeneralBooking = Loadable(lazy(() => import('../pages/dashboard/GeneralBoo
 const UserProfile = Loadable(lazy(() => import('../pages/dashboard/UserProfile')));
 const UserCards = Loadable(lazy(() => import('../pages/dashboard/UserCards')));
 const UserList = Loadable(lazy(() => import('../pages/dashboard/UserList')));
+
+const QuestionList = Loadable(lazy(() => import('../pages/dashboard/QuestionList')));
+
 const UserAccount = Loadable(lazy(() => import('../pages/dashboard/UserAccount')));
 const UserCreate = Loadable(lazy(() => import('../pages/dashboard/UserCreate')));
 const Chat = Loadable(lazy(() => import('../pages/dashboard/Chat')));

@@ -5,13 +5,13 @@ function path(root, sublink) {
 }
 
 
-const ROOTS_AUTH = '/auth';
+const ROOTS_AUTH = '';
 const ROOTS_DASHBOARD = '/dashboard';
 
 // ----------------------------------------------------------------------
 export const PATH_AUTH = {
   root: ROOTS_AUTH,
-  login: path(ROOTS_AUTH, '/login'),
+  login: path(ROOTS_AUTH, '/'),
 };
 
 
@@ -39,6 +39,11 @@ export const PATH_DASHBOARD = {
     newUser: path(ROOTS_DASHBOARD, '/user/new'),
     editById: path(ROOTS_DASHBOARD, `/user/reece-chung/edit`),
     account: path(ROOTS_DASHBOARD, '/user/account')
+  },
+
+  question: {
+    root: path(ROOTS_DASHBOARD, '/question'),
+    list: path(ROOTS_DASHBOARD, '/question/list'),
   },
   
 };
