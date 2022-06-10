@@ -15,6 +15,7 @@ import { question } from './question';
 import { upvote } from './upvote';
 import { downvote } from './downvote';
 import { comment } from './comment';
+import { solution } from './solution';
 
 // ----------------------------------------------------------------------
 
@@ -24,6 +25,7 @@ const _mock = {
   question:(index)=>question[index],
   upvote:(index)=>upvote[index],
   downvote:(index)=>downvote[index],
+  solution:(index)=>solution[index],
   comment:(index)=>comment[index],
   following:(index)=> following[index],
   follower: (index)=> follower[index],

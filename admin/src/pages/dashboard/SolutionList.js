@@ -23,7 +23,7 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
 import useSettings from '../../hooks/useSettings';
 // _mock_
-import { _questionList } from '../../_mock';
+import { _solutionList } from '../../_mock';
 // components
 import Page from '../../components/Page';
 import Label from '../../components/Label';
@@ -32,33 +32,31 @@ import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 // sections
-import { QuestionListHead, QuestionListToolbar, QuestionMoreMenu } from '../../sections/@dashboard/question/list';
+import { SolutionListHead, SolutionListToolbar, SolutionMoreMenu } from '../../sections/@dashboard/solution/list';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'name', label: 'UserName', alignRight: false },
   { id: 'id', label: 'Question ID', alignRight: false },
-  { id: 'question', label: 'Question', alignRight: false },
-  { id: 'upvote', label: 'Upvote', alignRight: false },
-  { id: 'downvote', label: 'Downvote', alignRight: false },
-  { id: 'solution', label: 'Solution', alignRight: false },
+  { id: 'id', label: 'Solution ID/Solution', alignRight: false },
+  { id: 'comment', label: 'Comment', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
   {}
 ];
 
 // ----------------------------------------------------------------------
 
-export default function QuestionList() {
+export default function SolutionList() {
   const theme = useTheme();
   const { themeStretch } = useSettings();
 
-  const [questionList, setQuestionList] = useState(_questionList);
+  const [solutionList, setSolutionList] = useState(_solutionList);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
-  const [filterQuestion, setFilterQuestion] = useState('');
+  const [filterSolution, setFilterSolution] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleRequestSort = (property) => {
@@ -69,7 +67,7 @@ export default function QuestionList() {
 
   const handleSelectAllClick = (checked) => {
     if (checked) {
-      const newSelecteds = questionList.map((n) => n.name);
+      const newSelecteds = solutionList.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -96,34 +94,34 @@ export default function QuestionList() {
     setPage(0);
   };
 
-  const handleFilterByName = (filterQuestion) => {
-    setFilterQuestion(filterQuestion);
+  const handleFilterByName = (filterSolution) => {
+    setFilterSolution(filterSolution);
     setPage(0);
   };
 
   const handleDeleteUser = (userId) => {
-    const deleteUser = questionList.filter((user) => user.id !== userId);
+    const deleteUser = solutionList.filter((user) => user.id !== userId);
     setSelected([]);
-    setQuestionList(deleteUser);
+    setSolutionList(deleteUser);
   };
 
   const handleDeleteMultiUser = (selected) => {
-    const deleteUsers = questionList.filter((user) => !selected.includes(user.name));
+    const deleteUsers = solutionList.filter((user) => !selected.includes(user.name));
     setSelected([]);
-    setQuestionList(deleteUsers);
+    setSolutionList(deleteUsers);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - questionList.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - solutionList.length) : 0;
 
-  const filterQuestions = applySortFilter(questionList, getComparator(order, orderBy), filterQuestion);
+  const filterSolutions = applySortFilter(solutionList, getComparator(order, orderBy), filterSolution);
 
-  const isNotFound = !filterQuestions.length && Boolean(filterQuestion);
+  const isNotFound = !filterSolutions.length && Boolean(filterSolution);
 
   return (
-    <Page title="Question: List">
+    <Page title="Solution: List">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading="Question List"
+          heading="Solution List"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             { name: 'List' },
@@ -131,29 +129,29 @@ export default function QuestionList() {
         />
 
         <Card>
-          <QuestionListToolbar
+          <SolutionListToolbar
             numSelected={selected.length}
-            filterQuestion={filterQuestion}
-            onFilterQuestion={handleFilterByName}
-            onDeleteQuestions={() => handleDeleteMultiUser(selected)}
+            filterSolution={filterSolution}
+            onFilterSolution={handleFilterByName}
+            onDeleteSolutions={() => handleDeleteMultiUser(selected)}
           />
           
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
-                <QuestionListHead
+                <SolutionListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={questionList.length}
+                  rowCount={solutionList.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filterQuestions.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, question, downvote, status, upvote, avatarUrl, solution } = row;
+                  {filterSolutions.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                    const { id, name, comment, status, avatarUrl } = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -175,10 +173,8 @@ export default function QuestionList() {
                           </Typography>
                         </TableCell>
                         <TableCell align="left">{id}</TableCell>
-                        <TableCell align="left">{question}</TableCell>
-                        <TableCell align="left">{upvote}</TableCell>
-                        <TableCell align="left">{downvote}</TableCell>
-                        <TableCell align="left">{solution}</TableCell>
+                        <TableCell align="left">{id}</TableCell>
+                        <TableCell align="left">{comment}</TableCell>
                         <TableCell align="left">
                           <Label
                             variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
@@ -189,7 +185,7 @@ export default function QuestionList() {
                         </TableCell>
 
                         <TableCell align="right">
-                          <QuestionMoreMenu onDelete={() => handleDeleteUser(id)} userName={name} />
+                          <SolutionMoreMenu onDelete={() => handleDeleteUser(id)} userName={name} />
                         </TableCell>
                       </TableRow>
                     );
@@ -204,7 +200,7 @@ export default function QuestionList() {
                   <TableBody>
                     <TableRow>
                       <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                        <SearchNotFound searchQuery={filterQuestion} />
+                        <SearchNotFound searchQuery={filterSolution} />
                       </TableCell>
                     </TableRow>
                   </TableBody>
@@ -216,7 +212,7 @@ export default function QuestionList() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={questionList.length}
+            count={solutionList.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={(e, page) => setPage(page)}

@@ -11,12 +11,12 @@ import MenuPopover from '../../../../components/MenuPopover';
 
 // ----------------------------------------------------------------------
 
-QuestionMoreMenu.propTypes = {
+SolutionMoreMenu.propTypes = {
   onDelete: PropTypes.func,
   userName: PropTypes.string,
 };
 
-export default function QuestionMoreMenu({ onDelete}) {
+export default function SolutionMoreMenu({ onDelete}) {
   const [open, setOpen] = useState(null);
 
   const handleOpen = (event) => {
