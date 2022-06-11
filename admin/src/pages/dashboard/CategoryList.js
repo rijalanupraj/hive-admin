@@ -1,8 +1,8 @@
-import { sentenceCase } from 'change-case';
-import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { sentenceCase } from "change-case";
+import { useState, useEffect } from "react";
+import { Link as RouterLink } from "react-router-dom";
 // @mui
-import { useTheme } from '@mui/material/styles';
+import { useTheme } from "@mui/material/styles";
 import {
   Card,
   Table,
@@ -16,63 +16,78 @@ import {
   Typography,
   TableContainer,
   TablePagination,
-  Link,
-} from '@mui/material';
+  Link
+} from "@mui/material";
 // routes
-import { PATH_DASHBOARD } from '../../routes/paths';
+import { PATH_DASHBOARD } from "../../routes/paths";
 // hooks
-import useSettings from '../../hooks/useSettings';
+import useSettings from "../../hooks/useSettings";
 // _mock_
-import { _userList } from '../../_mock';
+import { _userList } from "../../_mock";
 // components
-import Page from '../../components/Page';
-import Label from '../../components/Label';
-import Iconify from '../../components/Iconify';
-import Scrollbar from '../../components/Scrollbar';
-import SearchNotFound from '../../components/SearchNotFound';
-import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
+import Page from "../../components/Page";
+import Label from "../../components/Label";
+import Iconify from "../../components/Iconify";
+import Scrollbar from "../../components/Scrollbar";
+import SearchNotFound from "../../components/SearchNotFound";
+import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
 // sections
-import { CategoryListHead, CategoryListToolbar, CategoryMoreMenu } from '../../sections/@dashboard/category/list';
+import {
+  CategoryListHead,
+  CategoryListToolbar,
+  CategoryMoreMenu
+} from "../../sections/@dashboard/category/list";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllCategories } from "../../redux/actions/categoryActions";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'UserName', alignRight: false },
-
-  { id: 'isactive', label: 'isActive', alignRight: false },
-  { id: '' },
+  { id: "title", label: "Title", alignRight: false },
+  { id: "isactive", label: "isActive", alignRight: false },
+  {}
 ];
 
 // ----------------------------------------------------------------------
 
 export default function CategoryList() {
   const theme = useTheme();
+  const dispatch = useDispatch();
+  const category = useSelector(state => state.category);
   const { themeStretch } = useSettings();
 
-  const [userList, setUserList] = useState(_userList);
+  const [categoryList, setCategoryList] = useState([]);
   const [page, setPage] = useState(0);
-  const [order, setOrder] = useState('asc');
+  const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState([]);
-  const [orderBy, setOrderBy] = useState('name');
-  const [filterName, setFilterName] = useState('');
+  const [orderBy, setOrderBy] = useState("title");
+  const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const handleRequestSort = (property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+  useEffect(() => {
+    dispatch(getAllCategories());
+  }, []);
+
+  useEffect(() => {
+    setCategoryList([...category.categoryList]);
+  }, [category.categoryList]);
+
+  const handleRequestSort = property => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = (checked) => {
+  const handleSelectAllClick = checked => {
     if (checked) {
-      const newSelecteds = userList.map((n) => n.name);
+      const newSelecteds = categoryList.map(n => n.title);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (name) => {
+  const handleClick = name => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
     if (selectedIndex === -1) {
@@ -82,55 +97,58 @@ export default function CategoryList() {
     } else if (selectedIndex === selected.length - 1) {
       newSelected = newSelected.concat(selected.slice(0, -1));
     } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1)
+      );
     }
     setSelected(newSelected);
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = event => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
-  const handleFilterByName = (filterName) => {
+  const handleFilterByName = filterName => {
     setFilterName(filterName);
     setPage(0);
   };
 
-  const handleDeleteUser = (userId) => {
-    const deleteUser = userList.filter((user) => user.id !== userId);
+  const handleDeleteUser = userId => {
+    const deleteUser = categoryList.filter(user => user.id !== userId);
     setSelected([]);
-    setUserList(deleteUser);
+    setCategoryList(deleteUser);
   };
 
-  const handleDeleteMultiUser = (selected) => {
-    const deleteUsers = userList.filter((user) => !selected.includes(user.name));
+  const handleDeleteMultiUser = selected => {
+    const deleteUsers = categoryList.filter(user => !selected.includes(user.name));
     setSelected([]);
-    setUserList(deleteUsers);
+    setCategoryList(deleteUsers);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - categoryList.length) : 0;
 
-  const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName);
+  const filteredCategory = applySortFilter(categoryList, getComparator(order, orderBy), filterName);
 
-  const isNotFound = !filteredUsers.length && Boolean(filterName);
+  const isNotFound = !filteredCategory.length && Boolean(filterName);
 
   return (
-    <Page title="Category: List">
-      <Container maxWidth={themeStretch ? false : 'lg'}>
+    <Page title='Category: List'>
+      <Container maxWidth={themeStretch ? false : "lg"}>
         <HeaderBreadcrumbs
-          heading="Question List"
+          heading='Question List'
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Category', href: PATH_DASHBOARD.category.root },
-            { name: 'List' },
+            { name: "Dashboard", href: PATH_DASHBOARD.root },
+            { name: "Category", href: PATH_DASHBOARD.category.root },
+            { name: "List" }
           ]}
           action={
             <Button
-              variant="contained"
+              variant='contained'
               component={RouterLink}
               to={PATH_DASHBOARD.category.newCategory}
-              startIcon={<Iconify icon={'eva:plus-fill'} />}
+              startIcon={<Iconify icon={"eva:plus-fill"} />}
             >
               New Category
             </Button>
@@ -144,7 +162,6 @@ export default function CategoryList() {
             onFilterName={handleFilterByName}
             onDeleteUsers={() => handleDeleteMultiUser(selected)}
           />
-          
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -153,49 +170,58 @@ export default function CategoryList() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={userList.length}
+                  rowCount={categoryList.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name,  isactive } = row;
-                    const isItemSelected = selected.indexOf(name) !== -1;
+                  {filteredCategory &&
+                    filteredCategory
+                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                      .map(row => {
+                        const { _id, title, isActive } = row;
+                        const isItemSelected = selected.indexOf(title) !== -1;
 
-                    return (
-                      <TableRow
-                        hover
-                        key={id}
-                        tabIndex={-1}
-                        role="checkbox"
-                        selected={isItemSelected}
-                        aria-checked={isItemSelected}
-                      >
-                        <TableCell padding="checkbox">
-                          <Checkbox checked={isItemSelected} onClick={() => handleClick(name)} />
-                        </TableCell>
-                        <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-                          <Typography variant="subtitle2" noWrap>
-                          <Link href={PATH_DASHBOARD.user.root}>{name}</Link>
-                          </Typography>
-                        </TableCell>
-
-                        <TableCell align="left">
-                          <Label
-                            variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-                            color={(isactive === 'false' && 'error') || 'success'}
+                        return (
+                          <TableRow
+                            hover
+                            key={_id}
+                            tabIndex={-1}
+                            role='checkbox'
+                            selected={isItemSelected}
+                            aria-checked={isItemSelected}
                           >
-                            {sentenceCase(isactive)}
-                          </Label>
-                        </TableCell>
+                            <TableCell padding='checkbox'>
+                              <Checkbox
+                                checked={isItemSelected}
+                                onClick={() => handleClick(title)}
+                              />
+                            </TableCell>
+                            <TableCell sx={{ display: "flex", alignItems: "center" }}>
+                              <Typography variant='subtitle2' noWrap>
+                                <Link href={PATH_DASHBOARD.user.root}>{title}</Link>
+                              </Typography>
+                            </TableCell>
 
-                        <TableCell align="right">
-                          <CategoryMoreMenu onDelete={() => handleDeleteUser(id)} userName={name} />
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
+                            <TableCell align='left'>
+                              <Label
+                                variant={theme.palette.mode === "light" ? "ghost" : "filled"}
+                                color={(isActive === false && "error") || "success"}
+                              >
+                                {sentenceCase(isActive ? "true" : "false")}
+                              </Label>
+                            </TableCell>
+
+                            <TableCell align='right'>
+                              <CategoryMoreMenu
+                                onDelete={() => handleDeleteUser(_id)}
+                                userName={title}
+                              />
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
                   {emptyRows > 0 && (
                     <TableRow style={{ height: 53 * emptyRows }}>
                       <TableCell colSpan={6} />
@@ -205,7 +231,7 @@ export default function CategoryList() {
                 {isNotFound && (
                   <TableBody>
                     <TableRow>
-                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                      <TableCell align='center' colSpan={6} sx={{ py: 3 }}>
                         <SearchNotFound searchQuery={filterName} />
                       </TableCell>
                     </TableRow>
@@ -217,8 +243,8 @@ export default function CategoryList() {
 
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={userList.length}
+            component='div'
+            count={categoryList.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={(e, page) => setPage(page)}
@@ -243,12 +269,13 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
-  return order === 'desc'
+  return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
 function applySortFilter(array, comparator, query) {
+  console.log(array);
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -256,7 +283,9 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return array.filter((_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return array.filter(
+      category => category.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
+    );
   }
-  return stabilizedThis.map((el) => el[0]);
+  return stabilizedThis.map(el => el[0]);
 }
