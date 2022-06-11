@@ -26,6 +26,27 @@ export const getAllSolutions = navigate => async (dispatch, getState) => {
   }
 };
 
+export const deleteSolution = (solutionId, enqueueSnackbar) => async (dispatch, getState) => {
+  dispatch({ type: TYPES.DELETE_SOLUTION_LOADING });
+
+  try {
+    const options = attachTokenToHeaders(getState);
+
+    await axios.delete(`${API_URL}/admin/solution/deletesolution/${solutionId}`, options);
+
+    dispatch({
+      type: TYPES.DELETE_SOLUTION_SUCCESS,
+      payload: { solutionId: solutionId }
+    });
+    enqueueSnackbar("Solution deleted successfully", { variant: "success" });
+  } catch (err) {
+    dispatch({
+      type: TYPES.DELETE_SOLUTION_SUCCESS,
+      payload: { error: err.response.data.message }
+    });
+  }
+};
+
 export const attachTokenToHeaders = getState => {
   const token = getState().auth.token;
 

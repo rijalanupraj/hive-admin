@@ -38,7 +38,7 @@ import {
   SolutionListToolbar,
   SolutionMoreMenu
 } from "../../sections/@dashboard/solution/list";
-import { getAllSolutions } from "../../redux/actions/solutionActions";
+import { getAllSolutions, deleteSolution } from "../../redux/actions/solutionActions";
 
 // ----------------------------------------------------------------------
 
@@ -120,10 +120,8 @@ export default function SolutionList() {
     setPage(0);
   };
 
-  const handleDeleteUser = userId => {
-    const deleteUser = solutionList.filter(user => user.id !== userId);
-    setSelected([]);
-    setSolutionList(deleteUser);
+  const handleDeleteSolution = solutionId => {
+    dispatch(deleteSolution(solutionId));
   };
 
   const handleDeleteMultiUser = selected => {
@@ -200,7 +198,7 @@ export default function SolutionList() {
                             <Checkbox checked={isItemSelected} onClick={() => handleClick("")} />
                           </TableCell>
                           <TableCell align='left'>{answer.slice(0, 20)}</TableCell>
-                          <TableCell align='left'>{question.title}</TableCell>
+                          <TableCell align='left'>{question?.title}</TableCell>
                           <TableCell sx={{ display: "flex", alignItems: "center" }}>
                             <Avatar
                               alt={user.username}
@@ -231,7 +229,7 @@ export default function SolutionList() {
 
                           <TableCell align='right'>
                             <SolutionMoreMenu
-                              onDelete={() => handleDeleteUser(_id)}
+                              onDelete={() => handleDeleteSolution(_id)}
                               userName={user.name}
                             />
                           </TableCell>
@@ -300,7 +298,7 @@ function applySortFilter(array, comparator, query) {
   if (query) {
     return array.filter(
       _solution =>
-        _solution.question.title.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _solution?.question?.title.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
         _solution.user.username.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
         _solution.answer.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );

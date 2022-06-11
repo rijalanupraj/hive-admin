@@ -1,6 +1,7 @@
 import { sentenceCase } from "change-case";
 import { useState, useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
+import { useSnackbar } from "notistack";
 // @mui
 import { useTheme } from "@mui/material/styles";
 import {
@@ -37,7 +38,7 @@ import {
   QuestionListToolbar,
   QuestionMoreMenu
 } from "../../sections/@dashboard/question/list";
-import { getAllQuestions } from "../../redux/actions/questionActions";
+import { getAllQuestions, deleteQuestion } from "../../redux/actions/questionActions";
 
 // ----------------------------------------------------------------------
 
@@ -58,6 +59,7 @@ export default function QuestionList() {
   const dispatch = useDispatch();
   const question = useSelector(state => state.question);
   const { themeStretch } = useSettings();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [questionList, setQuestionList] = useState([]);
   const [page, setPage] = useState(0);
@@ -83,18 +85,18 @@ export default function QuestionList() {
 
   const handleSelectAllClick = checked => {
     if (checked) {
-      const newSelecteds = questionList.map(n => n.name);
+      const newSelecteds = questionList.map(n => n._id);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = name => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = id => {
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -118,10 +120,8 @@ export default function QuestionList() {
     setPage(0);
   };
 
-  const handleDeleteUser = userId => {
-    const deleteUser = questionList.filter(user => user.id !== userId);
-    setSelected([]);
-    setQuestionList(deleteUser);
+  const handleDeleteQuestion = questionId => {
+    dispatch(deleteQuestion(questionId, enqueueSnackbar));
   };
 
   const handleDeleteMultiUser = selected => {
@@ -173,7 +173,7 @@ export default function QuestionList() {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map(row => {
                       const { _id, title, tags, user, answers, isActive, category } = row;
-                      const isItemSelected = selected.indexOf("") !== -1;
+                      const isItemSelected = selected.indexOf(_id) !== -1;
 
                       return (
                         <TableRow
@@ -185,7 +185,7 @@ export default function QuestionList() {
                           aria-checked={isItemSelected}
                         >
                           <TableCell padding='checkbox'>
-                            <Checkbox checked={isItemSelected} onClick={() => handleClick("")} />
+                            <Checkbox checked={isItemSelected} onClick={() => handleClick(_id)} />
                           </TableCell>
                           <TableCell align='left'>{title}</TableCell>
                           <TableCell sx={{ display: "flex", alignItems: "center" }}>
@@ -222,10 +222,7 @@ export default function QuestionList() {
                           </TableCell>
 
                           <TableCell align='right'>
-                            <QuestionMoreMenu
-                              onDelete={() => handleDeleteUser(_id)}
-                              userName={""}
-                            />
+                            <QuestionMoreMenu onDelete={() => handleDeleteQuestion(_id)} />
                           </TableCell>
                         </TableRow>
                       );

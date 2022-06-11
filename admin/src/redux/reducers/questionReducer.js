@@ -22,6 +22,19 @@ export default function QuestionReducer(state = initialState, { type, payload })
         questionsList: payload.questions,
         error: null
       };
+
+    case TYPES.DELETE_QUESTION_SUCCESS:
+      const latestList = state.questionsList.filter(
+        question => question._id !== payload.questionId
+      );
+
+      return {
+        ...state,
+        isLoading: false,
+        questionsList: latestList,
+        error: null
+      };
+
     case TYPES.ALL_QUESTIONS_FAIL:
       return {
         ...state,
