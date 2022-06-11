@@ -104,14 +104,13 @@ export default function Router() {
           ]
         },
 
-
         //solution
         {
-          path: 'solution',
+          path: "solution",
           children: [
-            { element: <Navigate to="/dashboard/solution/list" replace />, index: true },
-            { path: 'list', element: <SolutionList /> },
-          ],
+            { element: <Navigate to='/dashboard/solution/list' replace />, index: true },
+            { path: "list", element: <SolutionList /> }
+          ]
         },
 
          //category
@@ -124,7 +123,6 @@ export default function Router() {
           ],
         },
        
-        
         {
           path: "chat",
           children: [
@@ -156,24 +154,22 @@ const Login = Loadable(lazy(() => import("../pages/auth/Login")));
 const GeneralAnalytics = Loadable(lazy(() => import("../pages/dashboard/GeneralAnalytics")));
 const GeneralBooking = Loadable(lazy(() => import("../pages/dashboard/GeneralBooking")));
 
-
-const UserProfile = Loadable(lazy(() => import('../pages/dashboard/UserProfile')));
-const UserCards = Loadable(lazy(() => import('../pages/dashboard/UserCards')));
-const UserList = Loadable(lazy(() => import('../pages/dashboard/UserList')));
-
-const QuestionList = Loadable(lazy(() => import('../pages/dashboard/QuestionList')));
-
-const SolutionList = Loadable(lazy(() => import('../pages/dashboard/SolutionList')));
+const UserProfile = Loadable(lazy(() => import("../pages/dashboard/UserProfile")));
+const UserCards = Loadable(lazy(() => import("../pages/dashboard/UserCards")));
+const UserList = Loadable(lazy(() => import("../pages/dashboard/UserList")));
 
 const CategoryList = Loadable(lazy(() => import('../pages/dashboard/CategoryList')));
 const CategoryCreate = Loadable(lazy(() => import('../pages/dashboard/CategoryCreate')));
 
-const UserAccount = Loadable(lazy(() => import('../pages/dashboard/UserAccount')));
-const UserCreate = Loadable(lazy(() => import('../pages/dashboard/UserCreate')));
-const Chat = Loadable(lazy(() => import('../pages/dashboard/Chat')));
 
-const Calendar = Loadable(lazy(() => import('../pages/dashboard/Calendar')));
-const Kanban = Loadable(lazy(() => import('../pages/dashboard/Kanban')));
+const QuestionList = Loadable(lazy(() => import("../pages/dashboard/QuestionList")));
 
 
+const SolutionList = Loadable(lazy(() => import("../pages/dashboard/SolutionList")));
 
+const UserAccount = Loadable(lazy(() => import("../pages/dashboard/UserAccount")));
+const UserCreate = Loadable(lazy(() => import("../pages/dashboard/UserCreate")));
+const Chat = Loadable(lazy(() => import("../pages/dashboard/Chat")));
+
+const Calendar = Loadable(lazy(() => import("../pages/dashboard/Calendar")));
+const Kanban = Loadable(lazy(() => import("../pages/dashboard/Kanban")));
