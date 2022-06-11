@@ -50,6 +50,12 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/solution'),
     list: path(ROOTS_DASHBOARD, '/solution/list'),
   },
+
+  category: {
+    root: path(ROOTS_DASHBOARD, '/category'),
+    list: path(ROOTS_DASHBOARD, '/category/list'),
+    newCategory: path(ROOTS_DASHBOARD, '/category/new'),
+  },
   
 };
 

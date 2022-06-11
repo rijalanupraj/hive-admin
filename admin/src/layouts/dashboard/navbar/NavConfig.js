@@ -73,6 +73,16 @@ const navConfig = [
         icon: ICONS.booking,
         children: [{ title: "list", path: PATH_DASHBOARD.solution.list }],
       },
+      // MANAGEMENT : Category
+      {
+        title: "category",
+        path: PATH_DASHBOARD.category.root,
+        icon: ICONS.booking,
+        children: [
+          { title: "list", path: PATH_DASHBOARD.category.list },
+          { title: "new", path: PATH_DASHBOARD.category.newCategory },
+        ],
+      },
 
     ],
   },

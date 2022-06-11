@@ -113,6 +113,16 @@ export default function Router() {
             { path: 'list', element: <SolutionList /> },
           ],
         },
+
+         //category
+         {
+          path: 'category',
+          children: [
+            { element: <Navigate to="/dashboard/category/list" replace />, index: true },
+            { path: 'list', element: <CategoryList /> },
+            { path: "new", element: <CategoryCreate /> },
+          ],
+        },
        
         
         {
@@ -154,6 +164,9 @@ const UserList = Loadable(lazy(() => import('../pages/dashboard/UserList')));
 const QuestionList = Loadable(lazy(() => import('../pages/dashboard/QuestionList')));
 
 const SolutionList = Loadable(lazy(() => import('../pages/dashboard/SolutionList')));
+
+const CategoryList = Loadable(lazy(() => import('../pages/dashboard/CategoryList')));
+const CategoryCreate = Loadable(lazy(() => import('../pages/dashboard/CategoryCreate')));
 
 const UserAccount = Loadable(lazy(() => import('../pages/dashboard/UserAccount')));
 const UserCreate = Loadable(lazy(() => import('../pages/dashboard/UserCreate')));
