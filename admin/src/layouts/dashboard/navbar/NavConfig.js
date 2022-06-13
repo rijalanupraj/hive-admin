@@ -27,21 +27,21 @@ const ICONS = {
 const navConfig = [
   // GENERAL
   // ----------------------------------------------------------------------
-  {
-    subheader: "general",
-    items: [
-      {
-        title: "analytics website",
-        path: PATH_DASHBOARD.general.analytics,
-        icon: ICONS.analytics,
-      },
-      {
-        title: "analytics post",
-        path: PATH_DASHBOARD.general.booking,
-        icon: ICONS.booking,
-      },
-    ],
-  },
+  // {
+  //   subheader: "general",
+  //   items: [
+  //     {
+  //       title: "analytics website",
+  //       path: PATH_DASHBOARD.general.analytics,
+  //       icon: ICONS.analytics,
+  //     },
+  //     {
+  //       title: "analytics post",
+  //       path: PATH_DASHBOARD.general.booking,
+  //       icon: ICONS.booking,
+  //     },
+  //   ],
+  // },
 
   // MANAGEMENT
   // ----------------------------------------------------------------------

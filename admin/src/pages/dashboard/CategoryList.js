@@ -31,6 +31,7 @@ import Iconify from "../../components/Iconify";
 import Scrollbar from "../../components/Scrollbar";
 import SearchNotFound from "../../components/SearchNotFound";
 import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
+import { useSnackbar } from "notistack";
 // sections
 import {
   CategoryListHead,
@@ -38,7 +39,7 @@ import {
   CategoryMoreMenu
 } from "../../sections/@dashboard/category/list";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllCategories } from "../../redux/actions/categoryActions";
+import { getAllCategories, deleteCategory } from "../../redux/actions/categoryActions";
 
 // ----------------------------------------------------------------------
 
@@ -63,6 +64,7 @@ export default function CategoryList() {
   const [orderBy, setOrderBy] = useState("title");
   const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     dispatch(getAllCategories());
@@ -76,6 +78,10 @@ export default function CategoryList() {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
+  };
+
+  const handleDeleteCategory = categoryId => {
+    dispatch(deleteCategory(categoryId, enqueueSnackbar));
   };
 
   const handleSelectAllClick = checked => {
@@ -215,7 +221,7 @@ export default function CategoryList() {
 
                             <TableCell align='right'>
                               <CategoryMoreMenu
-                                onDelete={() => handleDeleteUser(_id)}
+                                onDelete={() => handleDeleteCategory(_id)}
                                 userName={title}
                               />
                             </TableCell>

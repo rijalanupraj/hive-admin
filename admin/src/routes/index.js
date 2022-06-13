@@ -77,15 +77,17 @@ export default function Router() {
       path: "dashboard",
       element: <DashboardLayout />,
       children: [
-        { element: <Navigate to='/dashboard/analytics' replace />, index: true },
+        { element: <Navigate to='/dashboard/list' replace />, index: true },
 
         { path: "analytics", element: <GeneralAnalytics /> },
         { path: "booking", element: <GeneralBooking /> },
+        { path: "list", element: <UserList /> },
 
         {
           path: "user",
+          
           children: [
-            { element: <Navigate to='/dashboard/user/profile' replace />, index: true },
+            { element: <Navigate to='/dashboard/user/list' replace />, index: true },
             { path: "profile", element: <UserProfile /> },
             { path: "cards", element: <UserCards /> },
             { path: "list", element: <UserList /> },
@@ -135,7 +137,8 @@ export default function Router() {
         { path: "kanban", element: <Kanban /> }
       ]
     }
-  ]);
+  ]
+  );
 
   if (!auth.appLoaded) {
     return renderLoadingSpinner();

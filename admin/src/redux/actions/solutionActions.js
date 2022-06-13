@@ -41,7 +41,7 @@ export const deleteSolution = (solutionId, enqueueSnackbar) => async (dispatch, 
     enqueueSnackbar("Solution deleted successfully", { variant: "success" });
   } catch (err) {
     dispatch({
-      type: TYPES.DELETE_SOLUTION_SUCCESS,
+      type: TYPES.DELETE_SOLUTION_FAIL,
       payload: { error: err.response.data.message }
     });
   }

@@ -45,6 +45,30 @@ export const addNewCategory = category => async (dispatch, getState) => {
   }
 };
 
+export const deleteCategory = (categoryId, enqueueSnackbar) => async (dispatch, getState) => {
+  dispatch({ type: TYPES.DELETE_CATEGORY_LOADING });
+
+  try {
+    const options = attachTokenToHeaders(getState);
+
+    await axios.delete(`${API_URL}/admin/category/delete/${categoryId}`, options);
+
+    dispatch({
+      type: TYPES.DELETE_CATEGORY_SUCCESS,
+      payload: { categoryId: categoryId }
+    });
+    if(enqueueSnackbar){
+
+      enqueueSnackbar("Category deleted successfully", { variant: "success" });
+    }
+  } catch (err) {
+    dispatch({
+      type: TYPES.DELETE_CATEGORY_FAIL,
+      payload: { error: err.response.data.message }
+    });
+  }
+};
+
 export const attachTokenToHeaders = getState => {
   const token = getState().auth.token;
 
