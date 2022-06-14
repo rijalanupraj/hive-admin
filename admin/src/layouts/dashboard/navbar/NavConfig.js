@@ -58,6 +58,17 @@ const navConfig = [
           { title: "list", path: PATH_DASHBOARD.user.list },
         ],
       },
+      // MANAGEMENT : admin User
+      {
+        title: "admin user",
+        path: PATH_DASHBOARD.adminuser.root,
+        icon: ICONS.booking,
+        children: [
+          { title: "list", path: PATH_DASHBOARD.adminuser.list },
+          { title: "new", path: PATH_DASHBOARD.adminuser.newAdmin },
+        ],
+      },
+
       // MANAGEMENT : QUESTION
       {
         title: "question",
@@ -83,6 +94,8 @@ const navConfig = [
           { title: "new", path: PATH_DASHBOARD.category.newCategory },
         ],
       },
+
+      
 
     ],
   },

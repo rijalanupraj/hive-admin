@@ -16,7 +16,7 @@ const visuallyHidden = {
   width: '1px',
 };
 
-UserListHead.propTypes = {
+AdminListHead.propTypes = {
   order: PropTypes.oneOf(['asc', 'desc']),
   orderBy: PropTypes.string,
   rowCount: PropTypes.number,
@@ -26,7 +26,7 @@ UserListHead.propTypes = {
   onSelectAllClick: PropTypes.func,
 };
 
-export default function UserListHead({
+export default function AdminListHead({
   order,
   orderBy,
   rowCount,
@@ -56,10 +56,10 @@ export default function UserListHead({
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
-              hideSortIcon
+             
               active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc' } 
-              onClick={createSortHandler(headCell.id)} 
+              direction={orderBy === headCell.id ? order : 'asc'}
+              onClick={createSortHandler(headCell.id)}
             >
               {headCell.label}
               {orderBy === headCell.id ? (

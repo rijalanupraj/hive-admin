@@ -56,6 +56,12 @@ export const PATH_DASHBOARD = {
     list: path(ROOTS_DASHBOARD, '/category/list'),
     newCategory: path(ROOTS_DASHBOARD, '/category/new'),
   },
+
+  adminuser: {
+    root: path(ROOTS_DASHBOARD, '/adminuser'),
+    list: path(ROOTS_DASHBOARD, '/adminuser/list'),
+    newAdmin: path(ROOTS_DASHBOARD, '/adminuser/new'),
+  },
   
 };
 

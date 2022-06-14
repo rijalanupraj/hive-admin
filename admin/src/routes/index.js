@@ -124,6 +124,16 @@ export default function Router() {
             { path: "new", element: <CategoryCreate /> },
           ],
         },
+
+         //adminuser
+         {
+          path: 'adminuser',
+          children: [
+            { element: <Navigate to="/dashboard/adminuser/list" replace />, index: true },
+            { path: 'list', element: <AdminUserList /> },
+            { path: "new", element: <AdminCreate /> },
+          ],
+        },
        
         {
           path: "chat",
@@ -163,6 +173,9 @@ const UserList = Loadable(lazy(() => import("../pages/dashboard/UserList")));
 
 const CategoryList = Loadable(lazy(() => import('../pages/dashboard/CategoryList')));
 const CategoryCreate = Loadable(lazy(() => import('../pages/dashboard/CategoryCreate')));
+
+const AdminUserList = Loadable(lazy(() => import('../pages/dashboard/AdminUserList')));
+const AdminCreate = Loadable(lazy(() => import('../pages/dashboard/AdminCreate')));
 
 
 const QuestionList = Loadable(lazy(() => import("../pages/dashboard/QuestionList")));

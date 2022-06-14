@@ -34,8 +34,8 @@ export default function LoginForm() {
   });
 
   const defaultValues = {
-    email: "demo@minimals.cc",
-    password: "demo1234",
+    email: "",
+    password: "",
     remember: true
   };
 
@@ -88,9 +88,7 @@ export default function LoginForm() {
 
       <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ my: 2 }}>
         <RHFCheckbox name='remember' label='Remember me' />
-        <Link component={RouterLink} variant='subtitle2' to='/'>
-          Forgot password?
-        </Link>
+        
       </Stack>
 
       <LoadingButton
