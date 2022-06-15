@@ -65,6 +65,7 @@ import { create } from "lodash";
 const TABLE_HEAD = [
   { id: "email", label: "Email", alignRight: false },
   { id: "id", label: "Id", alignRight: false },
+  { id: "superAdmin", label: "Super Admin", alignRight: false },
   { id: "" }
 ];
 
@@ -157,12 +158,22 @@ export default function AdminUserList() {
 
   const isNotFound = !filteredUsers.length && Boolean(filterName);
 
+  const handleCreateUserAction = auth => {
+    if (auth.me.superAdmin) {
+      setDialogOpen(true);
+    } else {
+      enqueueSnackbar("You don't have permission to create new admin", {
+        variant: "error"
+      });
+    }
+  };
+
   return (
     <Page title='Admin User: List'>
       <CreateUserDialog dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} users={users} />
       <Container maxWidth={themeStretch ? false : "lg"}>
         <HeaderBreadcrumbs
-          heading='User List'
+          heading='Admin List'
           links={[
             { name: "Dashboard", href: PATH_DASHBOARD.root },
             { name: "Admin User", href: PATH_DASHBOARD.adminuser.root },
@@ -172,7 +183,7 @@ export default function AdminUserList() {
             <Button
               variant='contained'
               startIcon={<Iconify icon={"eva:plus-fill"} />}
-              onClick={() => setDialogOpen(true)}
+              onClick={() => handleCreateUserAction(auth)}
             >
               New Admin
             </Button>
@@ -203,7 +214,7 @@ export default function AdminUserList() {
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map(row => {
-                      const { _id, email } = row;
+                      const { _id, email, superAdmin } = row;
                       const isItemSelected = selected.indexOf(email) !== -1;
 
                       return (
@@ -220,6 +231,7 @@ export default function AdminUserList() {
                           </TableCell>
                           <TableCell align='left'>{email}</TableCell>
                           <TableCell align='left'>{_id}</TableCell>
+                          <TableCell align='left'>{superAdmin ? "True" : "False"}</TableCell>
                           <TableCell align='right'>
                             {auth.me.superAdmin && auth.me._id !== _id && (
                               <AdminMoreMenu
@@ -312,13 +324,15 @@ const CreateUserDialog = ({ dialogOpen, setDialogOpen, users }) => {
 
   const NewUserSchema = Yup.object().shape({
     email: Yup.string().email("Email must be a valid email address").required("Email is required"),
-    password: Yup.string().required("Password is required")
+    password: Yup.string().required("Password is required"),
+    superAdmin: Yup.boolean().required("Super Admin is required")
   });
 
   const defaultValues = useMemo(
     () => ({
       email: "",
-      password: ""
+      password: "",
+      superAdmin: false
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
@@ -347,14 +361,14 @@ const CreateUserDialog = ({ dialogOpen, setDialogOpen, users }) => {
   return (
     <Dialog open={dialogOpen} onClose={handleClose} maxWidth='lg'>
       <DialogTitle>Create Admin</DialogTitle>
-      
+
       <DialogContent>
-        <br/>
+        <br />
         <DialogContentText>
           To subscribe to this website, please enter your email address here. We will send updates
           occasionally.
         </DialogContentText>
-        <br/>
+        <br />
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={3}>
             <Grid item xs={6}>
@@ -376,20 +390,23 @@ const CreateUserDialog = ({ dialogOpen, setDialogOpen, users }) => {
                 }}
               />
             </Grid>
-            
+            <Grid item xs={12}>
+              <RHFSwitch name='superAdmin' label='Super Admin' />
+            </Grid>
+
             <LoadingButton
               fullWidth
               size='large'
               type='submit'
               variant='contained'
               loading={isSubmitting}
-              sx={{mt:2, ml:3}}
+              sx={{ mt: 2, ml: 3 }}
             >
               Create Admin
             </LoadingButton>
             {users.createAdminError && <Alert severity='error'>{users.createAdminError}</Alert>}
           </Grid>
-          <br/>
+          <br />
         </FormProvider>
       </DialogContent>
     </Dialog>
