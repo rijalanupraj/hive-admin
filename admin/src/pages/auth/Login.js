@@ -24,7 +24,7 @@ const RootStyle = styled('div')(({ theme }) => ({
 }));
 
 const HeaderStyle = styled('header')(({ theme }) => ({
-  top: 0,
+  top: 120,
   zIndex: 9,
   lineHeight: 0,
   width: '100%',

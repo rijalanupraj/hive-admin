@@ -347,11 +347,14 @@ const CreateUserDialog = ({ dialogOpen, setDialogOpen, users }) => {
   return (
     <Dialog open={dialogOpen} onClose={handleClose} maxWidth='lg'>
       <DialogTitle>Create Admin</DialogTitle>
+      
       <DialogContent>
+        <br/>
         <DialogContentText>
           To subscribe to this website, please enter your email address here. We will send updates
           occasionally.
         </DialogContentText>
+        <br/>
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={3}>
             <Grid item xs={6}>
@@ -373,17 +376,20 @@ const CreateUserDialog = ({ dialogOpen, setDialogOpen, users }) => {
                 }}
               />
             </Grid>
+            
             <LoadingButton
               fullWidth
               size='large'
               type='submit'
               variant='contained'
               loading={isSubmitting}
+              sx={{mt:2, ml:3}}
             >
               Create Admin
             </LoadingButton>
             {users.createAdminError && <Alert severity='error'>{users.createAdminError}</Alert>}
           </Grid>
+          <br/>
         </FormProvider>
       </DialogContent>
     </Dialog>
