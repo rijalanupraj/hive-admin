@@ -87,6 +87,27 @@ export const deleteAdminUser = (adminId, enqueueSnackbar) => async (dispatch, ge
   }
 };
 
+export const deleteUser = (userId, enqueueSnackbar) => async (dispatch, getState) => {
+  dispatch({ type: TYPES.DELETE_USER_LOADING });
+
+  try {
+    const options = attachTokenToHeaders(getState);
+    const response = await axios.delete(`${API_URL}/admin/user/deleteuser/${userId}`, options);
+
+    dispatch({
+      type: TYPES.DELETE_USER_SUCCESS,
+      payload: { userId }
+    });
+    enqueueSnackbar("User deleted successfully", { variant: "success" });
+  } catch (err) {
+    dispatch({
+      type: TYPES.DELETE_USER_FAIL,
+      payload: { error: err.response.data.message }
+    });
+    enqueueSnackbar(err.response.data.message, { variant: "error" });
+  }
+};
+
 export const attachTokenToHeaders = getState => {
   const token = getState().auth.token;
 

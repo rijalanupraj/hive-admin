@@ -22,6 +22,9 @@ import {
 import { PATH_DASHBOARD } from "../../routes/paths";
 // hooks
 import useSettings from "../../hooks/useSettings";
+
+import { useSnackbar } from "notistack";
+
 // components
 import Page from "../../components/Page";
 import Label from "../../components/Label";
@@ -32,7 +35,7 @@ import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
 // sections
 import { UserListHead, UserListToolbar, UserMoreMenu } from "../../sections/@dashboard/user/list";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllUsers } from "../../redux/actions/usersActions";
+import { getAllUsers, deleteUser } from "../../redux/actions/usersActions";
 
 // ----------------------------------------------------------------------
 
@@ -55,6 +58,8 @@ export default function UserList() {
   const { usersList } = users;
   const theme = useTheme();
   const { themeStretch } = useSettings();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
@@ -219,7 +224,7 @@ export default function UserList() {
 
                           <TableCell align='right'>
                             <UserMoreMenu
-                              onDelete={() => handleDeleteUser(user._id)}
+                              onDelete={() => dispatch(deleteUser(user._id, enqueueSnackbar))}
                               userName={user.username}
                             />
                           </TableCell>
