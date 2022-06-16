@@ -134,6 +134,33 @@ export default function Router() {
             { path: "new", element: <AdminCreate /> },
           ],
         },
+
+        //reportsolution
+        {
+          path: 'reportsolution',
+          children: [
+            { element: <Navigate to="/dashboard/reportsolution/reportsolutionlist" replace />, index: true },
+            { path: 'reportsolutionlist', element: <ReportSolutionList /> },
+          ],
+        },
+
+        //reportquestion
+        {
+          path: 'reportquestion',
+          children: [
+            { element: <Navigate to="/dashboard/reportquestion/reportquestionlist" replace />, index: true },
+            { path: 'reportquestionlist', element: <ReportQuestionList /> },
+          ],
+        },
+
+        //reportuser
+        {
+          path: 'reportuser',
+          children: [
+            { element: <Navigate to="/dashboard/reportuser/reportuserlist" replace />, index: true },
+            { path: 'reportuserlist', element: <ReportUserList /> },
+          ],
+        },
        
         {
           path: "chat",
@@ -182,6 +209,12 @@ const QuestionList = Loadable(lazy(() => import("../pages/dashboard/QuestionList
 
 
 const SolutionList = Loadable(lazy(() => import("../pages/dashboard/SolutionList")));
+
+const ReportSolutionList = Loadable(lazy(() => import("../pages/dashboard/ReportSolutionList")));
+
+const ReportQuestionList = Loadable(lazy(() => import("../pages/dashboard/ReportQuestionList")));
+
+const ReportUserList = Loadable(lazy(() => import("../pages/dashboard/ReportUserList")));
 
 const UserAccount = Loadable(lazy(() => import("../pages/dashboard/UserAccount")));
 const UserCreate = Loadable(lazy(() => import("../pages/dashboard/UserCreate")));
