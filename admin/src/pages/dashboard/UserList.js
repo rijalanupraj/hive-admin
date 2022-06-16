@@ -35,7 +35,7 @@ import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
 // sections
 import { UserListHead, UserListToolbar, UserMoreMenu } from "../../sections/@dashboard/user/list";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllUsers, deleteUser } from "../../redux/actions/usersActions";
+import { getAllUsers, deleteUser, toggleBanUser } from "../../redux/actions/usersActions";
 
 // ----------------------------------------------------------------------
 
@@ -55,9 +55,9 @@ const TABLE_HEAD = [
 export default function UserList() {
   const dispatch = useDispatch();
   const users = useSelector(state => state.users);
-  const { usersList } = users;
   const theme = useTheme();
   const { themeStretch } = useSettings();
+  const [usersList, setUsersList] = useState([]);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -71,6 +71,10 @@ export default function UserList() {
   useEffect(() => {
     dispatch(getAllUsers());
   }, []);
+
+  useEffect(() => {
+    setUsersList(users.usersList);
+  }, [users.usersList]);
 
   const handleRequestSort = property => {
     const isAsc = orderBy === property && order === "asc";
@@ -216,15 +220,16 @@ export default function UserList() {
                           <TableCell align='left'>
                             <Label
                               variant={theme.palette.mode === "light" ? "ghost" : "filled"}
-                              color={(user.isEmailVerified === "banned" && "error") || "success"}
+                              color={(user.isBanned && "error") || "success"}
                             >
-                              {sentenceCase(user.username)}
+                              {sentenceCase(user.isBanned ? "banned" : "Not banned")}
                             </Label>
                           </TableCell>
 
                           <TableCell align='right'>
                             <UserMoreMenu
                               onDelete={() => dispatch(deleteUser(user._id, enqueueSnackbar))}
+                              banToggle={() => dispatch(toggleBanUser(user._id, enqueueSnackbar))}
                               userName={user.username}
                             />
                           </TableCell>

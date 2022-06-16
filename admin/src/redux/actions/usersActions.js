@@ -108,6 +108,32 @@ export const deleteUser = (userId, enqueueSnackbar) => async (dispatch, getState
   }
 };
 
+export const toggleBanUser = (userId, enqueueSnackbar) => async (dispatch, getState) => {
+  dispatch({ type: TYPES.BAN_TOGGLE_USER_LOADING });
+
+  try {
+    const options = attachTokenToHeaders(getState);
+    const response = await axios.post(`${API_URL}/admin/user/bantoggle/${userId}`, {}, options);
+
+    dispatch({
+      type: TYPES.BAN_TOGGLE_USER_SUCCESS,
+      payload: { userId, isBanned: response.data.isBanned }
+    });
+    console.log(response.data.isBanned);
+    if (response.data.isBanned) {
+      enqueueSnackbar("User banned successfully", { variant: "success" });
+    } else {
+      enqueueSnackbar("User unbanned successfully", { variant: "success" });
+    }
+  } catch (err) {
+    dispatch({
+      type: TYPES.BAN_TOGGLE_USER_FAIL,
+      payload: { error: err.response.data.message }
+    });
+    enqueueSnackbar(err.response.data.message, { variant: "error" });
+  }
+};
+
 export const attachTokenToHeaders = getState => {
   const token = getState().auth.token;
 
