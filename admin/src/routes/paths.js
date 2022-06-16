@@ -62,6 +62,22 @@ export const PATH_DASHBOARD = {
     list: path(ROOTS_DASHBOARD, '/adminuser/list'),
     newAdmin: path(ROOTS_DASHBOARD, '/adminuser/new'),
   },
+
+  reportsolution: {
+    root: path(ROOTS_DASHBOARD, '/reportsolution'),
+    reportsolutionlist: path(ROOTS_DASHBOARD, '/reportsolution/reportsolutionlist'),
+  },
+
+  reportquestion:{
+    root: path(ROOTS_DASHBOARD, '/reportquestion'),
+    reportquestionlist: path(ROOTS_DASHBOARD, '/reportquestion/reportquestionlist'),
+  },
+
+  reportuser:{
+    root: path(ROOTS_DASHBOARD, '/reportuser'),
+    reportuserlist: path(ROOTS_DASHBOARD, '/reportuser/reportuserlist'),
+  }
+
   
 };
 

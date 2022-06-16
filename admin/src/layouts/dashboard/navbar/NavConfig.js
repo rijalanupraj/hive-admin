@@ -62,7 +62,7 @@ const navConfig = [
       {
         title: "admin user",
         path: PATH_DASHBOARD.adminuser.root,
-        icon: ICONS.booking,
+        icon: ICONS.blog,
         children: [
           { title: "list", path: PATH_DASHBOARD.adminuser.list },
           { title: "new", path: PATH_DASHBOARD.adminuser.newAdmin },
@@ -100,24 +100,61 @@ const navConfig = [
     ],
   },
 
+  // REPORT
+  {
+    subheader: "Report",
+    items: [
+      // REPORT : USER
+      {
+        title: "Solution Report",
+        path: PATH_DASHBOARD.reportsolution.root,
+        icon: ICONS.user,
+        children: [
+          { title: "List", path: PATH_DASHBOARD.reportsolution.reportsolutionlist },
+        ],
+      },
+
+      {
+        title: "Question Report",
+        path: PATH_DASHBOARD.reportquestion.root,
+        icon: ICONS.user,
+        children: [
+          { title: "List", path: PATH_DASHBOARD.reportquestion.reportquestionlist },
+        ],
+      },
+
+      {
+        title: "User Report",
+        path: PATH_DASHBOARD.reportuser.root,
+        icon: ICONS.user,
+        children: [
+          { title: "List", path: PATH_DASHBOARD.reportuser.reportuserlist },
+        ],
+      },
+
+    ],
+    
+  }
+
+
   // APP
   // ----------------------------------------------------------------------
-  {
-    subheader: "app",
-    items: [
-      { title: "chat", path: PATH_DASHBOARD.chat.root, icon: ICONS.chat },
-      {
-        title: "calendar",
-        path: PATH_DASHBOARD.calendar,
-        icon: ICONS.calendar,
-      },
-      {
-        title: "kanban",
-        path: PATH_DASHBOARD.kanban,
-        icon: ICONS.kanban,
-      },
-    ],
-  },
+  // {
+  //   subheader: "app",
+  //   items: [
+  //     { title: "chat", path: PATH_DASHBOARD.chat.root, icon: ICONS.chat },
+  //     {
+  //       title: "calendar",
+  //       path: PATH_DASHBOARD.calendar,
+  //       icon: ICONS.calendar,
+  //     },
+  //     {
+  //       title: "kanban",
+  //       path: PATH_DASHBOARD.kanban,
+  //       icon: ICONS.kanban,
+  //     },
+  //   ],
+  // },
 ];
 
 export default navConfig;
