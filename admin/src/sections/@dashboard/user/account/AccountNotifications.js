@@ -11,29 +11,23 @@ import { FormProvider, RHFSwitch } from '../../../../components/hook-form';
 
 const ACTIVITY_OPTIONS = [
   {
-    value: 'activityComments',
-    label: 'Email me when someone comments onmy article',
+    value: 'activityRequest',
+    label: 'Email me when user fills a moderator request',
   },
   {
-    value: 'activityAnswers',
-    label: 'Email me when someone answers on my form',
+    value: 'activityMessage',
+    label: 'Email me when someone sends me message',
   },
-  { value: 'activityFollows', label: 'Email me hen someone follows me' },
+  { value: 'activityReport', label: 'Email me when I get a moderator report' },
 ];
 
-const APPLICATION_OPTIONS = [
-  { value: 'applicationNews', label: 'News and announcements' },
-  { value: 'applicationProduct', label: 'Weekly product updates' },
-  { value: 'applicationBlog', label: 'Weekly blog digest' },
-];
+
 
 const NOTIFICATION_SETTINGS = {
-  activityComments: true,
-  activityAnswers: true,
-  activityFollows: false,
-  applicationNews: true,
-  applicationProduct: false,
-  applicationBlog: false,
+  activityRequest: true,
+  activityMessage: true,
+  activityReport: false,
+
 };
 
 // ----------------------------------------------------------------------
@@ -42,12 +36,10 @@ export default function AccountNotifications() {
   const { enqueueSnackbar } = useSnackbar();
 
   const defaultValues = {
-    activityComments: NOTIFICATION_SETTINGS.activityComments,
-    activityAnswers: NOTIFICATION_SETTINGS.activityAnswers,
-    activityFollows: NOTIFICATION_SETTINGS.activityFollows,
-    applicationNews: NOTIFICATION_SETTINGS.applicationNews,
-    applicationProduct: NOTIFICATION_SETTINGS.applicationProduct,
-    applicationBlog: NOTIFICATION_SETTINGS.applicationBlog,
+    activityRequest: NOTIFICATION_SETTINGS.activityRequest,
+    activityMessage: NOTIFICATION_SETTINGS.activityMessage,
+    activityReport: NOTIFICATION_SETTINGS.activityReport,
+
   };
 
   const methods = useForm({
@@ -80,17 +72,6 @@ export default function AccountNotifications() {
             <Stack spacing={1}>
               {ACTIVITY_OPTIONS.map((activity) => (
                 <RHFSwitch key={activity.value} name={activity.value} label={activity.label} sx={{ m: 0 }} />
-              ))}
-            </Stack>
-          </Stack>
-
-          <Stack spacing={2} sx={{ width: 1 }}>
-            <Typography variant="overline" sx={{ color: 'text.secondary' }}>
-              Application
-            </Typography>
-            <Stack spacing={1}>
-              {APPLICATION_OPTIONS.map((application) => (
-                <RHFSwitch key={application.value} name={application.value} label={application.label} sx={{ m: 0 }} />
               ))}
             </Stack>
           </Stack>

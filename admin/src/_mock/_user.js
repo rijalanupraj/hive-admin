@@ -15,10 +15,10 @@ export const _userAbout = {
   company: _mock.company(1),
   school: _mock.company(2),
   role: 'Manager',
-  facebookLink: `https://www.facebook.com/caitlyn.kerluke`,
-  instagramLink: `https://www.instagram.com/caitlyn.kerluke`,
-  linkedinLink: `https://www.linkedin.com/in/caitlyn.kerluke`,
-  twitterLink: `https://www.twitter.com/caitlyn.kerluke`,
+  facebookLink: `https://www.youtube.com/watch?v=dQw4w9WgXcQ`,
+  instagramLink: `https://www.youtube.com/watch?v=dQw4w9WgXcQ`,
+  linkedinLink: `https://www.youtube.com/watch?v=dQw4w9WgXcQ`,
+  twitterLink: `https://www.youtube.com/watch?v=dQw4w9WgXcQ`,
 };
 
 export const _userFollowers = [...Array(18)].map((_, index) => ({
@@ -133,5 +133,8 @@ export const _userList = [...Array(24)].map((_, index) => ({
   company: _mock.company(index),
   isVerified: _mock.boolean(index),
   status: randomInArray(['active', 'banned']),
+  isactive: randomInArray(['true', 'false']),
   role: _mock.role(index),
 }));
+
+

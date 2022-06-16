@@ -1,8 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 // utils
 // import axios from '../../utils/axios';
 //
-import { dispatch } from '../store';
+import { dispatch } from "../store";
 
 // ----------------------------------------------------------------------
 
@@ -12,11 +12,11 @@ const initialState = {
   events: [],
   isOpenModal: false,
   selectedEventId: null,
-  selectedRange: null,
+  selectedRange: null
 };
 
 const slice = createSlice({
-  name: 'calendar',
+  name: "calendar",
   initialState,
   reducers: {
     // START LOADING
@@ -46,7 +46,7 @@ const slice = createSlice({
     // UPDATE EVENT
     updateEventSuccess(state, action) {
       const event = action.payload;
-      const updateEvent = state.events.map((_event) => {
+      const updateEvent = state.events.map(_event => {
         if (_event.id === event.id) {
           return event;
         }
@@ -60,7 +60,7 @@ const slice = createSlice({
     // DELETE EVENT
     deleteEventSuccess(state, action) {
       const { eventId } = action.payload;
-      const deleteEvent = state.events.filter((event) => event.id !== eventId);
+      const deleteEvent = state.events.filter(event => event.id !== eventId);
       state.events = deleteEvent;
     },
 
@@ -88,8 +88,8 @@ const slice = createSlice({
       state.isOpenModal = false;
       state.selectedEventId = null;
       state.selectedRange = null;
-    },
-  },
+    }
+  }
 });
 
 // Reducer
@@ -149,7 +149,7 @@ export function deleteEvent(eventId) {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      await axios.post('/api/calendar/events/delete', { eventId });
+      // await axios.post("/api/calendar/events/delete", { eventId });
       dispatch(slice.actions.deleteEventSuccess({ eventId }));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -164,7 +164,7 @@ export function selectRange(start, end) {
     dispatch(
       slice.actions.selectRange({
         start: start.getTime(),
-        end: end.getTime(),
+        end: end.getTime()
       })
     );
   };

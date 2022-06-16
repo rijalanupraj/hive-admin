@@ -11,12 +11,22 @@ import { title, sentence, description } from './text';
 import { price, rating, age, percent } from './number';
 import { following } from './following';
 import { follower } from './follower';
+import { question } from './question';
+import { upvote } from './upvote';
+import { downvote } from './downvote';
+import { comment } from './comment';
+import { solution } from './solution';
 
 // ----------------------------------------------------------------------
 
 const _mock = {
   id: (index) => `e99f09a7-dd88-49d5-b1c8-1daf80c2d7b${index + 1}`,
   email: (index) => email[index],
+  question:(index)=>question[index],
+  upvote:(index)=>upvote[index],
+  downvote:(index)=>downvote[index],
+  solution:(index)=>solution[index],
+  comment:(index)=>comment[index],
   following:(index)=> following[index],
   follower: (index)=> follower[index],
   phoneNumber: (index) => phoneNumber[index],
