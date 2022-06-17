@@ -338,18 +338,16 @@ const CategoryPopUpDialog = ({ dialogOpen, setDialogOpen, isEdit, category }) =>
   const onSubmit = async () => {
     if (isEdit) {
       try {
-        dispatch(updateCategory(category._id, values));
+        dispatch(updateCategory(category._id, values, enqueueSnackbar));
         reset();
-        enqueueSnackbar("Category Updated", { variant: "success" });
         setDialogOpen(false);
       } catch (error) {
         console.error(error);
       }
     } else {
       try {
-        dispatch(addNewCategory(values));
+        dispatch(addNewCategory(values, enqueueSnackbar));
         reset();
-        enqueueSnackbar("Added new category", { variant: "success" });
         setDialogOpen(false);
       } catch (error) {
         console.error(error);

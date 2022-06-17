@@ -22,15 +22,9 @@ import {
   DialogTitle,
   DialogContent,
   DialogContentText,
-  Grid,
-  IconButton,
-  InputAdornment
+  Grid
 } from "@mui/material";
-import * as Yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { FormProvider, RHFSwitch, RHFTextField } from "../../components/hook-form";
+
 // routes
 import useSettings from "../../hooks/useSettings";
 // _mock_
@@ -52,8 +46,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getAllCategories,
   deleteCategory,
-  addNewCategory,
-  updateCategory
+  getAllSuggestedCategory,
+  toggleCategoryStatus
 } from "../../redux/actions/categoryActions";
 
 // ----------------------------------------------------------------------
@@ -61,6 +55,7 @@ import {
 const TABLE_HEAD = [
   { id: "title", label: "Title", alignRight: false },
   { id: "isactive", label: "isActive", alignRight: false },
+  { id: "suggestedBy", label: "By", alignRight: false },
   {}
 ];
 
@@ -71,7 +66,6 @@ export default function SuggestedCategory() {
   const dispatch = useDispatch();
   const category = useSelector(state => state.category);
   const { themeStretch } = useSettings();
-  const [dialogOpen, setDialogOpen] = useState(false);
 
   const [categoryList, setCategoryList] = useState([]);
   const [page, setPage] = useState(0);
@@ -82,11 +76,8 @@ export default function SuggestedCategory() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const { enqueueSnackbar } = useSnackbar();
 
-  const [currentEditCategory, setCurrentEditCategory] = useState({});
-  const [isEdit, setIsEdit] = useState(false);
-
   useEffect(() => {
-    dispatch(getAllCategories());
+    dispatch(getAllSuggestedCategory());
   }, []);
 
   useEffect(() => {
@@ -158,43 +149,16 @@ export default function SuggestedCategory() {
 
   const isNotFound = !filteredCategory.length && Boolean(filterName);
 
-  const handleCreateUpdateCategory = (edit, category) => {
-    setIsEdit(edit);
-    if (category) {
-      setCurrentEditCategory(category);
-    } else {
-      setCurrentEditCategory({});
-    }
-    setDialogOpen(true);
-  };
-
   return (
     <Page title='Category: List'>
-      <CategoryPopUpDialog
-        isEdit={isEdit}
-        dialogOpen={dialogOpen}
-        setDialogOpen={setDialogOpen}
-        category={currentEditCategory}
-      />
       <Container maxWidth={themeStretch ? false : "lg"}>
         <HeaderBreadcrumbs
-          heading='Question List'
+          heading='Suggested Category'
           links={[
             { name: "Dashboard", href: "/" },
             { name: "Category", href: "/" },
-            { name: "List" }
+            { name: "Suggested" }
           ]}
-          action={
-            <Button
-              variant='contained'
-              onClick={() => {
-                handleCreateUpdateCategory(false);
-              }}
-              startIcon={<Iconify icon={"eva:plus-fill"} />}
-            >
-              New Category
-            </Button>
-          }
         />
 
         <Card>
@@ -222,7 +186,7 @@ export default function SuggestedCategory() {
                     filteredCategory
                       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                       .map(row => {
-                        const { _id, title, isActive } = row;
+                        const { _id, title, isActive, suggestedBy } = row;
                         const isItemSelected = selected.indexOf(title) !== -1;
 
                         return (
@@ -255,10 +219,18 @@ export default function SuggestedCategory() {
                               </Label>
                             </TableCell>
 
+                            <TableCell>
+                              <Typography variant='subtitle2' noWrap>
+                                {suggestedBy?.username}
+                              </Typography>
+                            </TableCell>
+
                             <TableCell align='right'>
                               <SuggestedMoreMenu
                                 onDelete={() => handleDeleteCategory(_id)}
-                                onEdit={() => handleCreateUpdateCategory(true, row)}
+                                onApprove={() =>
+                                  dispatch(toggleCategoryStatus(_id, enqueueSnackbar))
+                                }
                                 userName={title}
                               />
                             </TableCell>
@@ -331,106 +303,3 @@ function applySortFilter(array, comparator, query) {
   }
   return stabilizedThis.map(el => el[0]);
 }
-
-const CategoryPopUpDialog = ({ dialogOpen, setDialogOpen, isEdit, category }) => {
-  const dispatch = useDispatch();
-  const { enqueueSnackbar } = useSnackbar();
-  const onSubmit = async () => {
-    if (isEdit) {
-      try {
-        dispatch(updateCategory(category._id, values));
-        reset();
-        enqueueSnackbar("Category Updated", { variant: "success" });
-        setDialogOpen(false);
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      try {
-        dispatch(addNewCategory(values));
-        reset();
-        enqueueSnackbar("Added new category", { variant: "success" });
-        setDialogOpen(false);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
-
-  const CategorySchema = Yup.object().shape({
-    title: Yup.string().required("Title is required"),
-    isActive: Yup.boolean().required("Is active is required")
-  });
-
-  const defaultValues = useMemo(
-    () => ({
-      title: "",
-      isActive: false
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-
-  const methods = useForm({
-    resolver: yupResolver(CategorySchema),
-    defaultValues
-  });
-
-  const {
-    reset,
-    watch,
-    control,
-    setValue,
-    handleSubmit,
-    formState: { isSubmitting, isValid }
-  } = methods;
-
-  useEffect(() => {
-    if (isEdit) {
-      setValue("title", category.title);
-      setValue("isActive", category.isActive);
-    } else {
-      reset(defaultValues);
-    }
-  }, [isEdit, category]);
-
-  const values = watch();
-
-  const handleClose = () => {
-    setDialogOpen(false);
-  };
-
-  return (
-    <Dialog open={dialogOpen} onClose={handleClose} maxWidth='lg'>
-      <DialogTitle>{isEdit ? "Edit Category" : "New Category"}</DialogTitle>
-
-      <DialogContent>
-        <br />
-        <DialogContentText>{isEdit ? "Edit Category" : "New Category"}</DialogContentText>
-        <br />
-        <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-          <Grid container spacing={3}>
-            <Grid item xs={6}>
-              <RHFTextField name='title' label='Title' />
-            </Grid>
-            <Grid item xs={12}>
-              <RHFSwitch name='isActive' label='Active' />
-            </Grid>
-
-            <LoadingButton
-              fullWidth
-              size='large'
-              type='submit'
-              variant='contained'
-              loading={isSubmitting}
-              sx={{ mt: 2, ml: 3 }}
-            >
-              {isEdit ? "Update" : "Create"}
-            </LoadingButton>
-          </Grid>
-          <br />
-        </FormProvider>
-      </DialogContent>
-    </Dialog>
-  );
-};

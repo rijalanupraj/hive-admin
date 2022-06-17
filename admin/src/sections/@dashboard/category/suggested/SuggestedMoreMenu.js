@@ -17,7 +17,7 @@ SuggestedMoreMenu.propTypes = {
   userName: PropTypes.string
 };
 
-export default function SuggestedMoreMenu({ onDelete, onEdit, userName }) {
+export default function SuggestedMoreMenu({ onDelete, onApprove, userName }) {
   const [open, setOpen] = useState(null);
 
   const handleOpen = event => {
@@ -57,11 +57,10 @@ export default function SuggestedMoreMenu({ onDelete, onEdit, userName }) {
           <Iconify icon={"eva:trash-2-outline"} sx={{ ...ICON }} />
           Delete
         </MenuItem>
-
-        {/* Edit */}
-        <MenuItem onClick={onEdit} sx={{ color: "primary.main" }}>
-          <Iconify icon={"eva:edit-outline"} sx={{ ...ICON }} />
-          Edit
+        {/* Approve */}
+        <MenuItem onClick={onApprove} sx={{ color: "success.main" }}>
+          <Iconify icon={"eva:check-circle-outline"} sx={{ ...ICON }} />
+          Approve
         </MenuItem>
       </MenuPopover>
     </>

@@ -40,12 +40,17 @@ export default function CategoryReducer(state = initialState, { type, payload })
       };
 
     case TYPES.UPDATE_CATEGORY_SUCCESS:
-      const updatedList = state.categoryList.map(category => {
-        if (category._id === payload.category._id) {
-          return payload.category;
-        }
-        return category;
-      });
+      let updatedList = [];
+      if (payload.isApprove) {
+        updatedList = state.categoryList.filter(category => category._id === payload.categoryId);
+      } else {
+        updatedList = state.categoryList.map(category => {
+          if (category._id === payload.category._id) {
+            return payload.category;
+          }
+          return category;
+        });
+      }
 
       return {
         ...state,
