@@ -45,6 +45,29 @@ export const addNewCategory = category => async (dispatch, getState) => {
   }
 };
 
+export const updateCategory = (id, categoryData) => async (dispatch, getState) => {
+  dispatch({ type: TYPES.UPDATE_CATEGORY_LOADING });
+
+  try {
+    const options = attachTokenToHeaders(getState);
+    const response = await axios.put(
+      `${API_URL}/admin/category/update/${id}`,
+      categoryData,
+      options
+    );
+
+    dispatch({
+      type: TYPES.UPDATE_CATEGORY_SUCCESS,
+      payload: { category: response.data.category }
+    });
+  } catch (err) {
+    dispatch({
+      type: TYPES.UPDATE_CATEGORY_FAIL,
+      payload: { error: err.response.data.message }
+    });
+  }
+};
+
 export const deleteCategory = (categoryId, enqueueSnackbar) => async (dispatch, getState) => {
   dispatch({ type: TYPES.DELETE_CATEGORY_LOADING });
 
@@ -57,8 +80,7 @@ export const deleteCategory = (categoryId, enqueueSnackbar) => async (dispatch, 
       type: TYPES.DELETE_CATEGORY_SUCCESS,
       payload: { categoryId: categoryId }
     });
-    if(enqueueSnackbar){
-
+    if (enqueueSnackbar) {
       enqueueSnackbar("Category deleted successfully", { variant: "success" });
     }
   } catch (err) {

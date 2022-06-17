@@ -85,7 +85,7 @@ export default function Router() {
 
         {
           path: "user",
-          
+
           children: [
             { element: <Navigate to='/dashboard/user/list' replace />, index: true },
             { path: "profile", element: <UserProfile /> },
@@ -115,53 +115,61 @@ export default function Router() {
           ]
         },
 
-         //category
-         {
-          path: 'category',
+        //category
+        {
+          path: "category",
           children: [
-            { element: <Navigate to="/dashboard/category/list" replace />, index: true },
-            { path: 'list', element: <CategoryList /> },
-            { path: "new", element: <CategoryCreate /> },
-          ],
+            { element: <Navigate to='/dashboard/category/list' replace />, index: true },
+            { path: "list", element: <CategoryList /> }
+          ]
         },
 
-         //adminuser
-         {
-          path: 'adminuser',
+        //adminuser
+        {
+          path: "adminuser",
           children: [
-            { element: <Navigate to="/dashboard/adminuser/list" replace />, index: true },
-            { path: 'list', element: <AdminUserList /> },
-            { path: "new", element: <AdminCreate /> },
-          ],
+            { element: <Navigate to='/dashboard/adminuser/list' replace />, index: true },
+            { path: "list", element: <AdminUserList /> },
+            { path: "new", element: <AdminCreate /> }
+          ]
         },
 
         //reportsolution
         {
-          path: 'reportsolution',
+          path: "reportsolution",
           children: [
-            { element: <Navigate to="/dashboard/reportsolution/reportsolutionlist" replace />, index: true },
-            { path: 'reportsolutionlist', element: <ReportSolutionList /> },
-          ],
+            {
+              element: <Navigate to='/dashboard/reportsolution/reportsolutionlist' replace />,
+              index: true
+            },
+            { path: "reportsolutionlist", element: <ReportSolutionList /> }
+          ]
         },
 
         //reportquestion
         {
-          path: 'reportquestion',
+          path: "reportquestion",
           children: [
-            { element: <Navigate to="/dashboard/reportquestion/reportquestionlist" replace />, index: true },
-            { path: 'reportquestionlist', element: <ReportQuestionList /> },
-          ],
+            {
+              element: <Navigate to='/dashboard/reportquestion/reportquestionlist' replace />,
+              index: true
+            },
+            { path: "reportquestionlist", element: <ReportQuestionList /> }
+          ]
         },
 
         //reportuser
         {
-          path: 'reportuser',
+          path: "reportuser",
           children: [
-            { element: <Navigate to="/dashboard/reportuser/reportuserlist" replace />, index: true },
-            { path: 'reportuserlist', element: <ReportUserList /> },
-          ],
+            {
+              element: <Navigate to='/dashboard/reportuser/reportuserlist' replace />,
+              index: true
+            },
+            { path: "reportuserlist", element: <ReportUserList /> }
+          ]
         },
-       
+
         {
           path: "chat",
           children: [
@@ -174,8 +182,7 @@ export default function Router() {
         { path: "kanban", element: <Kanban /> }
       ]
     }
-  ]
-  );
+  ]);
 
   if (!auth.appLoaded) {
     return renderLoadingSpinner();
@@ -198,15 +205,12 @@ const UserProfile = Loadable(lazy(() => import("../pages/dashboard/UserProfile")
 const UserCards = Loadable(lazy(() => import("../pages/dashboard/UserCards")));
 const UserList = Loadable(lazy(() => import("../pages/dashboard/UserList")));
 
-const CategoryList = Loadable(lazy(() => import('../pages/dashboard/CategoryList')));
-const CategoryCreate = Loadable(lazy(() => import('../pages/dashboard/CategoryCreate')));
+const CategoryList = Loadable(lazy(() => import("../pages/dashboard/CategoryList")));
 
-const AdminUserList = Loadable(lazy(() => import('../pages/dashboard/AdminUserList')));
-const AdminCreate = Loadable(lazy(() => import('../pages/dashboard/AdminCreate')));
-
+const AdminUserList = Loadable(lazy(() => import("../pages/dashboard/AdminUserList")));
+const AdminCreate = Loadable(lazy(() => import("../pages/dashboard/AdminCreate")));
 
 const QuestionList = Loadable(lazy(() => import("../pages/dashboard/QuestionList")));
-
 
 const SolutionList = Loadable(lazy(() => import("../pages/dashboard/SolutionList")));
 

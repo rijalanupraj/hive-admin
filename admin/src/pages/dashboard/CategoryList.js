@@ -1,6 +1,7 @@
 import { sentenceCase } from "change-case";
 import { useState, useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
+import { LoadingButton } from "@mui/lab";
 // @mui
 import { useTheme } from "@mui/material/styles";
 import {
@@ -16,14 +17,23 @@ import {
   Typography,
   TableContainer,
   TablePagination,
-  Link
+  Link,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  Grid,
+  IconButton,
+  InputAdornment
 } from "@mui/material";
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useMemo } from "react";
+import { useForm } from "react-hook-form";
+import { FormProvider, RHFSwitch, RHFTextField } from "../../components/hook-form";
 // routes
-import { PATH_DASHBOARD } from "../../routes/paths";
-// hooks
 import useSettings from "../../hooks/useSettings";
 // _mock_
-import { _userList } from "../../_mock";
 // components
 import Page from "../../components/Page";
 import Label from "../../components/Label";
@@ -39,7 +49,12 @@ import {
   CategoryMoreMenu
 } from "../../sections/@dashboard/category/list";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllCategories, deleteCategory } from "../../redux/actions/categoryActions";
+import {
+  getAllCategories,
+  deleteCategory,
+  addNewCategory,
+  updateCategory
+} from "../../redux/actions/categoryActions";
 
 // ----------------------------------------------------------------------
 
@@ -56,6 +71,7 @@ export default function CategoryList() {
   const dispatch = useDispatch();
   const category = useSelector(state => state.category);
   const { themeStretch } = useSettings();
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const [categoryList, setCategoryList] = useState([]);
   const [page, setPage] = useState(0);
@@ -65,6 +81,9 @@ export default function CategoryList() {
   const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const { enqueueSnackbar } = useSnackbar();
+
+  const [currentEditCategory, setCurrentEditCategory] = useState({});
+  const [isEdit, setIsEdit] = useState(false);
 
   useEffect(() => {
     dispatch(getAllCategories());
@@ -139,21 +158,38 @@ export default function CategoryList() {
 
   const isNotFound = !filteredCategory.length && Boolean(filterName);
 
+  const handleCreateUpdateCategory = (edit, category) => {
+    setIsEdit(edit);
+    if (category) {
+      setCurrentEditCategory(category);
+    } else {
+      setCurrentEditCategory({});
+    }
+    setDialogOpen(true);
+  };
+
   return (
     <Page title='Category: List'>
+      <CategoryPopUpDialog
+        isEdit={isEdit}
+        dialogOpen={dialogOpen}
+        setDialogOpen={setDialogOpen}
+        category={currentEditCategory}
+      />
       <Container maxWidth={themeStretch ? false : "lg"}>
         <HeaderBreadcrumbs
           heading='Question List'
           links={[
-            { name: "Dashboard", href: PATH_DASHBOARD.root },
-            { name: "Category", href: PATH_DASHBOARD.category.root },
+            { name: "Dashboard", href: "/" },
+            { name: "Category", href: "/" },
             { name: "List" }
           ]}
           action={
             <Button
               variant='contained'
-              component={RouterLink}
-              to={PATH_DASHBOARD.category.newCategory}
+              onClick={() => {
+                handleCreateUpdateCategory(false);
+              }}
               startIcon={<Iconify icon={"eva:plus-fill"} />}
             >
               New Category
@@ -206,7 +242,7 @@ export default function CategoryList() {
                             </TableCell>
                             <TableCell sx={{ display: "flex", alignItems: "center" }}>
                               <Typography variant='subtitle2' noWrap>
-                                <Link href={PATH_DASHBOARD.user.root}>{title}</Link>
+                                <Link href={"/"}>{title}</Link>
                               </Typography>
                             </TableCell>
 
@@ -222,6 +258,7 @@ export default function CategoryList() {
                             <TableCell align='right'>
                               <CategoryMoreMenu
                                 onDelete={() => handleDeleteCategory(_id)}
+                                onEdit={() => handleCreateUpdateCategory(true, row)}
                                 userName={title}
                               />
                             </TableCell>
@@ -281,7 +318,6 @@ function getComparator(order, orderBy) {
 }
 
 function applySortFilter(array, comparator, query) {
-  console.log(array);
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -295,3 +331,106 @@ function applySortFilter(array, comparator, query) {
   }
   return stabilizedThis.map(el => el[0]);
 }
+
+const CategoryPopUpDialog = ({ dialogOpen, setDialogOpen, isEdit, category }) => {
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
+  const onSubmit = async () => {
+    if (isEdit) {
+      try {
+        dispatch(updateCategory(category._id, values));
+        reset();
+        enqueueSnackbar("Category Updated", { variant: "success" });
+        setDialogOpen(false);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      try {
+        dispatch(addNewCategory(values));
+        reset();
+        enqueueSnackbar("Added new category", { variant: "success" });
+        setDialogOpen(false);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  const CategorySchema = Yup.object().shape({
+    title: Yup.string().required("Title is required"),
+    isActive: Yup.boolean().required("Is active is required")
+  });
+
+  const defaultValues = useMemo(
+    () => ({
+      title: "",
+      isActive: false
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
+  const methods = useForm({
+    resolver: yupResolver(CategorySchema),
+    defaultValues
+  });
+
+  const {
+    reset,
+    watch,
+    control,
+    setValue,
+    handleSubmit,
+    formState: { isSubmitting, isValid }
+  } = methods;
+
+  useEffect(() => {
+    if (isEdit) {
+      setValue("title", category.title);
+      setValue("isActive", category.isActive);
+    } else {
+      reset(defaultValues);
+    }
+  }, [isEdit, category]);
+
+  const values = watch();
+
+  const handleClose = () => {
+    setDialogOpen(false);
+  };
+
+  return (
+    <Dialog open={dialogOpen} onClose={handleClose} maxWidth='lg'>
+      <DialogTitle>{isEdit ? "Edit Category" : "New Category"}</DialogTitle>
+
+      <DialogContent>
+        <br />
+        <DialogContentText>{isEdit ? "Edit Category" : "New Category"}</DialogContentText>
+        <br />
+        <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+          <Grid container spacing={3}>
+            <Grid item xs={6}>
+              <RHFTextField name='title' label='Title' />
+            </Grid>
+            <Grid item xs={12}>
+              <RHFSwitch name='isActive' label='Active' />
+            </Grid>
+
+            <LoadingButton
+              fullWidth
+              size='large'
+              type='submit'
+              variant='contained'
+              loading={isSubmitting}
+              sx={{ mt: 2, ml: 3 }}
+            >
+              {isEdit ? "Update" : "Create"}
+            </LoadingButton>
+          </Grid>
+          <br />
+        </FormProvider>
+      </DialogContent>
+    </Dialog>
+  );
+};
