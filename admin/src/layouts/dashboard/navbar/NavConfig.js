@@ -6,7 +6,9 @@ import SvgIconStyle from "../../../components/SvgIconStyle";
 
 // ----------------------------------------------------------------------
 
-const getIcon = name => <SvgIconStyle src={`/icons/${name}.svg`} sx={{ width: 1, height: 1 }} />;
+const getIcon = (name) => (
+  <SvgIconStyle src={`/icons/${name}.svg`} sx={{ width: 1, height: 1 }} />
+);
 
 const ICONS = {
   blog: getIcon("ic_blog"),
@@ -19,7 +21,7 @@ const ICONS = {
   ecommerce: getIcon("ic_ecommerce"),
   analytics: getIcon("ic_analytics"),
   dashboard: getIcon("ic_dashboard"),
-  booking: getIcon("ic_booking")
+  booking: getIcon("ic_booking"),
 };
 
 const navConfig = [
@@ -53,8 +55,8 @@ const navConfig = [
         icon: ICONS.user,
         children: [
           { title: "Top User", path: PATH_DASHBOARD.user.cards },
-          { title: "list", path: PATH_DASHBOARD.user.list }
-        ]
+          { title: "list", path: PATH_DASHBOARD.user.list },
+        ],
       },
       // MANAGEMENT : admin User
       {
@@ -63,8 +65,8 @@ const navConfig = [
         icon: ICONS.blog,
         children: [
           { title: "list", path: PATH_DASHBOARD.adminuser.list },
-          { title: "new", path: PATH_DASHBOARD.adminuser.newAdmin }
-        ]
+          { title: "new", path: PATH_DASHBOARD.adminuser.newAdmin },
+        ],
       },
 
       // MANAGEMENT : QUESTION
@@ -72,7 +74,7 @@ const navConfig = [
         title: "question",
         path: PATH_DASHBOARD.question.root,
         icon: ICONS.booking,
-        children: [{ title: "list", path: PATH_DASHBOARD.question.list }]
+        children: [{ title: "list", path: PATH_DASHBOARD.question.list }],
       },
 
       // MANAGEMENT : SOLUTION
@@ -80,16 +82,19 @@ const navConfig = [
         title: "solution",
         path: PATH_DASHBOARD.solution.root,
         icon: ICONS.booking,
-        children: [{ title: "list", path: PATH_DASHBOARD.solution.list }]
+        children: [{ title: "list", path: PATH_DASHBOARD.solution.list }],
       },
       // MANAGEMENT : Category
       {
         title: "category",
         path: PATH_DASHBOARD.category.root,
         icon: ICONS.booking,
-        children: [{ title: "list", path: PATH_DASHBOARD.category.list }]
-      }
-    ]
+        children: [
+          { title: "list", path: PATH_DASHBOARD.category.list },
+          { title: "suggested", path: PATH_DASHBOARD.category.suggested },
+        ],
+      },
+    ],
   },
 
   // REPORT
@@ -101,24 +106,36 @@ const navConfig = [
         title: "Solution Report",
         path: PATH_DASHBOARD.reportsolution.root,
         icon: ICONS.user,
-        children: [{ title: "List", path: PATH_DASHBOARD.reportsolution.reportsolutionlist }]
+        children: [
+          {
+            title: "List",
+            path: PATH_DASHBOARD.reportsolution.reportsolutionlist,
+          },
+        ],
       },
 
       {
         title: "Question Report",
         path: PATH_DASHBOARD.reportquestion.root,
         icon: ICONS.user,
-        children: [{ title: "List", path: PATH_DASHBOARD.reportquestion.reportquestionlist }]
+        children: [
+          {
+            title: "List",
+            path: PATH_DASHBOARD.reportquestion.reportquestionlist,
+          },
+        ],
       },
 
       {
         title: "User Report",
         path: PATH_DASHBOARD.reportuser.root,
         icon: ICONS.user,
-        children: [{ title: "List", path: PATH_DASHBOARD.reportuser.reportuserlist }]
-      }
-    ]
-  }
+        children: [
+          { title: "List", path: PATH_DASHBOARD.reportuser.reportuserlist },
+        ],
+      },
+    ],
+  },
 
   // APP
   // ----------------------------------------------------------------------

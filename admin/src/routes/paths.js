@@ -50,7 +50,8 @@ export const PATH_DASHBOARD = {
 
   category: {
     root: path(ROOTS_DASHBOARD, "/category"),
-    list: path(ROOTS_DASHBOARD, "/category/list")
+    list: path(ROOTS_DASHBOARD, "/category/list"),
+    suggested: path(ROOTS_DASHBOARD, "/category/suggested")
   },
 
   adminuser: {

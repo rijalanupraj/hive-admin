@@ -120,7 +120,8 @@ export default function Router() {
           path: "category",
           children: [
             { element: <Navigate to='/dashboard/category/list' replace />, index: true },
-            { path: "list", element: <CategoryList /> }
+            { path: "list", element: <CategoryList /> },
+            { path: "suggested", element: <SuggestedCategory /> }
           ]
         },
 
@@ -206,6 +207,7 @@ const UserCards = Loadable(lazy(() => import("../pages/dashboard/UserCards")));
 const UserList = Loadable(lazy(() => import("../pages/dashboard/UserList")));
 
 const CategoryList = Loadable(lazy(() => import("../pages/dashboard/CategoryList")));
+const SuggestedCategory = Loadable(lazy(() => import("../pages/dashboard/SuggestedCategory")));
 
 const AdminUserList = Loadable(lazy(() => import("../pages/dashboard/AdminUserList")));
 const AdminCreate = Loadable(lazy(() => import("../pages/dashboard/AdminCreate")));
