@@ -4,6 +4,7 @@ import axios from "axios";
 // Internal Import
 import * as TYPES from "../types";
 import { BACKEND_API_URL } from "../../constants";
+import da from "date-fns/esm/locale/da/index.js";
 
 const API_URL = BACKEND_API_URL;
 
@@ -46,6 +47,39 @@ export const deleteSolution = (solutionId, enqueueSnackbar) => async (dispatch, 
     });
   }
 };
+
+export const hideUnHideSolutionToggle =
+  (solutionId, enqueueSnackbar) => async (dispatch, getState) => {
+    dispatch({ type: TYPES.HIDE_UNHIDE_SOLUTION_LOADING });
+
+    try {
+      const options = attachTokenToHeaders(getState);
+
+      const response = await axios.post(
+        `${API_URL}/admin/solution/hide-unhide/${solutionId}`,
+        {},
+        options
+      );
+
+      dispatch({
+        type: TYPES.HIDE_UNHIDE_SOLUTION_SUCCESS,
+        payload: { solutionId: solutionId, isHide: response.data.isHide }
+      });
+      if (response.data.isHide) {
+        enqueueSnackbar("Solution hidden successfully", { variant: "success" });
+      } else {
+        enqueueSnackbar("Solution unhidden successfully", { variant: "success" });
+      }
+    } catch (err) {
+      dispatch({
+        type: TYPES.HIDE_UNHIDE_SOLUTION_FAIL,
+        payload: {
+          error: err?.response?.data?.message ?? "Something went wrong"
+        }
+      });
+      enqueueSnackbar("Solution update failed", { variant: "error" });
+    }
+  };
 
 export const attachTokenToHeaders = getState => {
   const token = getState().auth.token;

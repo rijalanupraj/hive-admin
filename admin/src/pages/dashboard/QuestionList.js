@@ -38,7 +38,11 @@ import {
   QuestionListToolbar,
   QuestionMoreMenu
 } from "../../sections/@dashboard/question/list";
-import { getAllQuestions, deleteQuestion } from "../../redux/actions/questionActions";
+import {
+  getAllQuestions,
+  deleteQuestion,
+  hideUnHideQuestionToggle
+} from "../../redux/actions/questionActions";
 
 // ----------------------------------------------------------------------
 
@@ -49,6 +53,7 @@ const TABLE_HEAD = [
   { id: "category", label: "Category", alignRight: false },
   { id: "tag", label: "Tag", alignRight: false },
   { id: "isactive", label: "Active", alignRight: false },
+  { id: "ishide", label: "Hidden", alignRight: false },
   {}
 ];
 
@@ -172,7 +177,7 @@ export default function QuestionList() {
                   {filterQuestions
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map(row => {
-                      const { _id, title, tags, user, answers, isActive, category } = row;
+                      const { _id, title, tags, user, answers, isActive, category, isHide } = row;
                       const isItemSelected = selected.indexOf(_id) !== -1;
 
                       return (
@@ -220,9 +225,15 @@ export default function QuestionList() {
                               {isActive ? "true" : "false"}
                             </Label>
                           </TableCell>
+                          <TableCell align='left'>{isHide ? "true" : "false"}</TableCell>
 
                           <TableCell align='right'>
-                            <QuestionMoreMenu onDelete={() => handleDeleteQuestion(_id)} />
+                            <QuestionMoreMenu
+                              onDelete={() => handleDeleteQuestion(_id)}
+                              onHideToggle={() =>
+                                dispatch(hideUnHideQuestionToggle(_id, enqueueSnackbar))
+                              }
+                            />
                           </TableCell>
                         </TableRow>
                       );

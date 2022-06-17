@@ -35,6 +35,24 @@ export default function QuestionReducer(state = initialState, { type, payload })
         error: null
       };
 
+    case TYPES.HIDE_UNHIDE_QUESTION_SUCCESS:
+      let latestList1 = state.questionsList.map(question => {
+        if (question._id === payload.questionId) {
+          if (payload.isHide) {
+            question.isHide = true;
+          } else {
+            question.isHide = false;
+          }
+        }
+        return question;
+      });
+      return {
+        ...state,
+        isLoading: false,
+        solutionsList: latestList1,
+        error: null
+      };
+
     case TYPES.ALL_QUESTIONS_FAIL:
       return {
         ...state,

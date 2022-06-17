@@ -47,6 +47,39 @@ export const deleteQuestion = (questionId, enqueueSnackbar) => async (dispatch, 
   }
 };
 
+export const hideUnHideQuestionToggle =
+  (questionId, enqueueSnackbar) => async (dispatch, getState) => {
+    dispatch({ type: TYPES.HIDE_UNHIDE_QUESTION_LOADING });
+
+    try {
+      const options = attachTokenToHeaders(getState);
+
+      const response = await axios.post(
+        `${API_URL}/admin/question/hide-unhide/${questionId}`,
+        {},
+        options
+      );
+
+      dispatch({
+        type: TYPES.HIDE_UNHIDE_QUESTION_SUCCESS,
+        payload: { questionId: questionId, isHide: response.data.isHide }
+      });
+      if (response.data.isHide) {
+        enqueueSnackbar("Question hidden successfully", { variant: "success" });
+      } else {
+        enqueueSnackbar("Question unhidden successfully", { variant: "success" });
+      }
+    } catch (err) {
+      dispatch({
+        type: TYPES.HIDE_UNHIDE_QUESTION_FAIL,
+        payload: {
+          error: err?.response?.data?.message ?? "Something went wrong"
+        }
+      });
+      enqueueSnackbar("Solution update failed", { variant: "error" });
+    }
+  };
+
 export const attachTokenToHeaders = getState => {
   const token = getState().auth.token;
 
