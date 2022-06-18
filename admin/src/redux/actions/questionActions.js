@@ -80,6 +80,25 @@ export const hideUnHideQuestionToggle =
     }
   };
 
+export const viewReportedQuestion = () => async (dispatch, getState) => {
+  dispatch({ type: TYPES.VIEW_REPORTED_QUESTION_LOADING });
+
+  try {
+    const options = attachTokenToHeaders(getState);
+    const response = await axios.get(`${API_URL}/admin/report/questionreports/`, options);
+
+    dispatch({
+      type: TYPES.VIEW_REPORTED_QUESTION_SUCCESS,
+      payload: { reports: response.data.allQuestionReport }
+    });
+  } catch (err) {
+    dispatch({
+      type: TYPES.VIEW_REPORTED_QUESTION_FAIL,
+      payload: { error: err.response.data.message }
+    });
+  }
+};
+
 export const attachTokenToHeaders = getState => {
   const token = getState().auth.token;
 

@@ -4,6 +4,7 @@ import * as TYPES from "../types";
 const initialState = {
   usersList: [],
   adminsList: [],
+  userReports: [],
   isLoading: false,
   error: null,
   createAdminError: null
@@ -70,6 +71,13 @@ export default function UsersReducer(state = initialState, { type, payload }) {
           return user;
         }),
         error: null
+      };
+
+    case TYPES.VIEW_REPORTED_USER_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        userReports: payload.reports
       };
 
     case TYPES.CREATE_ADMIN_FAIL:

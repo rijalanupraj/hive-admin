@@ -3,6 +3,7 @@ import * as TYPES from "../types";
 
 const initialState = {
   solutionsList: [],
+  solutionReports: [],
   isLoading: false,
   error: null
 };
@@ -50,6 +51,13 @@ export default function SolutionReducer(state = initialState, { type, payload })
         isLoading: false,
         solutionsList: latestList1,
         error: null
+      };
+
+    case TYPES.VIEW_REPORTED_SOLUTION_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        solutionReports: payload.reports
       };
 
     case TYPES.ALL_SOLUTIONS_FAIL:

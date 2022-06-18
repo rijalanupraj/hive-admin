@@ -81,6 +81,26 @@ export const hideUnHideSolutionToggle =
     }
   };
 
+export const viewReportedSolutions = () => async (dispatch, getState) => {
+  dispatch({ type: TYPES.VIEW_REPORTED_SOLUTION_LOADING });
+
+  try {
+    const options = attachTokenToHeaders(getState);
+    const response = await axios.get(`${API_URL}/admin/report/solutionreports/`, options);
+
+    console.log(response.data);
+    dispatch({
+      type: TYPES.VIEW_REPORTED_SOLUTION_SUCCESS,
+      payload: { reports: response.data.allSolutionReport }
+    });
+  } catch (err) {
+    dispatch({
+      type: TYPES.VIEW_REPORTED_SOLUTION_FAIL,
+      payload: { error: err.response.data.message }
+    });
+  }
+};
+
 export const attachTokenToHeaders = getState => {
   const token = getState().auth.token;
 

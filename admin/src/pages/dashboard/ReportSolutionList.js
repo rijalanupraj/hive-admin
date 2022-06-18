@@ -16,7 +16,8 @@ import {
   Typography,
   TableContainer,
   TablePagination,
-  Link
+  Link,
+  Box
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 // routes
@@ -38,18 +39,18 @@ import {
   SolutionListToolbar,
   SolutionMoreMenu
 } from "../../sections/@dashboard/solution/list";
-import { getAllSolutions, deleteSolution } from "../../redux/actions/solutionActions";
+import { deleteSolution, viewReportedSolutions } from "../../redux/actions/solutionActions";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: "content", label: "Content", alignRight: false },
+  { id: "answer", label: "Answer", alignRight: false },
+  { id: "answerid", label: "Id", alignRight: false },
   { id: "question", label: "Question", alignRight: false },
-  { id: "name", label: "UserName", alignRight: false },
-  { id: "upvotedownvote", label: "Upvote/Downvote", alignRight: false },
-  { id: "comment", label: "Comment", alignRight: false },
-  { id: "isActive", label: "Is Active", alignRight: false },
-  { id: "tags", label: "Tags", alignRight: false },
+  { id: "author", label: "Author", alignRight: false },
+  { id: "reportedBy", label: "Reported By", alignRight: false },
+  { id: "subject", label: "Subject", alignRight: false },
+  { id: "description", label: "Description", alignRight: false },
   {}
 ];
 
@@ -61,21 +62,21 @@ export default function ReportSolutionList() {
   const dispatch = useDispatch();
   const solution = useSelector(state => state.solution);
 
-  useEffect(() => {
-    dispatch(getAllSolutions());
-  }, []);
-
   const [solutionList, setSolutionList] = useState([]);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState([]);
-  const [orderBy, setOrderBy] = useState("question");
+  const [orderBy, setOrderBy] = useState("subject");
   const [filterSolution, setFilterSolution] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
-    setSolutionList(solution.solutionsList);
-  }, [solution.solutionsList]);
+    dispatch(viewReportedSolutions());
+  }, []);
+
+  useEffect(() => {
+    setSolutionList(solution.solutionReports);
+  }, [solution.solutionReports]);
 
   const handleRequestSort = property => {
     const isAsc = orderBy === property && order === "asc";
@@ -132,6 +133,7 @@ export default function ReportSolutionList() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - solutionList.length) : 0;
 
+  console.log(solutionList);
   const filterSolutions = applySortFilter(
     solutionList,
     getComparator(order, orderBy),
@@ -144,7 +146,7 @@ export default function ReportSolutionList() {
     <Page title='Solution: List'>
       <Container maxWidth={themeStretch ? false : "lg"}>
         <HeaderBreadcrumbs
-          heading='Solution List'
+          heading='Reported Solutions'
           links={[{ name: "Dashboard", href: PATH_DASHBOARD.root }, { name: "List" }]}
         />
 
@@ -172,17 +174,7 @@ export default function ReportSolutionList() {
                   {filterSolutions
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map(row => {
-                      const {
-                        user,
-                        question,
-                        _id,
-                        tags,
-                        isActive,
-                        comments,
-                        answer,
-                        upVotes,
-                        downVotes
-                      } = row;
+                      const { _id, reportedSolution, reportedBy, subject, description } = row;
                       const isItemSelected = selected.indexOf("") !== -1;
 
                       return (
@@ -197,40 +189,49 @@ export default function ReportSolutionList() {
                           <TableCell padding='checkbox'>
                             <Checkbox checked={isItemSelected} onClick={() => handleClick("")} />
                           </TableCell>
-                          <TableCell align='left'>{answer.slice(0, 20)}</TableCell>
-                          <TableCell align='left'>{question?.title}</TableCell>
-                          <TableCell sx={{ display: "flex", alignItems: "center" }}>
-                            <Avatar
-                              alt={user.username}
-                              src={user?.profilePhoto?.hasPhoto ? user.profilePhoto.url : ""}
-                              sx={{ mr: 2 }}
-                            />
-                            <Typography variant='subtitle2' noWrap>
-                              <Link href={PATH_DASHBOARD.user.root}>{user.username}</Link>
-                            </Typography>
+                          <TableCell align='left'>{reportedSolution.answer.slice(0, 20)}</TableCell>
+
+                          <TableCell align='left'>{reportedSolution._id}</TableCell>
+                          <TableCell align='left'>{reportedSolution.question.title}</TableCell>
+                          <TableCell>
+                            <Box sx={{ display: "flex", alignItems: "center" }}>
+                              <Avatar
+                                alt={reportedSolution?.user?.username}
+                                src={
+                                  reportedSolution?.user?.profilePhoto?.hasPhoto
+                                    ? reportedSolution.user.profilePhoto.url
+                                    : ""
+                                }
+                                sx={{ mr: 1 }}
+                              />
+                              <Typography variant='subtitle2' noWrap>
+                                {reportedSolution?.user.username}
+                              </Typography>
+                            </Box>
                           </TableCell>
-                          <TableCell align='left'>
-                            {upVotes.length}/{downVotes.length}
+                          <TableCell>
+                            <Box sx={{ display: "flex", alignItems: "center" }}>
+                              <Avatar
+                                alt={reportedBy.username}
+                                src={
+                                  reportedBy?.profilePhoto?.hasPhoto
+                                    ? reportedBy.profilePhoto.url
+                                    : ""
+                                }
+                                sx={{ mr: 1 }}
+                              />
+                              <Typography variant='subtitle2' noWrap>
+                                {reportedBy.username}
+                              </Typography>
+                            </Box>
                           </TableCell>
-                          <TableCell align='left'>{comments.length}</TableCell>
-                          <TableCell align='left'>{isActive ? "true" : "false"}</TableCell>
-                          <TableCell align='left'>
-                            {tags.map(tag => {
-                              return (
-                                <Label
-                                  variant={theme.palette.mode === "light" ? "ghost" : "filled"}
-                                  color={"success"}
-                                >
-                                  {sentenceCase(tag)}
-                                </Label>
-                              );
-                            })}
-                          </TableCell>
+                          <TableCell align='left'>{subject}</TableCell>
+                          <TableCell align='left'>{description}</TableCell>
 
                           <TableCell align='right'>
                             <SolutionMoreMenu
                               onDelete={() => handleDeleteSolution(_id)}
-                              userName={user.name}
+                              userName={""}
                             />
                           </TableCell>
                         </TableRow>
@@ -297,10 +298,13 @@ function applySortFilter(array, comparator, query) {
   });
   if (query) {
     return array.filter(
-      _solution =>
-        _solution?.question?.title.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        _solution.user.username.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        _solution.answer.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      report =>
+        report.subject.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        report.reportedBy.username.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        report.reportedSolution.answer.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        report.reportedSolution.user.username.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        report.reportedSolution.question.title.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        report.reportedSolution._id.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis.map(el => el[0]);

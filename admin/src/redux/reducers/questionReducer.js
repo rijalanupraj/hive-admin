@@ -3,6 +3,7 @@ import * as TYPES from "../types";
 
 const initialState = {
   questionsList: [],
+  questionReports: [],
   isLoading: false,
   error: null
 };
@@ -51,6 +52,13 @@ export default function QuestionReducer(state = initialState, { type, payload })
         isLoading: false,
         solutionsList: latestList1,
         error: null
+      };
+
+    case TYPES.VIEW_REPORTED_QUESTION_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        questionReports: payload.reports
       };
 
     case TYPES.ALL_QUESTIONS_FAIL:

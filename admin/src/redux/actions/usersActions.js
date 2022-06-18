@@ -134,6 +134,25 @@ export const toggleBanUser = (userId, enqueueSnackbar) => async (dispatch, getSt
   }
 };
 
+export const viewReportedUser = userId => async (dispatch, getState) => {
+  dispatch({ type: TYPES.VIEW_REPORTED_USER_LOADING });
+
+  try {
+    const options = attachTokenToHeaders(getState);
+    const response = await axios.get(`${API_URL}/admin/report/userreports/`, options);
+
+    dispatch({
+      type: TYPES.VIEW_REPORTED_USER_SUCCESS,
+      payload: { reports: response.data.allUserReport }
+    });
+  } catch (err) {
+    dispatch({
+      type: TYPES.VIEW_REPORTED_USER_FAIL,
+      payload: { error: err.response.data.message }
+    });
+  }
+};
+
 export const attachTokenToHeaders = getState => {
   const token = getState().auth.token;
 

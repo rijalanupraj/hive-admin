@@ -1,15 +1,13 @@
 // hooks
 
 // utils
-import createAvatar from '../utils/createAvatar';
+import createAvatar from "../utils/createAvatar";
 //
-import Avatar from './Avatar';
+import Avatar from "./Avatar";
 
 // ----------------------------------------------------------------------
 
 export default function MyAvatar({ ...other }) {
-
-
   return (
     // <Avatar
     //   src={user?.photoURL}
@@ -21,11 +19,10 @@ export default function MyAvatar({ ...other }) {
     // </Avatar>
 
     <Avatar
-      src="https://pbs.twimg.com/media/EYUhsP4U0AATo-h?format=jpg&name=900x900"
-      alt="Mamba"
-      color= 'default'
+      src='https://pbs.twimg.com/media/EYUhsP4U0AATo-h?format=jpg&name=900x900'
+      alt='Mamba'
+      color='default'
       {...other}
-    >
-    </Avatar>
+    ></Avatar>
   );
 }
