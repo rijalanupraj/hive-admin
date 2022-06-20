@@ -218,7 +218,7 @@ export default function SolutionList() {
                               sx={{ mr: 2 }}
                             />
                             <Typography variant='subtitle2' noWrap>
-                              <Link href={PATH_DASHBOARD.user.root}>{user.username}</Link>
+                              {user.username}
                             </Typography>
                           </TableCell>
                           <TableCell align='left'>

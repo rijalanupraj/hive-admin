@@ -206,10 +206,10 @@ export default function UserList() {
                             <Avatar
                               alt={user.username}
                               src={user?.profilePhoto?.hasPhoto ? user.profilePhoto.url : ""}
-                              sx={{ mr: 2 }}
+                              sx={{ mr: 1 }}
                             />
                             <Typography variant='subtitle2' noWrap>
-                              <Link href={PATH_DASHBOARD.user.root}>{user.name}</Link>
+                              {user.name}
                             </Typography>
                           </TableCell>
                           <TableCell align='left'>{user.username}</TableCell>

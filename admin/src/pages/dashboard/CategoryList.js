@@ -242,7 +242,7 @@ export default function CategoryList() {
                             </TableCell>
                             <TableCell sx={{ display: "flex", alignItems: "center" }}>
                               <Typography variant='subtitle2' noWrap>
-                                <Link href={"/"}>{title}</Link>
+                               {title}
                               </Typography>
                             </TableCell>
 

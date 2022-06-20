@@ -2,7 +2,16 @@ import { capitalCase } from "change-case";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 // @mui
 import { styled } from "@mui/material/styles";
-import { Box, Card, Stack, Link, Alert, Tooltip, Container, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  Stack,
+  Link,
+  Alert,
+  Tooltip,
+  Container,
+  Typography,
+} from "@mui/material";
 // routes
 import { PATH_AUTH } from "../../routes/paths";
 // hooks
@@ -20,8 +29,8 @@ import { useSelector } from "react-redux";
 
 const RootStyle = styled("div")(({ theme }) => ({
   [theme.breakpoints.up("md")]: {
-    display: "flex"
-  }
+    display: "flex",
+  },
 }));
 
 const HeaderStyle = styled("header")(({ theme }) => ({
@@ -36,8 +45,8 @@ const HeaderStyle = styled("header")(({ theme }) => ({
   justifyContent: "space-between",
   [theme.breakpoints.up("md")]: {
     alignItems: "flex-start",
-    padding: theme.spacing(7, 5, 0, 7)
-  }
+    padding: theme.spacing(7, 5, 0, 7),
+  },
 }));
 
 const SectionStyle = styled(Card)(({ theme }) => ({
@@ -46,7 +55,7 @@ const SectionStyle = styled(Card)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
-  margin: theme.spacing(2, 0, 2, 2)
+  margin: theme.spacing(2, 0, 2, 2),
 }));
 
 const ContentStyle = styled("div")(({ theme }) => ({
@@ -56,14 +65,14 @@ const ContentStyle = styled("div")(({ theme }) => ({
   minHeight: "100vh",
   flexDirection: "column",
   justifyContent: "center",
-  padding: theme.spacing(12, 0)
+  padding: theme.spacing(12, 0),
 }));
 
 // ----------------------------------------------------------------------
 
 export default function Login() {
   // const { method } = useAuth();
-  const auth = useSelector(state => state.auth);
+  const auth = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
   const smUp = useResponsive("up", "sm");
@@ -75,40 +84,33 @@ export default function Login() {
   }
 
   return (
-    <Page title='Login'>
+    <Page title="Login">
       <RootStyle>
-        <HeaderStyle>
-          <Logo />
-          {smUp && (
-            <Typography variant='body2' sx={{ mt: { md: -2 } }}>
-              Don’t have an account? {""}
-              <Link variant='subtitle2' component={RouterLink} to='/'>
-                Get started
-              </Link>
-            </Typography>
-          )}
-        </HeaderStyle>
-
         {mdUp && (
           <SectionStyle>
-            <Typography variant='h3' sx={{ px: 5, mt: 10, mb: 5 }}>
+            <Box sx={{ mt:4, ml: 5 }}>
+              <Logo />
+            </Box>
+            <Typography variant="h3" sx={{ px: 5, mt: 7, mb: 5 }}>
               Hi, Welcome Back
             </Typography>
             <Image
-              alt='login'
-              src='https://img.freepik.com/free-vector/mobile-login-concept-illustration_114360-83.jpg?w=2000'
+              alt="login"
+              src="https://img.freepik.com/free-vector/mobile-login-concept-illustration_114360-83.jpg?w=2000"
             />
           </SectionStyle>
         )}
 
-        <Container maxWidth='sm'>
+        <Container maxWidth="sm">
           <ContentStyle>
-            <Stack direction='row' alignItems='center' sx={{ mb: 5 }}>
+            <Stack direction="row" alignItems="center" sx={{ mb: 5 }}>
               <Box sx={{ flexGrow: 1 }}>
-                <Typography variant='h4' gutterBottom>
+                <Typography variant="h4" gutterBottom>
                   Sign in to Samadhan
                 </Typography>
-                <Typography sx={{ color: "text.secondary" }}>Enter your details below.</Typography>
+                <Typography sx={{ color: "text.secondary" }}>
+                  Enter your details below.
+                </Typography>
               </Box>
 
               {/* <Tooltip title='hello' placement="right">
@@ -129,9 +131,9 @@ export default function Login() {
             <LoginForm />
 
             {!smUp && (
-              <Typography variant='body2' align='center' sx={{ mt: 3 }}>
+              <Typography variant="body2" align="center" sx={{ mt: 3 }}>
                 Don’t have an account?{" "}
-                <Link variant='subtitle2' component={RouterLink} to='/'>
+                <Link variant="subtitle2" component={RouterLink} to="/">
                   Get started
                 </Link>
               </Typography>
