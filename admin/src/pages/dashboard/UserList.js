@@ -135,7 +135,7 @@ export default function UserList() {
 
   const isNotFound = !filteredUsers.length && Boolean(filterName);
 
-  if (users.isLoading || users.usersList.length === 0) {
+  if (users.isLoading || !users.usersList) {
     return <h1>Loading</h1>;
   }
   return (
@@ -148,16 +148,6 @@ export default function UserList() {
             { name: "Profile", href: PATH_DASHBOARD.user.root },
             { name: "List" }
           ]}
-          action={
-            <Button
-              variant='contained'
-              component={RouterLink}
-              to={PATH_DASHBOARD.user.newUser}
-              startIcon={<Iconify icon={"eva:plus-fill"} />}
-            >
-              New User
-            </Button>
-          }
         />
 
         <Card>
