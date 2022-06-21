@@ -26,12 +26,12 @@ export default function SettingMode() {
 
   return (
     <RadioGroup name="themeMode" value={themeMode} onChange={onChangeMode}>
-      <Grid dir="ltr" container spacing={2.5}>
+      <Grid dir="ltr" container>
         {['light', 'dark'].map((mode, index) => {
           const isSelected = themeMode === mode;
 
           return (
-            <Grid key={mode} item xs={6} >
+            <Grid key={mode} item xs={2} sx={{mb:2}} >
               <BoxStyle
                 sx={{
                   bgcolor: mode === 'light' ? 'common.white' : 'grey.800',
@@ -39,9 +39,16 @@ export default function SettingMode() {
                     color: 'primary.main',
                     boxShadow: (theme) => theme.customShadows.z20,
                   }),
+                  ml:3,
+                  mr:3
                 }}
+                style={{
+                  width:'90%',
+                  height:'130%',
+                }}
+
               >
-                <Iconify icon={index === 0 ? 'ph:sun-duotone' : 'ph:moon-duotone'} width={28} height={28} />
+                <Iconify icon={index === 0 ? 'ph:sun-duotone' : 'ph:moon-duotone'} width={18} height={18} />
                 <BoxMask value={mode} />
               </BoxStyle>
             </Grid>
