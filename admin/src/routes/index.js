@@ -135,6 +135,15 @@ export default function Router() {
           ]
         },
 
+        //comment
+        {
+          path: "comment",
+          children: [
+            { element: <Navigate to='/dashboard/comment/list' replace />, index: true },
+            { path: "list", element: <CommentList /> }
+          ]
+        },
+
         //reportsolution
         {
           path: "reportsolution",
@@ -215,6 +224,8 @@ const AdminCreate = Loadable(lazy(() => import("../pages/dashboard/AdminCreate")
 const QuestionList = Loadable(lazy(() => import("../pages/dashboard/QuestionList")));
 
 const SolutionList = Loadable(lazy(() => import("../pages/dashboard/SolutionList")));
+
+const CommentList = Loadable(lazy(() => import("../pages/dashboard/CommentList")));
 
 const ReportSolutionList = Loadable(lazy(() => import("../pages/dashboard/ReportSolutionList")));
 

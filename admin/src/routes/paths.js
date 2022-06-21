@@ -54,6 +54,11 @@ export const PATH_DASHBOARD = {
     suggested: path(ROOTS_DASHBOARD, "/category/suggested")
   },
 
+  comment:{
+    root: path(ROOTS_DASHBOARD, "/comment"),
+    list: path(ROOTS_DASHBOARD, "/comment/list"),
+  },
+
   adminuser: {
     root: path(ROOTS_DASHBOARD, "/adminuser"),
     list: path(ROOTS_DASHBOARD, "/adminuser/list"),
