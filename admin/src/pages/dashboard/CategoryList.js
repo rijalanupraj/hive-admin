@@ -60,6 +60,11 @@ import {
 
 const TABLE_HEAD = [
   { id: "title", label: "Title", alignRight: false },
+  {
+    id: "icon",
+    label: "Icon",
+    alignRight: false
+  },
   { id: "isactive", label: "isActive", alignRight: false },
   {}
 ];
@@ -222,7 +227,7 @@ export default function CategoryList() {
                     filteredCategory
                       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                       .map(row => {
-                        const { _id, title, isActive } = row;
+                        const { _id, title, icon, isActive } = row;
                         const isItemSelected = selected.indexOf(title) !== -1;
 
                         return (
@@ -242,9 +247,10 @@ export default function CategoryList() {
                             </TableCell>
                             <TableCell sx={{ display: "flex", alignItems: "center" }}>
                               <Typography variant='subtitle2' noWrap>
-                               {title}
+                                {title}
                               </Typography>
                             </TableCell>
+                            <TableCell>{icon}</TableCell>
 
                             <TableCell align='left'>
                               <Label
@@ -357,13 +363,15 @@ const CategoryPopUpDialog = ({ dialogOpen, setDialogOpen, isEdit, category }) =>
 
   const CategorySchema = Yup.object().shape({
     title: Yup.string().required("Title is required"),
+    icon: Yup.string(),
     isActive: Yup.boolean().required("Is active is required")
   });
 
   const defaultValues = useMemo(
     () => ({
       title: "",
-      isActive: false
+      isActive: false,
+      icon: ""
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
@@ -410,6 +418,9 @@ const CategoryPopUpDialog = ({ dialogOpen, setDialogOpen, isEdit, category }) =>
           <Grid container spacing={3}>
             <Grid item xs={6}>
               <RHFTextField name='title' label='Title' />
+            </Grid>
+            <Grid item xs={6}>
+              <RHFTextField name='icon' label='Icon' />
             </Grid>
             <Grid item xs={12}>
               <RHFSwitch name='isActive' label='Active' />
