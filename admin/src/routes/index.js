@@ -176,9 +176,12 @@ export default function Router() {
               element: <Navigate to='/dashboard/reportuser/reportuserlist' replace />,
               index: true
             },
-            { path: "reportuserlist", element: <ReportUserList /> }
+            { path: "reportuserlist", element: <ReportUserList /> },
+            { path: "ticketuserlist", element: <TicketUser /> }
           ]
         },
+
+
 
         {
           path: "chat",
@@ -232,6 +235,8 @@ const ReportSolutionList = Loadable(lazy(() => import("../pages/dashboard/Report
 const ReportQuestionList = Loadable(lazy(() => import("../pages/dashboard/ReportQuestionList")));
 
 const ReportUserList = Loadable(lazy(() => import("../pages/dashboard/ReportUserList")));
+
+const TicketUser = Loadable(lazy(() => import("../pages/dashboard/TicketUserList")));
 
 const UserAccount = Loadable(lazy(() => import("../pages/dashboard/UserAccount")));
 const UserCreate = Loadable(lazy(() => import("../pages/dashboard/UserCreate")));

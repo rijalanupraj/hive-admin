@@ -112,6 +112,7 @@ const navConfig = [
         icon: ICONS.user,
         children: [
           { title: "List", path: PATH_DASHBOARD.reportuser.reportuserlist },
+          { title: "Ticket", path: PATH_DASHBOARD.reportuser.ticketuserlist },
         ],
       },
       // REPORT : question

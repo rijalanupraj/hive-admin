@@ -77,6 +77,8 @@ export const PATH_DASHBOARD = {
 
   reportuser: {
     root: path(ROOTS_DASHBOARD, "/reportuser"),
-    reportuserlist: path(ROOTS_DASHBOARD, "/reportuser/reportuserlist")
-  }
+    reportuserlist: path(ROOTS_DASHBOARD, "/reportuser/reportuserlist"),
+    ticketuserlist: path(ROOTS_DASHBOARD, "/reportuser/ticketuserlist")
+  },
+
 };
