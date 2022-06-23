@@ -11,17 +11,12 @@ const getIcon = (name) => (
 );
 
 const ICONS = {
-  blog: getIcon("ic_blog"),
-  cart: getIcon("ic_cart"),
-  chat: getIcon("ic_chat"),
-  mail: getIcon("ic_mail"),
   user: getIcon("ic_user"),
-  kanban: getIcon("ic_kanban"),
-  calendar: getIcon("ic_calendar"),
-  ecommerce: getIcon("ic_ecommerce"),
-  analytics: getIcon("ic_analytics"),
-  dashboard: getIcon("ic_dashboard"),
-  booking: getIcon("ic_booking"),
+  admin: getIcon("ic_admin"),
+  question: getIcon("ic_question"),
+  solution: getIcon("ic_solution"),
+  category: getIcon("ic_category"),
+  comment: getIcon("ic_comment"),
 };
 
 const navConfig = [
@@ -54,7 +49,7 @@ const navConfig = [
         path: PATH_DASHBOARD.user.root,
         icon: ICONS.user,
         children: [
-          { title: "Top User", path: PATH_DASHBOARD.user.cards },
+          // { title: "Top User", path: PATH_DASHBOARD.user.cards },
           { title: "list", path: PATH_DASHBOARD.user.list },
         ],
       },
@@ -62,10 +57,10 @@ const navConfig = [
       {
         title: "admin user",
         path: PATH_DASHBOARD.adminuser.root,
-        icon: ICONS.blog,
+        icon: ICONS.admin,
         children: [
           { title: "list", path: PATH_DASHBOARD.adminuser.list },
-          { title: "new", path: PATH_DASHBOARD.adminuser.newAdmin },
+          // { title: "new", path: PATH_DASHBOARD.adminuser.newAdmin }
         ],
       },
 
@@ -73,7 +68,7 @@ const navConfig = [
       {
         title: "question",
         path: PATH_DASHBOARD.question.root,
-        icon: ICONS.booking,
+        icon: ICONS.question,
         children: [{ title: "list", path: PATH_DASHBOARD.question.list }],
       },
 
@@ -81,22 +76,28 @@ const navConfig = [
       {
         title: "solution",
         path: PATH_DASHBOARD.solution.root,
-        icon: ICONS.booking,
+        icon: ICONS.solution,
         children: [{ title: "list", path: PATH_DASHBOARD.solution.list }],
       },
       // MANAGEMENT : Category
       {
         title: "category",
         path: PATH_DASHBOARD.category.root,
-        icon: ICONS.booking,
+        icon: ICONS.category,
         children: [
           { title: "list", path: PATH_DASHBOARD.category.list },
-          { title: "new", path: PATH_DASHBOARD.category.newCategory },
+          { title: "suggested", path: PATH_DASHBOARD.category.suggested },
         ],
       },
-
-      
-
+      //comment
+      {
+        title: "comment",
+        path: PATH_DASHBOARD.comment.root,
+        icon: ICONS.comment,
+        children: [
+          { title: "list", path: PATH_DASHBOARD.comment.list },
+        ],
+      },
     ],
   },
 
@@ -106,24 +107,6 @@ const navConfig = [
     items: [
       // REPORT : USER
       {
-        title: "Solution Report",
-        path: PATH_DASHBOARD.reportsolution.root,
-        icon: ICONS.user,
-        children: [
-          { title: "List", path: PATH_DASHBOARD.reportsolution.reportsolutionlist },
-        ],
-      },
-
-      {
-        title: "Question Report",
-        path: PATH_DASHBOARD.reportquestion.root,
-        icon: ICONS.user,
-        children: [
-          { title: "List", path: PATH_DASHBOARD.reportquestion.reportquestionlist },
-        ],
-      },
-
-      {
         title: "User Report",
         path: PATH_DASHBOARD.reportuser.root,
         icon: ICONS.user,
@@ -131,11 +114,32 @@ const navConfig = [
           { title: "List", path: PATH_DASHBOARD.reportuser.reportuserlist },
         ],
       },
-
+      // REPORT : question
+      {
+        title: "Question Report",
+        path: PATH_DASHBOARD.reportquestion.root,
+        icon: ICONS.question,
+        children: [
+          {
+            title: "List",
+            path: PATH_DASHBOARD.reportquestion.reportquestionlist,
+          },
+        ],
+      },
+      // REPORT : solution
+      {
+        title: "Solution Report",
+        path: PATH_DASHBOARD.reportsolution.root,
+        icon: ICONS.solution,
+        children: [
+          {
+            title: "List",
+            path: PATH_DASHBOARD.reportsolution.reportsolutionlist,
+          },
+        ],
+      },
     ],
-    
-  }
-
+  },
 
   // APP
   // ----------------------------------------------------------------------

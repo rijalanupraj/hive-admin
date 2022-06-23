@@ -32,11 +32,11 @@ export const colorPresets = [
   // BLUE
   {
     name: 'blue',
-    lighter: '#D1E9FC',
-    light: '#76B0F1',
-    main: '#2065D1',
-    dark: '#103996',
-    darker: '#061B64',
+    lighter: '#1877f2',
+    light: '#1877f2',
+    main: '#1877f2',
+    dark: '#1877f2',
+    darker: '#1877f2',
     contrastText: '#fff',
   },
   // ORANGE

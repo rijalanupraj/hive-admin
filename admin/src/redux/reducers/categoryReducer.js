@@ -4,51 +4,66 @@ import * as TYPES from "../types";
 const initialState = {
   categoryList: [],
   isLoading: false,
-  error: null,
+  error: null
 };
 
-export default function CategoryReducer(
-  state = initialState,
-  { type, payload }
-) {
+export default function CategoryReducer(state = initialState, { type, payload }) {
   switch (type) {
     case TYPES.ALL_CATEGORIES_LOADING:
       return {
         ...state,
         isLoading: true,
-        error: null,
+        error: null
       };
     case TYPES.ALL_CATEGORIES_SUCCESS:
       return {
         ...state,
         isLoading: false,
         categoryList: payload.categories,
-        error: null,
+        error: null
       };
 
     case TYPES.ADD_NEW_CATEGORY_SUCCESS:
       return {
         ...state,
         isLoading: false,
-        categoryList: [...state.categoryList, payload.category],
+        categoryList: [...state.categoryList, payload.category]
       };
     case TYPES.DELETE_CATEGORY_SUCCESS:
-      const latestList = state.categoryList.filter(
-        (category) => category._id !== payload.categoryId
-      );
+      const latestList = state.categoryList.filter(category => category._id !== payload.categoryId);
 
       return {
         ...state,
         isLoading: false,
         categoryList: latestList,
-        error: null,
+        error: null
+      };
+
+    case TYPES.UPDATE_CATEGORY_SUCCESS:
+      let updatedList = [];
+      if (payload.isApprove) {
+        updatedList = state.categoryList.filter(category => category._id === payload.categoryId);
+      } else {
+        updatedList = state.categoryList.map(category => {
+          if (category._id === payload.category._id) {
+            return payload.category;
+          }
+          return category;
+        });
+      }
+
+      return {
+        ...state,
+        isLoading: false,
+        categoryList: updatedList,
+        error: null
       };
 
     case TYPES.ALL_CATEGORIES_FAIL:
       return {
         ...state,
         isLoading: false,
-        error: payload.error,
+        error: payload.error
       };
     default:
       return state;

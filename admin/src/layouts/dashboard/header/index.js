@@ -81,8 +81,8 @@ export default function DashboardHeader({ onOpenSidebar, isCollapse = false, ver
 
         <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
     
-          <NotificationsPopover />
-          <ContactsPopover />
+          {/* <NotificationsPopover /> */}
+          {/* <ContactsPopover /> */}
           <AccountPopover />
         </Stack>
       </Toolbar>

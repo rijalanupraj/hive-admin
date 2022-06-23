@@ -4,6 +4,7 @@ import * as TYPES from "../types";
 const initialState = {
   usersList: [],
   adminsList: [],
+  userReports: [],
   isLoading: false,
   error: null,
   createAdminError: null
@@ -40,12 +41,43 @@ export default function UsersReducer(state = initialState, { type, payload }) {
         error: null
       };
 
+    case TYPES.DELETE_USER_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        usersList: state.usersList.filter(user => user._id !== payload.userId),
+        error: null
+      };
+
     case TYPES.CREATE_ADMIN_SUCCESS:
       return {
         ...state,
         isLoading: false,
         adminsList: [...state.adminsList, payload.admin],
         error: null
+      };
+
+    case TYPES.BAN_TOGGLE_USER_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        usersList: state.usersList.map(user => {
+          if (user._id === payload.userId) {
+            return {
+              ...user,
+              isBanned: !user.isBanned
+            };
+          }
+          return user;
+        }),
+        error: null
+      };
+
+    case TYPES.VIEW_REPORTED_USER_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        userReports: payload.reports
       };
 
     case TYPES.CREATE_ADMIN_FAIL:

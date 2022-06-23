@@ -23,6 +23,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { PATH_DASHBOARD } from "../../routes/paths";
 // hooks
 import useSettings from "../../hooks/useSettings";
+import { useSnackbar } from "notistack";
 // _mock_
 import { _solutionList } from "../../_mock";
 // components
@@ -38,7 +39,11 @@ import {
   SolutionListToolbar,
   SolutionMoreMenu
 } from "../../sections/@dashboard/solution/list";
-import { getAllSolutions, deleteSolution } from "../../redux/actions/solutionActions";
+import {
+  getAllSolutions,
+  deleteSolution,
+  hideUnHideSolutionToggle
+} from "../../redux/actions/solutionActions";
 
 // ----------------------------------------------------------------------
 
@@ -49,6 +54,7 @@ const TABLE_HEAD = [
   { id: "upvotedownvote", label: "Upvote/Downvote", alignRight: false },
   { id: "comment", label: "Comment", alignRight: false },
   { id: "isActive", label: "Is Active", alignRight: false },
+  { id: "isHidden", label: "Hidden", alignRight: false },
   { id: "tags", label: "Tags", alignRight: false },
   {}
 ];
@@ -72,6 +78,7 @@ export default function SolutionList() {
   const [orderBy, setOrderBy] = useState("question");
   const [filterSolution, setFilterSolution] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     setSolutionList(solution.solutionsList);
@@ -122,6 +129,10 @@ export default function SolutionList() {
 
   const handleDeleteSolution = solutionId => {
     dispatch(deleteSolution(solutionId));
+  };
+
+  const handleHideUnHideSolution = solutionId => {
+    dispatch(hideUnHideSolutionToggle(solutionId, enqueueSnackbar));
   };
 
   const handleDeleteMultiUser = selected => {
@@ -181,7 +192,8 @@ export default function SolutionList() {
                         comments,
                         answer,
                         upVotes,
-                        downVotes
+                        downVotes,
+                        isHide
                       } = row;
                       const isItemSelected = selected.indexOf("") !== -1;
 
@@ -206,7 +218,7 @@ export default function SolutionList() {
                               sx={{ mr: 2 }}
                             />
                             <Typography variant='subtitle2' noWrap>
-                              <Link href={PATH_DASHBOARD.user.root}>{user.username}</Link>
+                              {user.username}
                             </Typography>
                           </TableCell>
                           <TableCell align='left'>
@@ -214,6 +226,7 @@ export default function SolutionList() {
                           </TableCell>
                           <TableCell align='left'>{comments.length}</TableCell>
                           <TableCell align='left'>{isActive ? "true" : "false"}</TableCell>
+                          <TableCell align='left'>{isHide ? "true" : "false"}</TableCell>
                           <TableCell align='left'>
                             {tags.map(tag => {
                               return (
@@ -230,6 +243,7 @@ export default function SolutionList() {
                           <TableCell align='right'>
                             <SolutionMoreMenu
                               onDelete={() => handleDeleteSolution(_id)}
+                              onHideToggle={() => handleHideUnHideSolution(_id)}
                               userName={user.name}
                             />
                           </TableCell>

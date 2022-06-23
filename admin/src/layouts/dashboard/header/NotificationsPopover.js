@@ -85,7 +85,7 @@ export default function NotificationsPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <Scrollbar sx={{ height: { xs: 340, sm: 'auto' } }}>
+        {/* <Scrollbar sx={{ height: { xs: 340, sm: 'auto' } }}>
           <List
             disablePadding
             subheader={
@@ -112,7 +112,7 @@ export default function NotificationsPopover() {
               <NotificationItem key={notification.id} notification={notification} />
             ))}
           </List>
-        </Scrollbar>
+        </Scrollbar> */}
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
