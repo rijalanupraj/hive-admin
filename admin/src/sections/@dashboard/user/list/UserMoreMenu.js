@@ -17,7 +17,7 @@ UserMoreMenu.propTypes = {
   userName: PropTypes.string
 };
 
-export default function UserMoreMenu({ onDelete, userName, banToggle }) {
+export default function UserMoreMenu({ onDelete, userName, banToggle, verifyToggle }) {
   const [open, setOpen] = useState(null);
 
   const handleOpen = event => {
@@ -58,7 +58,7 @@ export default function UserMoreMenu({ onDelete, userName, banToggle }) {
           Delete
         </MenuItem>
 
-        <MenuItem sx={{ color: "success.main" }}>
+        <MenuItem onClick={verifyToggle} sx={{ color: "success.main" }}>
           <Iconify icon={"fe:check-verified"} sx={{ ...ICON }} />
           Verify Toggle
         </MenuItem>
@@ -67,9 +67,6 @@ export default function UserMoreMenu({ onDelete, userName, banToggle }) {
           <Iconify icon={"fontisto:ban"} sx={{ ...ICON }} />
           Ban Toggle
         </MenuItem>
-
-        
-
       </MenuPopover>
     </>
   );

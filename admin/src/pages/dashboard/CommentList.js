@@ -82,7 +82,7 @@ export default function QuestionList() {
 
   const handleSelectAllClick = checked => {
     if (checked) {
-      const newSelecteds = commentList.setCommentList(n => n._id);
+      const newSelecteds = commentList.map(n => n._id);
       setSelected(newSelecteds);
       return;
     }
@@ -122,13 +122,12 @@ export default function QuestionList() {
   };
 
   const handleDeleteMultiUser = selected => {
-    const deleteUsers = commentList.setCommentList(user => !selected.includes(user.name));
+    const deleteUsers = commentList.map(user => !selected.includes(user.name));
     setSelected([]);
     // setQuestionList(deleteUsers);
   };
 
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - commentList.setCommentList) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - commentList.length) : 0;
 
   const filterQuestions = applySortFilter(
     commentList,
@@ -150,7 +149,7 @@ export default function QuestionList() {
           <CommentListToolbar
             numSelected={selected.length}
             filterQuestion={filterQuestion}
-            onFilterQuestion={handleFilterByName}
+            onFilterName={handleFilterByName}
             onDeleteQuestions={() => handleDeleteMultiUser(selected)}
           />
 
@@ -161,7 +160,7 @@ export default function QuestionList() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={commentList.setCommentList}
+                  rowCount={commentList.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
@@ -232,7 +231,7 @@ export default function QuestionList() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component='div'
-            count={commentList.setCommentList}
+            count={commentList.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={(e, page) => setPage(page)}
@@ -273,7 +272,8 @@ function applySortFilter(array, comparator, query) {
     return array.filter(
       _comment =>
         _comment.text.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        _comment.user.username.toLowerCase().indexOf(query.toLowerCase()) !== -1
+        _comment.user.username.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _comment.solution._id.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis.map(el => el[0]);

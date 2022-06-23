@@ -153,6 +153,109 @@ export const viewReportedUser = userId => async (dispatch, getState) => {
   }
 };
 
+export const viewAllVerificationRequests = () => async (dispatch, getState) => {
+  dispatch({ type: TYPES.GET_ALL_VERIFICATION_REQUESTS_LOADING });
+
+  try {
+    const options = attachTokenToHeaders(getState);
+    const response = await axios.get(`${API_URL}/admin/user/view-allrequest`, options);
+
+    dispatch({
+      type: TYPES.GET_ALL_VERIFICATION_REQUESTS_SUCCESS,
+      payload: { requests: response.data.allVerificationRequests }
+    });
+  } catch (err) {
+    dispatch({
+      type: TYPES.GET_ALL_VERIFICATION_REQUESTS_FAIL,
+      payload: { error: err.response.data.message }
+    });
+  }
+};
+
+export const approveVerificationRequest =
+  (requestId, userId, enqueueSnackbar) => async (dispatch, getState) => {
+    dispatch({ type: TYPES.ACCEPT_VERIFICATION_REQUEST_LOADING });
+
+    try {
+      const options = attachTokenToHeaders(getState);
+      const response = await axios.put(
+        `${API_URL}/admin/user/approve/${requestId}/${userId}`,
+        {},
+        options
+      );
+
+      dispatch({
+        type: TYPES.ACCEPT_VERIFICATION_REQUEST_SUCCESS,
+        payload: { requestId, userId, userVerified: response.data.userVerified }
+      });
+      enqueueSnackbar("Verification request approved successfully", { variant: "success" });
+    } catch (err) {
+      dispatch({
+        type: TYPES.ACCEPT_VERIFICATION_REQUEST_FAIL,
+        payload: {
+          error: err?.response?.data?.message ?? "Something went wrong"
+        }
+      });
+      enqueueSnackbar(err?.response?.data?.message ?? "Something went wrong", { variant: "error" });
+    }
+  };
+
+export const rejectVerificationRequest =
+  (requestId, userId, enqueueSnackbar) => async (dispatch, getState) => {
+    dispatch({ type: TYPES.REJECT_VERIFICATION_REQUEST_LOADING });
+
+    try {
+      const options = attachTokenToHeaders(getState);
+      const response = await axios.put(
+        `${API_URL}/admin/user/reject/${requestId}/${userId}`,
+        {},
+        options
+      );
+
+      dispatch({
+        type: TYPES.REJECT_VERIFICATION_REQUEST_SUCCESS,
+        payload: { requestId, userId, userVerified: response.data.userVerified }
+      });
+      enqueueSnackbar("Verification request rejected successfully", { variant: "success" });
+    } catch (err) {
+      dispatch({
+        type: TYPES.REJECT_VERIFICATION_REQUEST_FAIL,
+        payload: { error: err.response.data.message }
+      });
+      enqueueSnackbar(err.response.data.message, { variant: "error" });
+    }
+  };
+
+export const verifyUserToggle = (userId, enqueueSnackbar) => async (dispatch, getState) => {
+  dispatch({ type: TYPES.VERIFY_USER_TOGGLE_LOADING });
+
+  try {
+    const options = attachTokenToHeaders(getState);
+    const response = await axios.post(
+      `${API_URL}/admin/user/verify-unverify/${userId}`,
+      {},
+      options
+    );
+
+    dispatch({
+      type: TYPES.VERIFY_USER_TOGGLE_SUCCESS,
+      payload: { userId, isVerified: response.data.isVerified }
+    });
+
+    if (response.data.isVerified) {
+      enqueueSnackbar("User verified successfully", { variant: "success" });
+    } else {
+      enqueueSnackbar("User unverified successfully", { variant: "success" });
+    }
+  } catch (err) {
+    dispatch({
+      type: TYPES.VERIFY_USER_TOGGLE_FAIL,
+      payload: { error: err.response.data.message }
+    });
+    enqueueSnackbar(err.response.data.message || "Something went wrong", { variant: "error" });
+  }
+};
+
 export const attachTokenToHeaders = getState => {
   const token = getState().auth.token;
 

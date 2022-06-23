@@ -33,20 +33,29 @@ import Scrollbar from "../../components/Scrollbar";
 import SearchNotFound from "../../components/SearchNotFound";
 import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
 // sections
-import { VerifyUserListHead, VerifyUserListToolbar, VerifyUserMoreMenu } from "../../sections/@dashboard/user/verifyUser";
+import {
+  VerifyUserListHead,
+  VerifyUserListToolbar,
+  VerifyUserMoreMenu
+} from "../../sections/@dashboard/user/verifyUser";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllUsers, deleteUser, toggleBanUser } from "../../redux/actions/usersActions";
+import {
+  getAllUsers,
+  deleteUser,
+  toggleBanUser,
+  viewAllVerificationRequests,
+  approveVerificationRequest,
+  rejectVerificationRequest
+} from "../../redux/actions/usersActions";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: "name", label: "Name", alignRight: false },
-  { id: "username", label: "UserName", alignRight: false },
-  { id: "email", label: "Email", alignRight: false },
-  { id: "following", label: "Following", alignRight: false },
-  { id: "follower", label: "Follower", alignRight: false },
-  { id: "isEmailVerified", label: "Email Verified", alignRight: false },
-  { id: 'isUserVerified', label: 'User Verified', alignRight: false },
+  { id: "username", label: "Username", alignRight: false },
+  { id: "contact", label: "Contacts", alignRight: false },
+  { id: "address", label: "Address", alignRight: false },
+  { id: "image", label: "Citizenship", alignRight: false },
   { id: "status", label: "Status", alignRight: false },
   { id: "" }
 ];
@@ -65,17 +74,17 @@ export default function VerifyUser() {
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState([]);
-  const [orderBy, setOrderBy] = useState("name");
+  const [orderBy, setOrderBy] = useState("username");
   const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
-    dispatch(getAllUsers());
+    dispatch(viewAllVerificationRequests());
   }, []);
 
   useEffect(() => {
-    setUsersList(users.usersList);
-  }, [users.usersList]);
+    setUsersList(users.userRequests);
+  }, [users.userRequests]);
 
   const handleRequestSort = property => {
     const isAsc = orderBy === property && order === "asc";
@@ -132,7 +141,7 @@ export default function VerifyUser() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - usersList.length) : 0;
 
-  const filteredUsers = applySortFilter(users.usersList, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(usersList, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && Boolean(filterName);
 
@@ -143,7 +152,7 @@ export default function VerifyUser() {
     <Page title='User: List'>
       <Container maxWidth={themeStretch ? false : "lg"}>
         <HeaderBreadcrumbs
-          heading='User List'
+          heading='Verify Request'
           links={[
             { name: "Dashboard", href: PATH_DASHBOARD.root },
             { name: "Profile", href: PATH_DASHBOARD.user.root },
@@ -174,14 +183,22 @@ export default function VerifyUser() {
                 <TableBody>
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map(user => {
-                      console.log(user);
-                      const isItemSelected = selected.indexOf(user.username) !== -1;
+                    .map(row => {
+                      const {
+                        _id,
+                        requestedBy,
+                        images,
+                        contact,
+                        address,
+                        citizenshipNumber,
+                        status
+                      } = row;
+                      const isItemSelected = selected.indexOf(_id) !== -1;
 
                       return (
                         <TableRow
                           hover
-                          key={user._id}
+                          key={_id}
                           tabIndex={-1}
                           role='checkbox'
                           selected={isItemSelected}
@@ -190,39 +207,58 @@ export default function VerifyUser() {
                           <TableCell padding='checkbox'>
                             <Checkbox
                               checked={isItemSelected}
-                              onClick={() => handleClick(user.username)}
+                              onClick={() => handleClick(requestedBy.username)}
                             />
                           </TableCell>
                           <TableCell sx={{ display: "flex", alignItems: "center" }}>
                             <Avatar
-                              alt={user.username}
-                              src={user?.profilePhoto?.hasPhoto ? user.profilePhoto.url : ""}
+                              alt={requestedBy.username}
+                              src={
+                                requestedBy?.profilePhoto?.hasPhoto
+                                  ? requestedBy.profilePhoto.url
+                                  : ""
+                              }
                               sx={{ mr: 1 }}
                             />
                             <Typography variant='subtitle2' noWrap>
-                              {user.name}
+                              {requestedBy.name}
                             </Typography>
                           </TableCell>
-                          <TableCell align='left'>{user.username}</TableCell>
-                          <TableCell align='left'>{user.email}</TableCell>
-                          <TableCell align='left'>{user.followings.length}</TableCell>
-                          <TableCell align='left'>{user.followers.length}</TableCell>
-                          <TableCell align='left'>{user.isEmailVerified ? <Iconify icon="icon-park-solid:correct" width={20} height={20} color="success.main" /> : <Iconify icon="entypo:circle-with-cross" width={20} height={20} color="red" />}</TableCell>
-                          <TableCell align='left'>{user.isUserVerified ? <Iconify icon="fe:check-verified" width={20} height={20} color="#3971f1" /> : <Iconify icon="entypo:circle-with-cross" width={20} height={20} color="red" />}</TableCell>
+                          <TableCell align='left'>{requestedBy.username}</TableCell>
+                          <TableCell align='left'>{contact}</TableCell>
+                          <TableCell align='left'>{address}</TableCell>
+                          <TableCell sx={{ display: "flex", alignItems: "center" }}>
+                            <Avatar
+                              alt={requestedBy.username}
+                              src={images.url ? images.url : ""}
+                              sx={{ mr: 1 }}
+                            />
+                            <Typography variant='subtitle2' noWrap>
+                              {citizenshipNumber}
+                            </Typography>
+                          </TableCell>
                           <TableCell align='left'>
                             <Label
                               variant={theme.palette.mode === "light" ? "ghost" : "filled"}
-                              color={(user.isBanned && "error") || "success"}
+                              color={(status && "error") || "success"}
                             >
-                              {sentenceCase(user.isBanned ? "banned" : "Not banned")}
+                              {sentenceCase(status)}
                             </Label>
                           </TableCell>
 
                           <TableCell align='right'>
                             <VerifyUserMoreMenu
-                              onDelete={() => dispatch(deleteUser(user._id, enqueueSnackbar))}
-                              banToggle={() => dispatch(toggleBanUser(user._id, enqueueSnackbar))}
-                              userName={user.username}
+                              onApprove={() => {
+                                dispatch(
+                                  approveVerificationRequest(_id, requestedBy._id, enqueueSnackbar)
+                                );
+                              }}
+                              onReject={() => {
+                                dispatch(
+                                  rejectVerificationRequest(_id, requestedBy._id, enqueueSnackbar)
+                                );
+                              }}
+                              userName={requestedBy.username}
                             />
                           </TableCell>
                         </TableRow>
@@ -289,11 +325,14 @@ function applySortFilter(array, comparator, query) {
   });
   console.log(array);
   if (query) {
-    return array.filter(_user => {
+    return array.filter(request => {
       return (
-        (_user.name && _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1) ||
-        _user.username.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        _user.email.toLowerCase().indexOf(query.toLowerCase()) !== -1
+        request.requestedBy.name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        request.requestedBy.username.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        request.citizenshipNumber.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        request.contact.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        request.address.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        request.status.toLowerCase().indexOf(query.toLowerCase()) !== -1
       );
     });
   }

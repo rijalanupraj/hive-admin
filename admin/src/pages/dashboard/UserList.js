@@ -35,7 +35,12 @@ import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
 // sections
 import { UserListHead, UserListToolbar, UserMoreMenu } from "../../sections/@dashboard/user/list";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllUsers, deleteUser, toggleBanUser } from "../../redux/actions/usersActions";
+import {
+  getAllUsers,
+  deleteUser,
+  toggleBanUser,
+  verifyUserToggle
+} from "../../redux/actions/usersActions";
 
 // ----------------------------------------------------------------------
 
@@ -46,7 +51,7 @@ const TABLE_HEAD = [
   { id: "following", label: "Following", alignRight: false },
   { id: "follower", label: "Follower", alignRight: false },
   { id: "isEmailVerified", label: "Email Verified", alignRight: false },
-  { id: 'isUserVerified', label: 'User Verified', alignRight: false },
+  { id: "isUserVerified", label: "User Verified", alignRight: false },
   { id: "status", label: "Status", alignRight: false },
   { id: "" }
 ];
@@ -132,7 +137,7 @@ export default function UserList() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - usersList.length) : 0;
 
-  const filteredUsers = applySortFilter(users.usersList, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(usersList, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && Boolean(filterName);
 
@@ -207,8 +212,40 @@ export default function UserList() {
                           <TableCell align='left'>{user.email}</TableCell>
                           <TableCell align='left'>{user.followings.length}</TableCell>
                           <TableCell align='left'>{user.followers.length}</TableCell>
-                          <TableCell align='left'>{user.isEmailVerified ? <Iconify icon="icon-park-solid:correct" width={20} height={20} color="success.main" /> : <Iconify icon="entypo:circle-with-cross" width={20} height={20} color="red" />}</TableCell>
-                          <TableCell align='left'>{user.isUserVerified ? <Iconify icon="fe:check-verified" width={20} height={20} color="#3971f1" /> : <Iconify icon="entypo:circle-with-cross" width={20} height={20} color="red" />}</TableCell>
+                          <TableCell align='left'>
+                            {user.isEmailVerified ? (
+                              <Iconify
+                                icon='icon-park-solid:correct'
+                                width={20}
+                                height={20}
+                                color='success.main'
+                              />
+                            ) : (
+                              <Iconify
+                                icon='entypo:circle-with-cross'
+                                width={20}
+                                height={20}
+                                color='red'
+                              />
+                            )}
+                          </TableCell>
+                          <TableCell align='left'>
+                            {user.isVerified ? (
+                              <Iconify
+                                icon='fe:check-verified'
+                                width={20}
+                                height={20}
+                                color='#3971f1'
+                              />
+                            ) : (
+                              <Iconify
+                                icon='entypo:circle-with-cross'
+                                width={20}
+                                height={20}
+                                color='red'
+                              />
+                            )}
+                          </TableCell>
                           <TableCell align='left'>
                             <Label
                               variant={theme.palette.mode === "light" ? "ghost" : "filled"}
@@ -220,6 +257,9 @@ export default function UserList() {
 
                           <TableCell align='right'>
                             <UserMoreMenu
+                              verifyToggle={() => {
+                                dispatch(verifyUserToggle(user._id, enqueueSnackbar));
+                              }}
                               onDelete={() => dispatch(deleteUser(user._id, enqueueSnackbar))}
                               banToggle={() => dispatch(toggleBanUser(user._id, enqueueSnackbar))}
                               userName={user.username}
