@@ -12,6 +12,7 @@ import UsersReducer from "./reducers/usersReducer";
 import QuestionReducer from "./reducers/questionReducer";
 import SolutionReducer from "./reducers/solutionReducer";
 import CategoryReducer from "./reducers/categoryReducer";
+import CommentReducer from "./reducers/commentReducer";
 
 // ----------------------------------------------------------------------
 
@@ -39,7 +40,8 @@ const rootReducer = combineReducers({
   users: UsersReducer,
   question: QuestionReducer,
   solution: SolutionReducer,
-  category: CategoryReducer
+  category: CategoryReducer,
+  comment: CommentReducer
 });
 
 export { rootPersistConfig, rootReducer };
