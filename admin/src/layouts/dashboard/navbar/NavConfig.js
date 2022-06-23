@@ -51,6 +51,7 @@ const navConfig = [
         children: [
           // { title: "Top User", path: PATH_DASHBOARD.user.cards },
           { title: "list", path: PATH_DASHBOARD.user.list },
+          { title: "Verify User", path: PATH_DASHBOARD.user.verifyuser },
         ],
       },
       // MANAGEMENT : admin User
@@ -112,6 +113,7 @@ const navConfig = [
         icon: ICONS.user,
         children: [
           { title: "List", path: PATH_DASHBOARD.reportuser.reportuserlist },
+          { title: "Ticket", path: PATH_DASHBOARD.reportuser.ticketuserlist },
         ],
       },
       // REPORT : question

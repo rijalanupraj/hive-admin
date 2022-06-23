@@ -91,6 +91,7 @@ export default function Router() {
             { path: "profile", element: <UserProfile /> },
             { path: "cards", element: <UserCards /> },
             { path: "list", element: <UserList /> },
+            { path: "verifyuser", element: <VerifyUser /> },
             { path: "new", element: <UserCreate /> },
             { path: ":name/edit", element: <UserCreate /> },
             { path: "account", element: <UserAccount /> }
@@ -176,9 +177,12 @@ export default function Router() {
               element: <Navigate to='/dashboard/reportuser/reportuserlist' replace />,
               index: true
             },
-            { path: "reportuserlist", element: <ReportUserList /> }
+            { path: "reportuserlist", element: <ReportUserList /> },
+            { path: "ticketuserlist", element: <TicketUser /> }
           ]
         },
+
+
 
         {
           path: "chat",
@@ -214,6 +218,7 @@ const GeneralBooking = Loadable(lazy(() => import("../pages/dashboard/GeneralBoo
 const UserProfile = Loadable(lazy(() => import("../pages/dashboard/UserProfile")));
 const UserCards = Loadable(lazy(() => import("../pages/dashboard/UserCards")));
 const UserList = Loadable(lazy(() => import("../pages/dashboard/UserList")));
+const VerifyUser = Loadable(lazy(() => import("../pages/dashboard/VerifyUser")));
 
 const CategoryList = Loadable(lazy(() => import("../pages/dashboard/CategoryList")));
 const SuggestedCategory = Loadable(lazy(() => import("../pages/dashboard/SuggestedCategory")));
@@ -232,6 +237,8 @@ const ReportSolutionList = Loadable(lazy(() => import("../pages/dashboard/Report
 const ReportQuestionList = Loadable(lazy(() => import("../pages/dashboard/ReportQuestionList")));
 
 const ReportUserList = Loadable(lazy(() => import("../pages/dashboard/ReportUserList")));
+
+const TicketUser = Loadable(lazy(() => import("../pages/dashboard/TicketUserList")));
 
 const UserAccount = Loadable(lazy(() => import("../pages/dashboard/UserAccount")));
 const UserCreate = Loadable(lazy(() => import("../pages/dashboard/UserCreate")));
