@@ -51,6 +51,7 @@ const navConfig = [
         children: [
           // { title: "Top User", path: PATH_DASHBOARD.user.cards },
           { title: "list", path: PATH_DASHBOARD.user.list },
+          { title: "Verify User", path: PATH_DASHBOARD.user.verifyuser },
         ],
       },
       // MANAGEMENT : admin User

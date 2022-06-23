@@ -91,6 +91,7 @@ export default function Router() {
             { path: "profile", element: <UserProfile /> },
             { path: "cards", element: <UserCards /> },
             { path: "list", element: <UserList /> },
+            { path: "verifyuser", element: <VerifyUser /> },
             { path: "new", element: <UserCreate /> },
             { path: ":name/edit", element: <UserCreate /> },
             { path: "account", element: <UserAccount /> }
@@ -217,6 +218,7 @@ const GeneralBooking = Loadable(lazy(() => import("../pages/dashboard/GeneralBoo
 const UserProfile = Loadable(lazy(() => import("../pages/dashboard/UserProfile")));
 const UserCards = Loadable(lazy(() => import("../pages/dashboard/UserCards")));
 const UserList = Loadable(lazy(() => import("../pages/dashboard/UserList")));
+const VerifyUser = Loadable(lazy(() => import("../pages/dashboard/VerifyUser")));
 
 const CategoryList = Loadable(lazy(() => import("../pages/dashboard/CategoryList")));
 const SuggestedCategory = Loadable(lazy(() => import("../pages/dashboard/SuggestedCategory")));
