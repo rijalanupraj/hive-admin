@@ -16,7 +16,7 @@ import {
   Typography,
   TableContainer,
   TablePagination,
-  Box
+  Box,
 } from "@mui/material";
 // routes
 import { PATH_DASHBOARD } from "../../routes/paths";
@@ -32,7 +32,11 @@ import Scrollbar from "../../components/Scrollbar";
 import SearchNotFound from "../../components/SearchNotFound";
 import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
 // sections
-import { UserListHead, UserListToolbar, UserMoreMenu } from "../../sections/@dashboard/user/list";
+import {
+  ReportUserListHead,
+  ReportUserListToolbar,
+  ReportUserMoreMenu,
+} from "../../sections/@dashboard/report/userReportList";
 
 import { useDispatch, useSelector } from "react-redux";
 import { viewReportedUser } from "../../redux/actions/usersActions";
@@ -42,11 +46,12 @@ import { description } from "../../_mock/text";
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: "reported", label: "Reported", alignRight: false },
+  { id: "reported", label: "Reported To", alignRight: false },
   { id: "reportedby", label: "Reported By", alignRight: false },
   { id: "subject", label: "Subject", alignRight: false },
   { id: "description", label: "Description", alignRight: false },
-  { id: "" }
+  { id: "warn", label: "Warn", alignRight: false },
+  { id: "" },
 ];
 
 // ----------------------------------------------------------------------
@@ -55,7 +60,7 @@ export default function UserList() {
   const theme = useTheme();
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
-  const users = useSelector(state => state.users);
+  const users = useSelector((state) => state.users);
   const [userReportList, setUserReportList] = useState([]);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
@@ -72,22 +77,22 @@ export default function UserList() {
     setUserReportList(users.userReports);
   }, [users.userReports]);
 
-  const handleRequestSort = property => {
+  const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = checked => {
+  const handleSelectAllClick = (checked) => {
     if (checked) {
-      const newSelecteds = userReportList.map(n => n.name);
+      const newSelecteds = userReportList.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = name => {
+  const handleClick = (name) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
     if (selectedIndex === -1) {
@@ -105,48 +110,57 @@ export default function UserList() {
     setSelected(newSelected);
   };
 
-  const handleChangeRowsPerPage = event => {
+  const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
-  const handleFilterByName = filterName => {
+  const handleFilterByName = (filterName) => {
     setFilterName(filterName);
     setPage(0);
   };
 
-  const handleDeleteUser = userId => {
-    const deleteUser = userReportList.filter(user => user.id !== userId);
+  const handleDeleteUser = (userId) => {
+    const deleteUser = userReportList.filter((user) => user.id !== userId);
     setSelected([]);
     setUserReportList(deleteUser);
   };
 
-  const handleDeleteMultiUser = selected => {
-    const deleteUsers = userReportList.filter(user => !selected.includes(user.name));
+  const handleDeleteMultiUser = (selected) => {
+    const deleteUsers = userReportList.filter(
+      (user) => !selected.includes(user.name)
+    );
     setSelected([]);
     setUserReportList(deleteUsers);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userReportList.length) : 0;
+  const emptyRows =
+    page > 0
+      ? Math.max(0, (1 + page) * rowsPerPage - userReportList.length)
+      : 0;
 
-  const filteredUsers = applySortFilter(userReportList, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(
+    userReportList,
+    getComparator(order, orderBy),
+    filterName
+  );
 
   const isNotFound = !filteredUsers.length && Boolean(filterName);
 
   return (
-    <Page title='User: List'>
+    <Page title="User: List">
       <Container maxWidth={themeStretch ? false : "lg"}>
         <HeaderBreadcrumbs
-          heading='User Reports'
+          heading="User Reports"
           links={[
             { name: "Dashboard", href: PATH_DASHBOARD.root },
             { name: "User", href: PATH_DASHBOARD.user.root },
-            { name: "List" }
+            { name: "List" },
           ]}
         />
 
         <Card>
-          <UserListToolbar
+          <ReportUserListToolbar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
@@ -156,7 +170,7 @@ export default function UserList() {
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
-                <UserListHead
+                <ReportUserListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
@@ -168,8 +182,15 @@ export default function UserList() {
                 <TableBody>
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map(row => {
-                      const { _id, reportedUser, reportedBy, subject, description } = row;
+                    .map((row) => {
+                      const {
+                        _id,
+                        reportedUser,
+                        reportedBy,
+                        subject,
+                        description,
+                        warn,
+                      } = row;
                       const isItemSelected = selected.indexOf(_id) !== -1;
 
                       return (
@@ -177,14 +198,19 @@ export default function UserList() {
                           hover
                           key={_id}
                           tabIndex={-1}
-                          role='checkbox'
+                          role="checkbox"
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >
-                          <TableCell padding='checkbox'>
-                            <Checkbox checked={isItemSelected} onClick={() => handleClick(_id)} />
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              checked={isItemSelected}
+                              onClick={() => handleClick(_id)}
+                            />
                           </TableCell>
-                          <TableCell sx={{ display: "flex", alignItems: "center" }}>
+                          <TableCell
+                            sx={{ display: "flex", alignItems: "center" }}
+                          >
                             <Avatar
                               alt={reportedUser.username}
                               src={
@@ -194,7 +220,7 @@ export default function UserList() {
                               }
                               sx={{ mr: 1 }}
                             />
-                            <Typography variant='subtitle2' noWrap>
+                            <Typography variant="subtitle2" noWrap>
                               {reportedUser.username}
                             </Typography>
                           </TableCell>
@@ -210,16 +236,37 @@ export default function UserList() {
                                 }
                                 sx={{ mr: 1 }}
                               />
-                              <Typography variant='subtitle2' noWrap>
+                              <Typography variant="subtitle2" noWrap>
                                 {reportedBy.username}
                               </Typography>
                             </Box>
                           </TableCell>
-                          <TableCell align='left'>{subject}</TableCell>
-                          <TableCell align='left'>{description}</TableCell>
+                          <TableCell align="left">{subject}</TableCell>
+                          <TableCell align="left">{description}</TableCell>
+                          <TableCell align="left">
+                            {reportedUser.isWarned ? (
+                              <Iconify
+                                icon="icon-park-solid:correct
+"
+                                width={20}
+                                height={20}
+                                color="success.main"
+                              />
+                            ) : (
+                              <Iconify
+                                icon="entypo:circle-with-cross"
+                                width={20}
+                                height={20}
+                                color="error.main"
+                              />
+                            )}
+                          </TableCell>
 
-                          <TableCell align='right'>
-                            <UserMoreMenu onDelete={() => handleDeleteUser(_id)} userName={""} />
+                          <TableCell align="right">
+                            <ReportUserMoreMenu
+                              onDelete={() => handleDeleteUser(_id)}
+                              userName={""}
+                            />
                           </TableCell>
                         </TableRow>
                       );
@@ -233,7 +280,7 @@ export default function UserList() {
                 {isNotFound && (
                   <TableBody>
                     <TableRow>
-                      <TableCell align='center' colSpan={6} sx={{ py: 3 }}>
+                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
                         <SearchNotFound searchQuery={filterName} />
                       </TableCell>
                     </TableRow>
@@ -245,7 +292,7 @@ export default function UserList() {
 
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
-            component='div'
+            component="div"
             count={userReportList.length}
             rowsPerPage={rowsPerPage}
             page={page}
@@ -285,11 +332,15 @@ function applySortFilter(array, comparator, query) {
   });
   if (query) {
     return array.filter(
-      report =>
+      (report) =>
         report.subject.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        report.reportedBy.username.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        report.reportedUser.username.toLowerCase().indexOf(query.toLowerCase()) !== -1
+        report.reportedBy.username
+          .toLowerCase()
+          .indexOf(query.toLowerCase()) !== -1 ||
+        report.reportedUser.username
+          .toLowerCase()
+          .indexOf(query.toLowerCase()) !== -1
     );
   }
-  return stabilizedThis.map(el => el[0]);
+  return stabilizedThis.map((el) => el[0]);
 }

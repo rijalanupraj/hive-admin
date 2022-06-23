@@ -46,6 +46,7 @@ const TABLE_HEAD = [
   { id: "following", label: "Following", alignRight: false },
   { id: "follower", label: "Follower", alignRight: false },
   { id: "isEmailVerified", label: "Email Verified", alignRight: false },
+  { id: 'isUserVerified', label: 'User Verified', alignRight: false },
   { id: "status", label: "Status", alignRight: false },
   { id: "" }
 ];
@@ -206,7 +207,8 @@ export default function UserList() {
                           <TableCell align='left'>{user.email}</TableCell>
                           <TableCell align='left'>{user.followings.length}</TableCell>
                           <TableCell align='left'>{user.followers.length}</TableCell>
-                          <TableCell align='left'>{user.isEmailVerified ? "Yes" : "No"}</TableCell>
+                          <TableCell align='left'>{user.isEmailVerified ? <Iconify icon="icon-park-solid:correct" width={20} height={20} color="success.main" /> : <Iconify icon="entypo:circle-with-cross" width={20} height={20} color="red" />}</TableCell>
+                          <TableCell align='left'>{user.isUserVerified ? <Iconify icon="fe:check-verified" width={20} height={20} color="#3971f1" /> : <Iconify icon="entypo:circle-with-cross" width={20} height={20} color="red" />}</TableCell>
                           <TableCell align='left'>
                             <Label
                               variant={theme.palette.mode === "light" ? "ghost" : "filled"}
