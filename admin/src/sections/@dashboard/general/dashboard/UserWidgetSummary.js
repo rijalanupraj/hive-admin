@@ -16,13 +16,13 @@ const RootStyle = styled(Card)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-BookingWidgetSummary.propTypes = {
+UserWidgetSummary.propTypes = {
   icon: PropTypes.any,
   title: PropTypes.string,
   total: PropTypes.number,
 };
 
-export default function BookingWidgetSummary({ title, total, icon }) {
+export default function UserWidgetSummary({ title, total, icon }) {
   return (
     <RootStyle>
       <div>
@@ -37,7 +37,7 @@ export default function BookingWidgetSummary({ title, total, icon }) {
           height: 120,
           lineHeight: 0,
           borderRadius: '50%',
-          bgcolor: 'background.neutral',
+          // bgcolor: '#303030',
         }}
       >
         {icon}

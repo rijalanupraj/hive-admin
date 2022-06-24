@@ -80,7 +80,7 @@ export default function Router() {
         { element: <Navigate to='/dashboard/list' replace />, index: true },
 
         { path: "analytics", element: <GeneralAnalytics /> },
-        { path: "booking", element: <GeneralBooking /> },
+        { path: "dashboard", element: <GeneralDashboard /> },
         { path: "list", element: <UserList /> },
 
         {
@@ -213,7 +213,7 @@ const Login = Loadable(lazy(() => import("../pages/auth/Login")));
 // Dashboard
 
 const GeneralAnalytics = Loadable(lazy(() => import("../pages/dashboard/GeneralAnalytics")));
-const GeneralBooking = Loadable(lazy(() => import("../pages/dashboard/GeneralBooking")));
+const GeneralDashboard = Loadable(lazy(() => import("../pages/dashboard/GeneralDashboard")));
 
 const UserProfile = Loadable(lazy(() => import("../pages/dashboard/UserProfile")));
 const UserCards = Loadable(lazy(() => import("../pages/dashboard/UserCards")));
