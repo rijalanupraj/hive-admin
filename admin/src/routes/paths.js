@@ -18,7 +18,7 @@ export const PATH_DASHBOARD = {
   general: {
     app: path(ROOTS_DASHBOARD, "/app"),
     analytics: path(ROOTS_DASHBOARD, "/analytics"),
-    booking: path(ROOTS_DASHBOARD, "/booking")
+    dashboard: path(ROOTS_DASHBOARD, "/dashboard")
   },
 
   chat: {
