@@ -17,7 +17,7 @@ UserMoreMenu.propTypes = {
   userName: PropTypes.string
 };
 
-export default function UserMoreMenu({ onDelete, userName, banToggle, verifyToggle }) {
+export default function UserMoreMenu({ onDelete, userName, banToggle, verifyToggle, warnUser }) {
   const [open, setOpen] = useState(null);
 
   const handleOpen = event => {
@@ -61,6 +61,11 @@ export default function UserMoreMenu({ onDelete, userName, banToggle, verifyTogg
         <MenuItem onClick={verifyToggle} sx={{ color: "success.main" }}>
           <Iconify icon={"fe:check-verified"} sx={{ ...ICON }} />
           Verify Toggle
+        </MenuItem>
+
+        <MenuItem onClick={warnUser} sx={{ color: "warning.main" }}>
+          <Iconify icon={"eva:alert-triangle-outline"} sx={{ ...ICON }} />
+          Warn User
         </MenuItem>
 
         <MenuItem onClick={banToggle} sx={{ color: "error.main" }}>

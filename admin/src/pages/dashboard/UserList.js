@@ -1,6 +1,7 @@
 import { sentenceCase } from "change-case";
 import { useEffect, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
+import { LoadingButton } from "@mui/lab";
 // @mui
 import { useTheme } from "@mui/material/styles";
 import {
@@ -16,7 +17,12 @@ import {
   Typography,
   TableContainer,
   TablePagination,
-  Link
+  Link,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  Grid
 } from "@mui/material";
 // routes
 import { PATH_DASHBOARD } from "../../routes/paths";
@@ -24,6 +30,11 @@ import { PATH_DASHBOARD } from "../../routes/paths";
 import useSettings from "../../hooks/useSettings";
 
 import { useSnackbar } from "notistack";
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useMemo } from "react";
+import { useForm } from "react-hook-form";
+import { FormProvider, RHFSwitch, RHFTextField } from "../../components/hook-form";
 
 // components
 import Page from "../../components/Page";
@@ -39,7 +50,8 @@ import {
   getAllUsers,
   deleteUser,
   toggleBanUser,
-  verifyUserToggle
+  verifyUserToggle,
+  warnUser
 } from "../../redux/actions/usersActions";
 
 // ----------------------------------------------------------------------
@@ -64,8 +76,10 @@ export default function UserList() {
   const theme = useTheme();
   const { themeStretch } = useSettings();
   const [usersList, setUsersList] = useState([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
+  const [currentWarnUser, setCurrentWarnUser] = useState({});
 
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
@@ -141,11 +155,25 @@ export default function UserList() {
 
   const isNotFound = !filteredUsers.length && Boolean(filterName);
 
+  const handleWarnUser = user => {
+    if (user) {
+      setCurrentWarnUser(user);
+      setTimeout(() => {
+        setDialogOpen(true);
+      });
+    }
+  };
+
   if (users.isLoading || !users.usersList) {
     return <h1>Loading</h1>;
   }
   return (
     <Page title='User: List'>
+      <WarnUserDialog
+        dialogOpen={dialogOpen}
+        setDialogOpen={setDialogOpen}
+        user={currentWarnUser}
+      />
       <Container maxWidth={themeStretch ? false : "lg"}>
         <HeaderBreadcrumbs
           heading='User List'
@@ -260,6 +288,9 @@ export default function UserList() {
                               verifyToggle={() => {
                                 dispatch(verifyUserToggle(user._id, enqueueSnackbar));
                               }}
+                              warnUser={() => {
+                                handleWarnUser(user);
+                              }}
                               onDelete={() => dispatch(deleteUser(user._id, enqueueSnackbar))}
                               banToggle={() => dispatch(toggleBanUser(user._id, enqueueSnackbar))}
                               userName={user.username}
@@ -339,3 +370,84 @@ function applySortFilter(array, comparator, query) {
   }
   return stabilizedThis.map(el => el[0]);
 }
+
+const WarnUserDialog = ({ dialogOpen, setDialogOpen, user }) => {
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
+  const onSubmit = async () => {
+    try {
+      dispatch(warnUser(user._id, values, enqueueSnackbar));
+      reset();
+      setDialogOpen(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const CategorySchema = Yup.object().shape({
+    reason: Yup.string().required("Reason is required"),
+    description: Yup.string().required("Description is required")
+  });
+
+  const defaultValues = useMemo(
+    () => ({
+      reason: "",
+      description: ""
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
+  const methods = useForm({
+    resolver: yupResolver(CategorySchema),
+    defaultValues
+  });
+
+  const {
+    reset,
+    watch,
+    control,
+    setValue,
+    handleSubmit,
+    formState: { isSubmitting, isValid }
+  } = methods;
+
+  const values = watch();
+
+  const handleClose = () => {
+    setDialogOpen(false);
+  };
+
+  return (
+    <Dialog open={dialogOpen} onClose={handleClose} maxWidth='lg'>
+      <DialogTitle>Warn User</DialogTitle>
+
+      <DialogContent>
+        <br />
+        <DialogContentText>Warn User {user?.username} </DialogContentText>
+        <br />
+        <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+          <Grid container spacing={3}>
+            <Grid item xs={6}>
+              <RHFTextField name='reason' label='Reason' />
+            </Grid>
+            <Grid item xs={6}>
+              <RHFTextField name='description' label='Description' />
+            </Grid>
+            <LoadingButton
+              fullWidth
+              size='large'
+              type='submit'
+              variant='contained'
+              loading={isSubmitting}
+              sx={{ mt: 2, ml: 3 }}
+            >
+              Warn User
+            </LoadingButton>
+          </Grid>
+          <br />
+        </FormProvider>
+      </DialogContent>
+    </Dialog>
+  );
+};
