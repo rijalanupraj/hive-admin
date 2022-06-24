@@ -256,6 +256,20 @@ export const verifyUserToggle = (userId, enqueueSnackbar) => async (dispatch, ge
   }
 };
 
+export const warnUser = (userId, jsonData, enqueueSnackbar) => async (dispatch, getState) => {
+  try {
+    const options = attachTokenToHeaders(getState);
+    const response = await axios.post(
+      `${API_URL}/admin/user/warn-user/${userId}`,
+      jsonData,
+      options
+    );
+    enqueueSnackbar("User warned successfully", { variant: "success" });
+  } catch (err) {
+    enqueueSnackbar(err.response.data.message || "Something went wrong", { variant: "error" });
+  }
+};
+
 export const attachTokenToHeaders = getState => {
   const token = getState().auth.token;
 
