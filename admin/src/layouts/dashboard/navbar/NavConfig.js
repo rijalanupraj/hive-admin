@@ -113,6 +113,7 @@ const navConfig = [
         icon: ICONS.user,
         children: [
           { title: "List", path: PATH_DASHBOARD.reportuser.reportuserlist },
+          { title: "Warn", path: PATH_DASHBOARD.reportuser.warnuserlist },
           { title: "Ticket", path: PATH_DASHBOARD.reportuser.ticketuserlist },
         ],
       },

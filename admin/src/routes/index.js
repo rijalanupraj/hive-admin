@@ -178,7 +178,8 @@ export default function Router() {
               index: true
             },
             { path: "reportuserlist", element: <ReportUserList /> },
-            { path: "ticketuserlist", element: <TicketUser /> }
+            { path: "warnuserlist", element: <WarnUserList /> },
+            { path: "ticketuserlist", element: <TicketUser /> },
           ]
         },
 
@@ -237,6 +238,8 @@ const ReportSolutionList = Loadable(lazy(() => import("../pages/dashboard/Report
 const ReportQuestionList = Loadable(lazy(() => import("../pages/dashboard/ReportQuestionList")));
 
 const ReportUserList = Loadable(lazy(() => import("../pages/dashboard/ReportUserList")));
+
+const WarnUserList = Loadable(lazy(() => import("../pages/dashboard/WarnUserList")));
 
 const TicketUser = Loadable(lazy(() => import("../pages/dashboard/TicketUserList")));
 
