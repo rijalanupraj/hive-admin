@@ -270,6 +270,25 @@ export const warnUser = (userId, jsonData, enqueueSnackbar) => async (dispatch, 
   }
 };
 
+export const viewAllWarnedUsers = () => async (dispatch, getState) => {
+  dispatch({ type: TYPES.VIEW_ALL_WARNED_USERS_LOADING });
+
+  try {
+    const options = attachTokenToHeaders(getState);
+    const response = await axios.get(`${API_URL}/admin/user/all-warnings`, options);
+
+    dispatch({
+      type: TYPES.VIEW_ALL_WARNED_USERS_SUCCESS,
+      payload: { warnings: response.data.allWarnings }
+    });
+  } catch (err) {
+    dispatch({
+      type: TYPES.VIEW_ALL_WARNED_USERS_FAIL,
+      payload: { error: err.response.data.message || "Something went wrong" }
+    });
+  }
+};
+
 export const attachTokenToHeaders = getState => {
   const token = getState().auth.token;
 

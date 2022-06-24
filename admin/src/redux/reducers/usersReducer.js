@@ -6,6 +6,7 @@ const initialState = {
   adminsList: [],
   userReports: [],
   userRequests: [],
+  allWarnings: [],
   isLoading: false,
   error: null,
   createAdminError: null
@@ -154,6 +155,13 @@ export default function UsersReducer(state = initialState, { type, payload }) {
           return user;
         }),
         error: null
+      };
+
+    case TYPES.VIEW_ALL_WARNED_USERS_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        allWarnings: payload.warnings
       };
 
     case TYPES.CREATE_ADMIN_FAIL:
