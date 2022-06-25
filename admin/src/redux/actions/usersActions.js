@@ -289,6 +289,25 @@ export const viewAllWarnedUsers = () => async (dispatch, getState) => {
   }
 };
 
+export const viewAllTickets = () => async (dispatch, getState) => {
+  dispatch({ type: TYPES.VIEW_ALL_TICKETS_LOADING });
+
+  try {
+    const options = attachTokenToHeaders(getState);
+    const response = await axios.get(`${API_URL}/admin/ticket/all-tickets`, options);
+
+    dispatch({
+      type: TYPES.VIEW_ALL_TICKETS_SUCCESS,
+      payload: { tickets: response.data.alltickets }
+    });
+  } catch (err) {
+    dispatch({
+      type: TYPES.VIEW_ALL_TICKETS_FAIL,
+      payload: { error: err.response.data.message || "Something went wrong" }
+    });
+  }
+};
+
 export const attachTokenToHeaders = getState => {
   const token = getState().auth.token;
 

@@ -16,7 +16,7 @@ import {
   Typography,
   TableContainer,
   TablePagination,
-  Box,
+  Box
 } from "@mui/material";
 // routes
 import { PATH_DASHBOARD } from "../../routes/paths";
@@ -35,23 +35,22 @@ import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
 import {
   TicketUserListHead,
   TicketUserListToolbar,
-  TicketUserMoreMenu,
+  TicketUserMoreMenu
 } from "../../sections/@dashboard/report/ticket";
 
 import { useDispatch, useSelector } from "react-redux";
-import { viewReportedUser } from "../../redux/actions/usersActions";
+import { viewAllTickets } from "../../redux/actions/usersActions";
 import { useEffect } from "react";
 import { description } from "../../_mock/text";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: "reported", label: "Reported To", alignRight: false },
-  { id: "reportedby", label: "Reported By", alignRight: false },
-  { id: "subject", label: "Subject", alignRight: false },
+  { id: "ticketBy", label: "Ticket By", alignRight: false },
+  { id: "request", label: "Request", alignRight: false },
   { id: "description", label: "Description", alignRight: false },
-  { id: "warn", label: "Warn", alignRight: false },
-  { id: "" },
+  { id: "status", label: "Status", alignRight: false },
+  { id: "" }
 ];
 
 // ----------------------------------------------------------------------
@@ -60,39 +59,39 @@ export default function TicketUserList() {
   const theme = useTheme();
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
-  const users = useSelector((state) => state.users);
+  const users = useSelector(state => state.users);
   const [userReportList, setUserReportList] = useState([]);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState([]);
-  const [orderBy, setOrderBy] = useState("subject");
+  const [orderBy, setOrderBy] = useState("request");
   const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
-    dispatch(viewReportedUser());
+    dispatch(viewAllTickets());
   }, []);
 
   useEffect(() => {
-    setUserReportList(users.userReports);
-  }, [users.userReports]);
+    setUserReportList(users.allTickets);
+  }, [users.allTickets]);
 
-  const handleRequestSort = (property) => {
+  const handleRequestSort = property => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = (checked) => {
+  const handleSelectAllClick = checked => {
     if (checked) {
-      const newSelecteds = userReportList.map((n) => n.name);
+      const newSelecteds = userReportList.map(n => n.name);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (name) => {
+  const handleClick = name => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
     if (selectedIndex === -1) {
@@ -110,52 +109,43 @@ export default function TicketUserList() {
     setSelected(newSelected);
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = event => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
-  const handleFilterByName = (filterName) => {
+  const handleFilterByName = filterName => {
     setFilterName(filterName);
     setPage(0);
   };
 
-  const handleDeleteUser = (userId) => {
-    const deleteUser = userReportList.filter((user) => user.id !== userId);
+  const handleDeleteUser = userId => {
+    const deleteUser = userReportList.filter(user => user.id !== userId);
     setSelected([]);
     setUserReportList(deleteUser);
   };
 
-  const handleDeleteMultiUser = (selected) => {
-    const deleteUsers = userReportList.filter(
-      (user) => !selected.includes(user.name)
-    );
+  const handleDeleteMultiUser = selected => {
+    const deleteUsers = userReportList.filter(user => !selected.includes(user.name));
     setSelected([]);
     setUserReportList(deleteUsers);
   };
 
-  const emptyRows =
-    page > 0
-      ? Math.max(0, (1 + page) * rowsPerPage - userReportList.length)
-      : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userReportList.length) : 0;
 
-  const filteredUsers = applySortFilter(
-    userReportList,
-    getComparator(order, orderBy),
-    filterName
-  );
+  const filteredUsers = applySortFilter(userReportList, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && Boolean(filterName);
 
   return (
-    <Page title="User: List">
+    <Page title='User: List'>
       <Container maxWidth={themeStretch ? false : "lg"}>
         <HeaderBreadcrumbs
-          heading="User Reports"
+          heading='User Reports'
           links={[
             { name: "Dashboard", href: PATH_DASHBOARD.root },
             { name: "User", href: PATH_DASHBOARD.user.root },
-            { name: "List" },
+            { name: "List" }
           ]}
         />
 
@@ -182,15 +172,8 @@ export default function TicketUserList() {
                 <TableBody>
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row) => {
-                      const {
-                        _id,
-                        reportedUser,
-                        reportedBy,
-                        subject,
-                        description,
-                        warn,
-                      } = row;
+                    .map(row => {
+                      const { _id, ticketBy, request, description, status } = row;
                       const isItemSelected = selected.indexOf(_id) !== -1;
 
                       return (
@@ -198,71 +181,33 @@ export default function TicketUserList() {
                           hover
                           key={_id}
                           tabIndex={-1}
-                          role="checkbox"
+                          role='checkbox'
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              checked={isItemSelected}
-                              onClick={() => handleClick(_id)}
-                            />
-                          </TableCell>
-                          <TableCell
-                            sx={{ display: "flex", alignItems: "center" }}
-                          >
-                            <Avatar
-                              alt={reportedUser.username}
-                              src={
-                                reportedUser?.profilePhoto?.hasPhoto
-                                  ? reportedUser.profilePhoto.url
-                                  : ""
-                              }
-                              sx={{ mr: 1 }}
-                            />
-                            <Typography variant="subtitle2" noWrap>
-                              {reportedUser.username}
-                            </Typography>
+                          <TableCell padding='checkbox'>
+                            <Checkbox checked={isItemSelected} onClick={() => handleClick(_id)} />
                           </TableCell>
 
                           <TableCell>
                             <Box sx={{ display: "flex", alignItems: "center" }}>
                               <Avatar
-                                alt={reportedBy.username}
+                                alt={ticketBy.username}
                                 src={
-                                  reportedBy?.profilePhoto?.hasPhoto
-                                    ? reportedBy.profilePhoto.url
-                                    : ""
+                                  ticketBy?.profilePhoto?.hasPhoto ? ticketBy.profilePhoto.url : ""
                                 }
                                 sx={{ mr: 1 }}
                               />
-                              <Typography variant="subtitle2" noWrap>
-                                {reportedBy.username}
+                              <Typography variant='subtitle2' noWrap>
+                                {ticketBy.username}
                               </Typography>
                             </Box>
                           </TableCell>
-                          <TableCell align="left">{subject}</TableCell>
-                          <TableCell align="left">{description}</TableCell>
-                          <TableCell align="left">
-                            {reportedUser.isWarned ? (
-                              <Iconify
-                                icon="icon-park-solid:correct
-"
-                                width={20}
-                                height={20}
-                                color="success.main"
-                              />
-                            ) : (
-                              <Iconify
-                                icon="entypo:circle-with-cross"
-                                width={20}
-                                height={20}
-                                color="error.main"
-                              />
-                            )}
-                          </TableCell>
+                          <TableCell align='left'>{request}</TableCell>
+                          <TableCell align='left'>{description}</TableCell>
+                          <TableCell align='left'>{status}</TableCell>
 
-                          <TableCell align="right">
+                          <TableCell align='right'>
                             <TicketUserMoreMenu
                               onDelete={() => handleDeleteUser(_id)}
                               userName={""}
@@ -280,7 +225,7 @@ export default function TicketUserList() {
                 {isNotFound && (
                   <TableBody>
                     <TableRow>
-                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                      <TableCell align='center' colSpan={6} sx={{ py: 3 }}>
                         <SearchNotFound searchQuery={filterName} />
                       </TableCell>
                     </TableRow>
@@ -292,7 +237,7 @@ export default function TicketUserList() {
 
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
-            component="div"
+            component='div'
             count={userReportList.length}
             rowsPerPage={rowsPerPage}
             page={page}
@@ -332,15 +277,11 @@ function applySortFilter(array, comparator, query) {
   });
   if (query) {
     return array.filter(
-      (report) =>
+      report =>
         report.subject.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        report.reportedBy.username
-          .toLowerCase()
-          .indexOf(query.toLowerCase()) !== -1 ||
-        report.reportedUser.username
-          .toLowerCase()
-          .indexOf(query.toLowerCase()) !== -1
+        report.reportedBy.username.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        report.reportedUser.username.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
-  return stabilizedThis.map((el) => el[0]);
+  return stabilizedThis.map(el => el[0]);
 }
