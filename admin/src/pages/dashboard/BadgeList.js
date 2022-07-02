@@ -44,10 +44,10 @@ import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
 import { useSnackbar } from "notistack";
 // sections
 import {
-  CategoryListHead,
-  CategoryListToolbar,
-  CategoryMoreMenu
-} from "../../sections/@dashboard/category/list";
+  BadgeListHead,
+  BadgeListToolbar,
+  BadgeMoreMenu
+} from "../../sections/@dashboard/badge/list";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllCategories,
@@ -71,7 +71,7 @@ const TABLE_HEAD = [
 
 // ----------------------------------------------------------------------
 
-export default function CategoryList() {
+export default function BadgeList() {
   const theme = useTheme();
   const dispatch = useDispatch();
   const category = useSelector(state => state.category);
@@ -183,11 +183,11 @@ export default function CategoryList() {
       />
       <Container maxWidth={themeStretch ? false : "lg"}>
         <HeaderBreadcrumbs
-          heading='Category List'
+          heading='Badge List'
           links={[
             { name: "Dashboard", href: "/" },
-            { name: "Category", href: "/" },
-            { name: "List" }
+            { name: "Badge", href: "/" },
+            { name: "Badge" }
           ]}
           action={
             <Button
@@ -197,13 +197,13 @@ export default function CategoryList() {
               }}
               startIcon={<Iconify icon={"eva:plus-fill"} />}
             >
-              New Category
+              New Badge
             </Button>
           }
         />
 
         <Card>
-          <CategoryListToolbar
+          <BadgeListToolbar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
@@ -213,7 +213,7 @@ export default function CategoryList() {
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
-                <CategoryListHead
+                <BadgeListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
@@ -262,7 +262,7 @@ export default function CategoryList() {
                             </TableCell>
 
                             <TableCell align='right'>
-                              <CategoryMoreMenu
+                              <BadgeMoreMenu
                                 onDelete={() => handleDeleteCategory(_id)}
                                 onEdit={() => handleCreateUpdateCategory(true, row)}
                                 userName={title}

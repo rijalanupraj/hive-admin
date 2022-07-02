@@ -90,6 +90,13 @@ const navConfig = [
         path: PATH_DASHBOARD.comment.root,
         icon: ICONS.comment,
         children: [{ title: "list", path: PATH_DASHBOARD.comment.list }]
+      },
+       //comment
+       {
+        title: "badge",
+        path: PATH_DASHBOARD.badge.root,
+        icon: ICONS.comment,
+        children: [{ title: "list", path: PATH_DASHBOARD.badge.list }]
       }
     ]
   },
