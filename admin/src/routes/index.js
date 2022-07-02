@@ -11,6 +11,7 @@ import DashboardLayout from "../layouts/dashboard";
 // components
 import LoadingScreen from "../components/LoadingScreen";
 import { loadMe } from "../redux/actions/authActions";
+import KanbanList from "../pages/dashboard/KanbanList";
 
 // ----------------------------------------------------------------------
 
@@ -179,11 +180,9 @@ export default function Router() {
             },
             { path: "reportuserlist", element: <ReportUserList /> },
             { path: "warnuserlist", element: <WarnUserList /> },
-            { path: "ticketuserlist", element: <TicketUser /> },
+            { path: "ticketuserlist", element: <TicketUser /> }
           ]
         },
-
-
 
         {
           path: "chat",
@@ -194,7 +193,7 @@ export default function Router() {
           ]
         },
         { path: "calendar", element: <Calendar /> },
-        { path: "kanban", element: <Kanban /> }
+        { path: "kanban", element: <KanbanList /> }
       ]
     }
   ]);
