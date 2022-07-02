@@ -89,6 +89,25 @@ export const deleteKanbanBoard = (boardId, enqueueSnackbar) => async (dispatch, 
   }
 };
 
+export const getBoardById = boardId => async (dispatch, getState) => {
+  dispatch({ type: TYPES.GET_BOARD_BY_ID_LOADING });
+
+  try {
+    const options = attachTokenToHeaders(getState);
+    const response = await axios.get(`${API_URL}/admin/kanban/board/${boardId}`, options);
+
+    dispatch({
+      type: TYPES.GET_BOARD_BY_ID_SUCCESS,
+      payload: { board: response.data.board }
+    });
+  } catch (err) {
+    dispatch({
+      type: TYPES.GET_BOARD_BY_ID_FAIL,
+      payload: { error: err?.response?.data?.message || "Something went wrong" }
+    });
+  }
+};
+
 export const attachTokenToHeaders = getState => {
   const token = getState().auth.token;
 

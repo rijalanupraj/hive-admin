@@ -1,105 +1,123 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 // @mui
-import { Container, Stack } from '@mui/material';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { Container, Stack } from "@mui/material";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 // redux
-import { useDispatch, useSelector } from '../../redux/store';
-import { getBoard, persistColumn, persistCard } from '../../redux/slices/kanban';
+import { useDispatch, useSelector } from "../../redux/store";
+import { getBoard, persistColumn, persistCard } from "../../redux/slices/kanban";
 // routes
-import { PATH_DASHBOARD } from '../../routes/paths';
+import { PATH_DASHBOARD } from "../../routes/paths";
 // components
-import Page from '../../components/Page';
-import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import { SkeletonKanbanColumn } from '../../components/skeleton';
+import Page from "../../components/Page";
+import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
+import { SkeletonKanbanColumn } from "../../components/skeleton";
 // sections
-import { KanbanColumn, KanbanColumnAdd } from '../../sections/@dashboard/kanban';
+import { KanbanColumn, KanbanColumnAdd } from "../../sections/@dashboard/kanban";
+import { useParams, useNavigate } from "react-router";
+
+import { getBoardById } from "../../redux/actions/kanbanActions";
 
 // ----------------------------------------------------------------------
 
 export default function Kanban() {
   const dispatch = useDispatch();
-  const { board } = useSelector((state) => state.kanban);
+  const kanban = useSelector(state => state.kanban);
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(getBoard());
-  }, [dispatch]);
+    dispatch(getBoardById(id));
+  }, []);
 
-  const onDragEnd = (result) => {
-    // Reorder card
-    const { destination, source, draggableId, type } = result;
+  // If page is not found then redirect to dashboard
+  if (kanban.isLoading) {
+    return <div>Loading</div>;
+  }
 
-    if (!destination) return;
+  if (!kanban.isLoading && !kanban.board) {
+    navigate("/dashboard/kanban");
+  }
 
-    if (destination.droppableId === source.droppableId && destination.index === source.index) return;
+  // useEffect(() => {
+  //   dispatch(getBoard());
+  // }, [dispatch]);
 
-    if (type === 'column') {
-      const newColumnOrder = Array.from(board.columnOrder);
-      newColumnOrder.splice(source.index, 1);
-      newColumnOrder.splice(destination.index, 0, draggableId);
+  // const onDragEnd = (result) => {
+  //   // Reorder card
+  //   const { destination, source, draggableId, type } = result;
 
-      dispatch(persistColumn(newColumnOrder));
-      return;
-    }
+  //   if (!destination) return;
 
-    const start = board.columns[source.droppableId];
-    const finish = board.columns[destination.droppableId];
+  //   if (destination.droppableId === source.droppableId && destination.index === source.index) return;
 
-    if (start.id === finish.id) {
-      const updatedCardIds = [...start.cardIds];
-      updatedCardIds.splice(source.index, 1);
-      updatedCardIds.splice(destination.index, 0, draggableId);
+  //   if (type === 'column') {
+  //     const newColumnOrder = Array.from(board.columnOrder);
+  //     newColumnOrder.splice(source.index, 1);
+  //     newColumnOrder.splice(destination.index, 0, draggableId);
 
-      const updatedColumn = {
-        ...start,
-        cardIds: updatedCardIds,
-      };
+  //     dispatch(persistColumn(newColumnOrder));
+  //     return;
+  //   }
 
-      dispatch(
-        persistCard({
-          ...board.columns,
-          [updatedColumn.id]: updatedColumn,
-        })
-      );
-      return;
-    }
+  //   const start = board.columns[source.droppableId];
+  //   const finish = board.columns[destination.droppableId];
 
-    const startCardIds = [...start.cardIds];
-    startCardIds.splice(source.index, 1);
-    const updatedStart = {
-      ...start,
-      cardIds: startCardIds,
-    };
+  //   if (start.id === finish.id) {
+  //     const updatedCardIds = [...start.cardIds];
+  //     updatedCardIds.splice(source.index, 1);
+  //     updatedCardIds.splice(destination.index, 0, draggableId);
 
-    const finishCardIds = [...finish.cardIds];
-    finishCardIds.splice(destination.index, 0, draggableId);
-    const updatedFinish = {
-      ...finish,
-      cardIds: finishCardIds,
-    };
+  //     const updatedColumn = {
+  //       ...start,
+  //       cardIds: updatedCardIds,
+  //     };
 
-    dispatch(
-      persistCard({
-        ...board.columns,
-        [updatedStart.id]: updatedStart,
-        [updatedFinish.id]: updatedFinish,
-      })
-    );
-  };
+  //     dispatch(
+  //       persistCard({
+  //         ...board.columns,
+  //         [updatedColumn.id]: updatedColumn,
+  //       })
+  //     );
+  //     return;
+  //   }
+
+  //   const startCardIds = [...start.cardIds];
+  //   startCardIds.splice(source.index, 1);
+  //   const updatedStart = {
+  //     ...start,
+  //     cardIds: startCardIds,
+  //   };
+
+  //   const finishCardIds = [...finish.cardIds];
+  //   finishCardIds.splice(destination.index, 0, draggableId);
+  //   const updatedFinish = {
+  //     ...finish,
+  //     cardIds: finishCardIds,
+  //   };
+
+  //   dispatch(
+  //     persistCard({
+  //       ...board.columns,
+  //       [updatedStart.id]: updatedStart,
+  //       [updatedFinish.id]: updatedFinish,
+  //     })
+  //   );
+  // };
 
   return (
-    <Page title="Kanban" sx={{ height: 1 }}>
+    <Page title='Kanban' sx={{ height: 1 }}>
       <Container maxWidth={false} sx={{ height: 1 }}>
         <HeaderBreadcrumbs
-          heading="Kanban"
+          heading='Kanban'
           links={[
             {
-              name: 'Dashboard',
-              href: PATH_DASHBOARD.root,
+              name: "Dashboard",
+              href: PATH_DASHBOARD.root
             },
-            { name: 'Kanban' },
+            { name: "Kanbans" }
           ]}
         />
-        <DragDropContext onDragEnd={onDragEnd}>
+        {/* <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="all-columns" direction="horizontal" type="column">
             {(provided) => (
               <Stack
@@ -123,7 +141,7 @@ export default function Kanban() {
               </Stack>
             )}
           </Droppable>
-        </DragDropContext>
+        </DragDropContext> */}
       </Container>
     </Page>
   );

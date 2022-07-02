@@ -1,8 +1,9 @@
 import PropTypes from "prop-types";
 // @mui
-import { TableRow, TableCell, TableHead } from "@mui/material";
+import { TableRow, TableCell, TableHead, Link } from "@mui/material";
 import KanbanListToolbar from "./KanbanListToolbar";
 import KanbanMoreMenu from "./KanbanMoreMenu";
+import { Link as RouterLink } from "react-router-dom";
 
 // ----------------------------------------------------------------------
 
@@ -27,7 +28,9 @@ export default function KanbanListHead({ headLabel, board, onEdit, onDelete }) {
     <TableHead>
       <TableRow>
         <TableCell key={board._id} align={"left"}>
-          {board.title}
+          <Link to={`/dashboard/kanban/${board._id}`} component={RouterLink}>
+            {board.title}
+          </Link>
         </TableCell>
         <TableCell align='right'>
           <KanbanMoreMenu onEdit={onEdit} onDelete={onDelete} />

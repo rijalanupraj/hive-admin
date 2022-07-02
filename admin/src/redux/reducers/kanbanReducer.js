@@ -4,7 +4,8 @@ import * as TYPES from "../types";
 const initialState = {
   boards: [],
   isLoading: false,
-  error: null
+  error: null,
+  board: null
 };
 
 export default function KanbanReducer(state = initialState, { type, payload }) {
@@ -45,7 +46,36 @@ export default function KanbanReducer(state = initialState, { type, payload }) {
         error: null
       };
 
+    case TYPES.GET_BOARD_BY_ID_LOADING:
+      return {
+        ...state,
+        isLoading: true,
+        error: null
+      };
+
+    case TYPES.GET_BOARD_BY_ID_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        board: payload.board,
+        error: null
+      };
+
     case TYPES.GET_ALL_KANBAN_BOARDS_FAIL:
+      return {
+        ...state,
+        isLoading: false,
+        error: payload.error
+      };
+
+    case TYPES.GET_BOARD_BY_ID_FAIL:
+      return {
+        ...state,
+        isLoading: false,
+        error: payload.error
+      };
+
+    case TYPES.EDIT_KANBAN_BOARD_FAIL:
       return {
         ...state,
         isLoading: false,

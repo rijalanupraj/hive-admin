@@ -193,7 +193,8 @@ export default function Router() {
           ]
         },
         { path: "calendar", element: <Calendar /> },
-        { path: "kanban", element: <KanbanList /> }
+        { path: "kanban", element: <KanbanList /> },
+        { path: "kanban/:id", element: <Kanban /> }
       ]
     }
   ]);
