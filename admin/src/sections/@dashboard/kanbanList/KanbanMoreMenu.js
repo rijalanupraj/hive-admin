@@ -16,7 +16,7 @@ KanbanMoreMenu.propTypes = {
   userName: PropTypes.string
 };
 
-export default function KanbanMoreMenu({ onDelete, onHideToggle }) {
+export default function KanbanMoreMenu({ onDelete, onEdit }) {
   const [open, setOpen] = useState(null);
 
   const handleOpen = event => {
@@ -52,19 +52,14 @@ export default function KanbanMoreMenu({ onDelete, onHideToggle }) {
           "& .MuiMenuItem-root": { px: 1, typography: "body2", borderRadius: 0.75 }
         }}
       >
-        <MenuItem sx={{ color: "success.main" }}>
-          <Iconify icon={"eva:trash-2-outline"} sx={{ ...ICON }} />
-         Create
-        </MenuItem>
-
-        <MenuItem sx={{ color: "error.main" }}>
+        <MenuItem onClick={onDelete} sx={{ color: "error.main" }}>
           <Iconify icon={"eva:edit-fill"} sx={{ ...ICON }} />
           Delete
         </MenuItem>
 
-        <MenuItem sx={{ color: "primary.main" }}>
+        <MenuItem onClick={onEdit} sx={{ color: "primary.main" }}>
           <Iconify icon={"eva:edit-fill"} sx={{ ...ICON }} />
-         Edit
+          Edit
         </MenuItem>
       </MenuPopover>
     </>
