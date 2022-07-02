@@ -8,7 +8,9 @@ import {
   DialogTitle,
   DialogContent,
   DialogContentText,
-  Grid
+  Grid,
+  TableContainer,
+  Table,
 } from "@mui/material";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -17,13 +19,25 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { LoadingButton } from "@mui/lab";
 import { useSnackbar } from "notistack";
-import { FormProvider, RHFSwitch, RHFTextField } from "../../components/hook-form";
+import {
+  FormProvider,
+  RHFSwitch,
+  RHFTextField,
+} from "../../components/hook-form";
 
 // Internal Import
 import Page from "../../components/Page";
 import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
 import Iconify from "../../components/Iconify";
 import useSettings from "../../hooks/useSettings";
+
+import {
+  KanbanListHead,
+} from "../../sections/@dashboard/kanbanList";
+
+const TABLE_HEAD = [
+  { id: "name", label: "Name", alignRight: false },
+];
 
 function KanbanList() {
   const { themeStretch } = useSettings();
@@ -41,7 +55,7 @@ function KanbanList() {
     setDialogOpen(true);
   };
   return (
-    <Page title='Kanban' sx={{ height: 1 }}>
+    <Page title="Kanban" sx={{ height: 1 }}>
       <BoardPopUpDialog
         isEdit={isEdit}
         dialogOpen={dialogOpen}
@@ -50,24 +64,34 @@ function KanbanList() {
       />
       <Container maxWidth={themeStretch ? false : "lg"}>
         <HeaderBreadcrumbs
-          heading='Kanban'
+          heading="Kanban"
           links={[
             { name: "Dashboard", href: "/" },
             { name: "Category", href: "/" },
-            { name: "List" }
+            { name: "List" },
           ]}
           action={
             <Button
               onClick={() => {
                 handleCreateEditBoard(false);
               }}
-              variant='contained'
+              variant="contained"
               startIcon={<Iconify icon={"eva:plus-fill"} />}
             >
               New Board
             </Button>
           }
         />
+
+        {/* start table */}
+
+        <TableContainer sx={{ minWidth: 800 }}>
+          <Table>
+            <KanbanListHead headLabel={TABLE_HEAD} />
+          </Table>
+        </TableContainer>
+
+        {/*end table */}
       </Container>
     </Page>
   );
@@ -99,12 +123,12 @@ const BoardPopUpDialog = ({ dialogOpen, setDialogOpen, isEdit, board }) => {
   };
 
   const CategorySchema = Yup.object().shape({
-    title: Yup.string().required("Title is required")
+    title: Yup.string().required("Title is required"),
   });
 
   const defaultValues = useMemo(
     () => ({
-      title: ""
+      title: "",
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
@@ -112,7 +136,7 @@ const BoardPopUpDialog = ({ dialogOpen, setDialogOpen, isEdit, board }) => {
 
   const methods = useForm({
     resolver: yupResolver(CategorySchema),
-    defaultValues
+    defaultValues,
   });
 
   const {
@@ -121,7 +145,7 @@ const BoardPopUpDialog = ({ dialogOpen, setDialogOpen, isEdit, board }) => {
     control,
     setValue,
     handleSubmit,
-    formState: { isSubmitting, isValid }
+    formState: { isSubmitting, isValid },
   } = methods;
 
   useEffect(() => {
@@ -139,23 +163,25 @@ const BoardPopUpDialog = ({ dialogOpen, setDialogOpen, isEdit, board }) => {
   };
 
   return (
-    <Dialog open={dialogOpen} onClose={handleClose} maxWidth='lg'>
+    <Dialog open={dialogOpen} onClose={handleClose} maxWidth="lg">
       <DialogTitle>{isEdit ? "Edit Board" : "New Board"}</DialogTitle>
 
       <DialogContent>
         <br />
-        <DialogContentText>{isEdit ? "Edit Board" : "New Board"}</DialogContentText>
+        <DialogContentText>
+          {isEdit ? "Edit Board" : "New Board"}
+        </DialogContentText>
         <br />
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <RHFTextField name='title' label='Title' />
+              <RHFTextField name="title" label="Title" />
             </Grid>
             <LoadingButton
               fullWidth
-              size='large'
-              type='submit'
-              variant='contained'
+              size="large"
+              type="submit"
+              variant="contained"
               loading={isSubmitting}
               sx={{ mt: 2, ml: 3 }}
             >
