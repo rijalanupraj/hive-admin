@@ -18,7 +18,7 @@ export const PATH_DASHBOARD = {
   general: {
     app: path(ROOTS_DASHBOARD, "/app"),
     analytics: path(ROOTS_DASHBOARD, "/analytics"),
-    booking: path(ROOTS_DASHBOARD, "/booking")
+    dashboard: path(ROOTS_DASHBOARD, "/dashboard")
   },
 
   chat: {
@@ -33,9 +33,11 @@ export const PATH_DASHBOARD = {
     profile: path(ROOTS_DASHBOARD, "/user/profile"),
     cards: path(ROOTS_DASHBOARD, "/user/cards"),
     list: path(ROOTS_DASHBOARD, "/user/list"),
+    verifyuser: path(ROOTS_DASHBOARD, "/user/verifyuser"),
     newUser: path(ROOTS_DASHBOARD, "/user/new"),
     editById: path(ROOTS_DASHBOARD, `/user/reece-chung/edit`),
-    account: path(ROOTS_DASHBOARD, "/user/account")
+    account: path(ROOTS_DASHBOARD, "/user/account"),
+    
   },
 
   question: {
@@ -77,6 +79,9 @@ export const PATH_DASHBOARD = {
 
   reportuser: {
     root: path(ROOTS_DASHBOARD, "/reportuser"),
-    reportuserlist: path(ROOTS_DASHBOARD, "/reportuser/reportuserlist")
-  }
+    reportuserlist: path(ROOTS_DASHBOARD, "/reportuser/reportuserlist"),
+    warnuserlist: path(ROOTS_DASHBOARD, "/reportuser/warnuserlist"),
+    ticketuserlist: path(ROOTS_DASHBOARD, "/reportuser/ticketuserlist")
+  },
+
 };

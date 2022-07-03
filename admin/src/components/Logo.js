@@ -19,7 +19,7 @@ export default function Logo({ disabledLink = false, sx }) {
   const PRIMARY_DARK = theme.palette.primary.dark;
 
   const logo = (
-    <Box sx={{ width: 90, height: 80, ...sx }}>
+    <Box sx={{ width: 100, height: 80, ...sx }}>
       <img src={logo2} alt="logo" />
       {/* <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Eo_circle_light-blue_white_letter-s.svg/1200px-Eo_circle_light-blue_white_letter-s.svg.png' alt='logo' /> */}
       {/* <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 512 512">

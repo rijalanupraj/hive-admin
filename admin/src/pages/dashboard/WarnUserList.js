@@ -1,13 +1,13 @@
 import { sentenceCase } from "change-case";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { useSnackbar } from "notistack";
 // @mui
 import { useTheme } from "@mui/material/styles";
 import {
   Card,
   Table,
   Avatar,
+  Button,
   Checkbox,
   TableRow,
   TableBody,
@@ -16,15 +16,14 @@ import {
   Typography,
   TableContainer,
   TablePagination,
-  Link
+  Box
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
 // routes
 import { PATH_DASHBOARD } from "../../routes/paths";
 // hooks
 import useSettings from "../../hooks/useSettings";
 // _mock_
-import { _questionList } from "../../_mock";
+import { _userList } from "../../_mock";
 // components
 import Page from "../../components/Page";
 import Label from "../../components/Label";
@@ -34,45 +33,46 @@ import SearchNotFound from "../../components/SearchNotFound";
 import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
 // sections
 import {
-  CommentListHead,
-  CommentListToolbar,
-  CommentMoreMenu
-} from "../../sections/@dashboard/comment/list";
-import { getAllComments, deleteComment } from "../../redux/actions/commentActions";
+  WarnUserListHead,
+  WarnUserListToolbar,
+  WarnUserMoreMenu
+} from "../../sections/@dashboard/report/warnUserList";
+
+import { useDispatch, useSelector } from "react-redux";
+import { viewAllWarnedUsers } from "../../redux/actions/usersActions";
+import { useEffect } from "react";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: "user", label: "User", alignRight: false },
-  { id: "text", label: "Comment", alignRight: false },
-  { id: "solution", label: "Solution", alignRight: false },
-  {}
+  { id: "reason", label: "Reason", alignRight: false },
+  { id: "description", label: "Description", alignRight: false },
+  { id: "" }
 ];
 
 // ----------------------------------------------------------------------
 
-export default function QuestionList() {
+export default function UserList() {
   const theme = useTheme();
-  const dispatch = useDispatch();
-  const comment = useSelector(state => state.comment);
   const { themeStretch } = useSettings();
-  const { enqueueSnackbar } = useSnackbar();
-
-  const [commentList, setCommentList] = useState([]);
+  const dispatch = useDispatch();
+  const users = useSelector(state => state.users);
+  const [userReportList, setUserReportList] = useState([]);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState([]);
-  const [orderBy, setOrderBy] = useState("text");
-  const [filterQuestion, setFilterQuestion] = useState("");
+  const [orderBy, setOrderBy] = useState("reason");
+  const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
-    dispatch(getAllComments());
+    dispatch(viewAllWarnedUsers());
   }, []);
 
   useEffect(() => {
-    setCommentList(comment.comments);
-  }, [comment.comments]);
+    setUserReportList(users.allWarnings);
+  }, [users.allWarnings]);
 
   const handleRequestSort = property => {
     const isAsc = orderBy === property && order === "asc";
@@ -82,18 +82,18 @@ export default function QuestionList() {
 
   const handleSelectAllClick = checked => {
     if (checked) {
-      const newSelecteds = commentList.map(n => n._id);
+      const newSelecteds = userReportList.map(n => n.name);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = id => {
-    const selectedIndex = selected.indexOf(id);
+  const handleClick = name => {
+    const selectedIndex = selected.indexOf(name);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
+      newSelected = newSelected.concat(selected, name);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -112,103 +112,107 @@ export default function QuestionList() {
     setPage(0);
   };
 
-  const handleFilterByName = filterQuestion => {
-    setFilterQuestion(filterQuestion);
+  const handleFilterByName = filterName => {
+    setFilterName(filterName);
     setPage(0);
   };
 
-  const handleDeleteQuestion = questionId => {
-    // dispatch(deleteQuestion(questionId, enqueueSnackbar));
+  const handleDeleteUser = userId => {
+    const deleteUser = userReportList.filter(user => user.id !== userId);
+    setSelected([]);
+    setUserReportList(deleteUser);
   };
 
   const handleDeleteMultiUser = selected => {
-    const deleteUsers = commentList.map(user => !selected.includes(user.name));
+    const deleteUsers = userReportList.filter(user => !selected.includes(user.name));
     setSelected([]);
-    // setQuestionList(deleteUsers);
+    setUserReportList(deleteUsers);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - commentList.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userReportList.length) : 0;
 
-  const filterQuestions = applySortFilter(
-    commentList,
-    getComparator(order, orderBy),
-    filterQuestion
-  );
+  const filteredUsers = applySortFilter(userReportList, getComparator(order, orderBy), filterName);
 
-  const isNotFound = !filterQuestions.length && Boolean(filterQuestion);
+  const isNotFound = !filteredUsers.length && Boolean(filterName);
 
   return (
-    <Page title='Question: List'>
+    <Page title='User: List'>
       <Container maxWidth={themeStretch ? false : "lg"}>
         <HeaderBreadcrumbs
-          heading='Question List'
-          links={[{ name: "Dashboard", href: PATH_DASHBOARD.root }, { name: "List" }]}
+          heading='User Warnings'
+          links={[
+            { name: "Dashboard", href: PATH_DASHBOARD.root },
+            { name: "User", href: PATH_DASHBOARD.user.root },
+            { name: "List" }
+          ]}
         />
 
         <Card>
-          <CommentListToolbar
+          <WarnUserListToolbar
             numSelected={selected.length}
-            filterQuestion={filterQuestion}
+            filterName={filterName}
             onFilterName={handleFilterByName}
-            onDeleteQuestions={() => handleDeleteMultiUser(selected)}
+            onDeleteUsers={() => handleDeleteMultiUser(selected)}
           />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
-                <CommentListHead
+                <WarnUserListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={commentList.length}
+                  rowCount={userReportList.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filterQuestions.length > 0 &&
-                    filterQuestions
-                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                      .map(row => {
-                        const { _id, text, user, solution } = row;
-                        const isItemSelected = selected.indexOf(_id) !== -1;
+                  {filteredUsers
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map(row => {
+                      const { _id, warnedUser, reason, description } = row;
+                      const isItemSelected = selected.indexOf(_id) !== -1;
 
-                        return (
-                          <TableRow
-                            hover
-                            key={_id}
-                            tabIndex={-1}
-                            role='checkbox'
-                            selected={isItemSelected}
-                            aria-checked={isItemSelected}
-                          >
-                            <TableCell padding='checkbox'>
-                              <Checkbox checked={isItemSelected} onClick={() => handleClick(_id)} />
-                            </TableCell>
-                            <TableCell sx={{ display: "flex", alignItems: "center" }}>
-                              <Avatar
-                                alt={user.username}
-                                src={user?.profilePhoto?.hasPhoto ? user.profilePhoto.url : ""}
-                                sx={{ mr: 2 }}
-                              />
-                              <Typography variant='subtitle2' noWrap>
-                                {user.username}
-                              </Typography>
-                            </TableCell>
-                            <TableCell align='left'>{text}</TableCell>
+                      return (
+                        <TableRow
+                          hover
+                          key={_id}
+                          tabIndex={-1}
+                          role='checkbox'
+                          selected={isItemSelected}
+                          aria-checked={isItemSelected}
+                        >
+                          <TableCell padding='checkbox'>
+                            <Checkbox checked={isItemSelected} onClick={() => handleClick(_id)} />
+                          </TableCell>
+                          <TableCell sx={{ display: "flex", alignItems: "center" }}>
+                            <Avatar
+                              alt={warnedUser.username}
+                              src={
+                                warnedUser?.profilePhoto?.hasPhoto
+                                  ? warnedUser.profilePhoto.url
+                                  : ""
+                              }
+                              sx={{ mr: 1 }}
+                            />
+                            <Typography variant='subtitle2' noWrap>
+                              {warnedUser.username}
+                            </Typography>
+                          </TableCell>
 
-                            <TableCell align='left'>{solution._id}</TableCell>
-                            <TableCell align='right'>
-                              <CommentMoreMenu
-                                onDelete={() => {
-                                  dispatch(deleteComment(_id, enqueueSnackbar));
-                                }}
-                                onHideToggle={""}
-                              />
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
+                          <TableCell align='left'>{reason}</TableCell>
+                          <TableCell align='left'>{description}</TableCell>
+
+                          <TableCell align='right'>
+                            <WarnUserMoreMenu
+                              onDelete={() => handleDeleteUser(_id)}
+                              userName={""}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
                   {emptyRows > 0 && (
                     <TableRow style={{ height: 53 * emptyRows }}>
                       <TableCell colSpan={6} />
@@ -219,7 +223,7 @@ export default function QuestionList() {
                   <TableBody>
                     <TableRow>
                       <TableCell align='center' colSpan={6} sx={{ py: 3 }}>
-                        <SearchNotFound searchQuery={filterQuestion} />
+                        <SearchNotFound searchQuery={filterName} />
                       </TableCell>
                     </TableRow>
                   </TableBody>
@@ -231,7 +235,7 @@ export default function QuestionList() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component='div'
-            count={commentList.length}
+            count={userReportList.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={(e, page) => setPage(page)}
@@ -270,10 +274,9 @@ function applySortFilter(array, comparator, query) {
   });
   if (query) {
     return array.filter(
-      _comment =>
-        _comment.text.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        _comment.user.username.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        _comment.solution._id.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      warnings =>
+        warnings.reason.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        warnings.warnedUser.username.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis.map(el => el[0]);

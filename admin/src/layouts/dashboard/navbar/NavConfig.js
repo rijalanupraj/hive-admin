@@ -11,6 +11,7 @@ const getIcon = (name) => (
 );
 
 const ICONS = {
+  dashboard: getIcon("ic_dashboard"),
   user: getIcon("ic_user"),
   admin: getIcon("ic_admin"),
   question: getIcon("ic_question"),
@@ -22,21 +23,16 @@ const ICONS = {
 const navConfig = [
   // GENERAL
   // ----------------------------------------------------------------------
-  // {
-  //   subheader: "general",
-  //   items: [
-  //     {
-  //       title: "analytics website",
-  //       path: PATH_DASHBOARD.general.analytics,
-  //       icon: ICONS.analytics,
-  //     },
-  //     {
-  //       title: "analytics post",
-  //       path: PATH_DASHBOARD.general.booking,
-  //       icon: ICONS.booking,
-  //     },
-  //   ],
-  // },
+  {
+    subheader: "general",
+    items: [
+      {
+        title: "Dashboard",
+        path: PATH_DASHBOARD.general.dashboard,
+        icon: ICONS.dashboard,
+      },
+    ],
+  },
 
   // MANAGEMENT
   // ----------------------------------------------------------------------
@@ -51,6 +47,7 @@ const navConfig = [
         children: [
           // { title: "Top User", path: PATH_DASHBOARD.user.cards },
           { title: "list", path: PATH_DASHBOARD.user.list },
+          { title: "Verify User", path: PATH_DASHBOARD.user.verifyuser },
         ],
       },
       // MANAGEMENT : admin User
@@ -112,6 +109,8 @@ const navConfig = [
         icon: ICONS.user,
         children: [
           { title: "List", path: PATH_DASHBOARD.reportuser.reportuserlist },
+          { title: "Warn", path: PATH_DASHBOARD.reportuser.warnuserlist },
+          { title: "Ticket", path: PATH_DASHBOARD.reportuser.ticketuserlist },
         ],
       },
       // REPORT : question

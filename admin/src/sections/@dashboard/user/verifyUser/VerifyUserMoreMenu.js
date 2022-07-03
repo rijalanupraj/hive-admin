@@ -12,12 +12,12 @@ import MenuPopover from "../../../../components/MenuPopover";
 
 // ----------------------------------------------------------------------
 
-UserMoreMenu.propTypes = {
+VerifyUserMoreMenu.propTypes = {
   onDelete: PropTypes.func,
   userName: PropTypes.string
 };
 
-export default function UserMoreMenu({ onDelete, userName, banToggle, verifyToggle, warnUser }) {
+export default function VerifyUserMoreMenu({ onDelete, userName, onReject, onApprove }) {
   const [open, setOpen] = useState(null);
 
   const handleOpen = event => {
@@ -58,19 +58,14 @@ export default function UserMoreMenu({ onDelete, userName, banToggle, verifyTogg
           Delete
         </MenuItem>
 
-        <MenuItem onClick={verifyToggle} sx={{ color: "success.main" }}>
+        <MenuItem onClick={onApprove} sx={{ color: "success.main" }}>
           <Iconify icon={"fe:check-verified"} sx={{ ...ICON }} />
-          Verify Toggle
+          Approve
         </MenuItem>
 
-        <MenuItem onClick={warnUser} sx={{ color: "warning.main" }}>
-          <Iconify icon={"eva:alert-triangle-outline"} sx={{ ...ICON }} />
-          Warn User
-        </MenuItem>
-
-        <MenuItem onClick={banToggle} sx={{ color: "error.main" }}>
+        <MenuItem onClick={onReject} sx={{ color: "error.main" }}>
           <Iconify icon={"fontisto:ban"} sx={{ ...ICON }} />
-          Ban Toggle
+          Reject
         </MenuItem>
       </MenuPopover>
     </>

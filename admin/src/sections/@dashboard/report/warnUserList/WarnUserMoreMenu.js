@@ -12,12 +12,12 @@ import MenuPopover from "../../../../components/MenuPopover";
 
 // ----------------------------------------------------------------------
 
-UserMoreMenu.propTypes = {
+WarnUserMoreMenu.propTypes = {
   onDelete: PropTypes.func,
   userName: PropTypes.string
 };
 
-export default function UserMoreMenu({ onDelete, userName, banToggle, verifyToggle, warnUser }) {
+export default function WarnUserMoreMenu({ onDelete, userName, banToggle }) {
   const [open, setOpen] = useState(null);
 
   const handleOpen = event => {
@@ -58,20 +58,11 @@ export default function UserMoreMenu({ onDelete, userName, banToggle, verifyTogg
           Delete
         </MenuItem>
 
-        <MenuItem onClick={verifyToggle} sx={{ color: "success.main" }}>
-          <Iconify icon={"fe:check-verified"} sx={{ ...ICON }} />
-          Verify Toggle
+        <MenuItem sx={{ color: "error.main" }}>
+          <Iconify icon={"ant-design:warning-filled"} sx={{ ...ICON }} />
+          Warn
         </MenuItem>
 
-        <MenuItem onClick={warnUser} sx={{ color: "warning.main" }}>
-          <Iconify icon={"eva:alert-triangle-outline"} sx={{ ...ICON }} />
-          Warn User
-        </MenuItem>
-
-        <MenuItem onClick={banToggle} sx={{ color: "error.main" }}>
-          <Iconify icon={"fontisto:ban"} sx={{ ...ICON }} />
-          Ban Toggle
-        </MenuItem>
       </MenuPopover>
     </>
   );

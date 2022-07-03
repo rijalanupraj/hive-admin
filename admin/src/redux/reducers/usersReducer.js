@@ -5,12 +5,16 @@ const initialState = {
   usersList: [],
   adminsList: [],
   userReports: [],
+  userRequests: [],
+  allWarnings: [],
+  allTickets: [],
   isLoading: false,
   error: null,
   createAdminError: null
 };
 
 export default function UsersReducer(state = initialState, { type, payload }) {
+  let updatedRequests;
   switch (type) {
     case TYPES.ALL_USERS_LOADING:
       return {
@@ -78,6 +82,94 @@ export default function UsersReducer(state = initialState, { type, payload }) {
         ...state,
         isLoading: false,
         userReports: payload.reports
+      };
+
+    case TYPES.GET_ALL_VERIFICATION_REQUESTS_LOADING:
+      return {
+        ...state,
+        isLoading: true,
+        error: null
+      };
+
+    case TYPES.GET_ALL_VERIFICATION_REQUESTS_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        userRequests: payload.requests,
+        error: null
+      };
+
+    case TYPES.GET_ALL_VERIFICATION_REQUESTS_FAIL:
+      return {
+        ...state,
+        isLoading: false,
+        error: payload.error
+      };
+
+    case TYPES.ACCEPT_VERIFICATION_REQUEST_SUCCESS:
+      updatedRequests = state.userRequests.map(request => {
+        if (request._id === payload.requestId) {
+          return {
+            ...request,
+            status: "Approved"
+          };
+        }
+        return request;
+      });
+
+      return {
+        ...state,
+        isLoading: false,
+        userRequests: updatedRequests,
+        error: null
+      };
+
+    case TYPES.REJECT_VERIFICATION_REQUEST_SUCCESS:
+      updatedRequests = state.userRequests.map(request => {
+        if (request._id === payload.requestId) {
+          return {
+            ...request,
+            status: "Rejected"
+          };
+        }
+        return request;
+      });
+
+      return {
+        ...state,
+        isLoading: false,
+        userRequests: updatedRequests,
+        error: null
+      };
+
+    case TYPES.VERIFY_USER_TOGGLE_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        usersList: state.usersList.map(user => {
+          if (user._id === payload.userId) {
+            return {
+              ...user,
+              isVerified: payload.isVerified
+            };
+          }
+          return user;
+        }),
+        error: null
+      };
+
+    case TYPES.VIEW_ALL_WARNED_USERS_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        allWarnings: payload.warnings
+      };
+
+    case TYPES.VIEW_ALL_TICKETS_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        allTickets: payload.tickets
       };
 
     case TYPES.CREATE_ADMIN_FAIL:
