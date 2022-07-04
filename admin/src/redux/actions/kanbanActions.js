@@ -108,6 +108,140 @@ export const getBoardById = boardId => async (dispatch, getState) => {
   }
 };
 
+export const getAllBoardList = boardId => async (dispatch, getState) => {
+  dispatch({ type: TYPES.GET_ALL_BOARD_LIST_LOADING });
+
+  try {
+    const options = attachTokenToHeaders(getState);
+    const response = await axios.get(`${API_URL}/admin/kanban/boardlist/${boardId}`, options);
+
+    dispatch({
+      type: TYPES.GET_ALL_BOARD_LIST_SUCCESS,
+      payload: { lists: response.data.lists }
+    });
+  } catch (err) {
+    dispatch({
+      type: TYPES.GET_ALL_BOARD_LIST_FAIL,
+
+      payload: { error: err?.response?.data?.message || "Something went wrong" }
+    });
+  }
+};
+
+export const createKanbanList = (boardId, data, enqueueSnackbar) => async (dispatch, getState) => {
+  dispatch({ type: TYPES.CREATE_KANBAN_LIST_LOADING });
+
+  try {
+    const options = attachTokenToHeaders(getState);
+
+    const response = await axios.post(`${API_URL}/admin/kanban/list/${boardId}`, data, options);
+
+    dispatch({
+      type: TYPES.CREATE_KANBAN_LIST_SUCCESS,
+      payload: { list: response.data.list, boardId }
+    });
+    enqueueSnackbar("List created successfully", { variant: "success" });
+  } catch (err) {
+    dispatch({
+      type: TYPES.CREATE_KANBAN_LIST_FAIL,
+      payload: { error: err?.response?.data?.message || "Something went wrong" }
+    });
+    enqueueSnackbar(err?.response?.data?.message || "Something went wrong", { variant: "error" });
+  }
+};
+
+export const updateKanbanList = (listId, data, enqueueSnackbar) => async (dispatch, getState) => {
+  dispatch({ type: TYPES.UPDATE_KANBAN_LIST_LOADING });
+
+  try {
+    const options = attachTokenToHeaders(getState);
+
+    const response = await axios.patch(
+      `${API_URL}/admin/kanban/list/rename/${listId}`,
+      data,
+      options
+    );
+
+    dispatch({
+      type: TYPES.UPDATE_KANBAN_LIST_SUCCESS,
+      payload: { list: response.data.list, listId }
+    });
+    enqueueSnackbar("List updated successfully", { variant: "success" });
+  } catch (err) {
+    dispatch({
+      type: TYPES.UPDATE_KANBAN_LIST_FAIL,
+      payload: { error: err?.response?.data?.message || "Something went wrong" }
+    });
+    enqueueSnackbar(err?.response?.data?.message || "Something went wrong", { variant: "error" });
+  }
+};
+
+export const deleteKanbanList =
+  (boardId, listId, enqueueSnackbar) => async (dispatch, getState) => {
+    dispatch({ type: TYPES.DELETE_KANBAN_LIST_LOADING });
+
+    try {
+      const options = attachTokenToHeaders(getState);
+      await axios.delete(`${API_URL}/admin/kanban/list/delete/${boardId}/${listId}`, options);
+
+      dispatch({
+        type: TYPES.DELETE_KANBAN_LIST_SUCCESS,
+        payload: { listId }
+      });
+      enqueueSnackbar("List deleted successfully", { variant: "success" });
+    } catch (err) {
+      dispatch({
+        type: TYPES.DELETE_KANBAN_LIST_FAIL,
+        payload: { error: err?.response?.data?.message || "Something went wrong" }
+      });
+      enqueueSnackbar(err?.response?.data?.message || "Something went wrong", { variant: "error" });
+    }
+  };
+
+export const createKanbanCard = (data, enqueueSnackbar) => async (dispatch, getState) => {
+  dispatch({ type: TYPES.CREATE_KANBAN_CARD_LOADING });
+
+  try {
+    const options = attachTokenToHeaders(getState);
+
+    const response = await axios.post(`${API_URL}/admin/kanban/card`, data, options);
+
+    dispatch({
+      type: TYPES.CREATE_KANBAN_CARD_SUCCESS,
+      payload: { card: response.data.card, listId: data.listId }
+    });
+    enqueueSnackbar("Card created successfully", { variant: "success" });
+  } catch (err) {
+    dispatch({
+      type: TYPES.CREATE_KANBAN_CARD_FAIL,
+      payload: { error: err?.response?.data?.message || "Something went wrong" }
+    });
+    enqueueSnackbar(err?.response?.data?.message || "Something went wrong", { variant: "error" });
+  }
+};
+
+export const deleteKanbanCard = (listId, cardId, enqueueSnackbar) => async (dispatch, getState) => {
+  dispatch({ type: TYPES.DELETE_KANBAN_CARD_LOADING });
+
+  try {
+    const options = attachTokenToHeaders(getState);
+    await axios.delete(`${API_URL}/admin/kanban/card/${listId}/${cardId}`, options);
+
+    dispatch({
+      type: TYPES.DELETE_KANBAN_CARD_SUCCESS,
+      payload: { cardId, listId }
+    });
+
+    enqueueSnackbar("Card deleted successfully", { variant: "success" });
+  } catch (err) {
+    dispatch({
+      type: TYPES.DELETE_KANBAN_CARD_FAIL,
+      payload: { error: err?.response?.data?.message || "Something went wrong" }
+    });
+    enqueueSnackbar(err?.response?.data?.message || "Something went wrong", { variant: "error" });
+  }
+};
+
 export const attachTokenToHeaders = getState => {
   const token = getState().auth.token;
 

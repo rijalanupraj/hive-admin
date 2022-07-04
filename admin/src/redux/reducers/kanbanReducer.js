@@ -3,6 +3,7 @@ import * as TYPES from "../types";
 
 const initialState = {
   boards: [],
+  boardList: [],
   isLoading: false,
   error: null,
   board: null
@@ -59,6 +60,75 @@ export default function KanbanReducer(state = initialState, { type, payload }) {
         isLoading: false,
         board: payload.board,
         error: null
+      };
+
+    case TYPES.GET_ALL_BOARD_LIST_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        boardList: payload.lists,
+        error: null
+      };
+
+    case TYPES.CREATE_KANBAN_LIST_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        boardList: [...state.boardList, payload.list],
+        error: null
+      };
+
+    case TYPES.UPDATE_KANBAN_LIST_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        boardList: state.boardList.map(list => {
+          if (list._id === payload.list._id) {
+            return payload.list;
+          }
+          return list;
+        })
+      };
+
+    case TYPES.DELETE_KANBAN_LIST_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        boardList: state.boardList.filter(list => {
+          console.log(list);
+          console.log(payload.listId);
+          return list._id !== payload.listId;
+        })
+      };
+
+    case TYPES.CREATE_KANBAN_CARD_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        boardList: state.boardList.map(list => {
+          if (list._id === payload.listId) {
+            return {
+              ...list,
+              cards: [...list.cards, payload.card]
+            };
+          }
+          return list;
+        })
+      };
+
+    case TYPES.DELETE_KANBAN_CARD_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        boardList: state.boardList.map(list => {
+          if (list._id === payload.listId) {
+            return {
+              ...list,
+              cards: list.cards.filter(card => card._id !== payload.cardId)
+            };
+          }
+          return list;
+        })
       };
 
     case TYPES.GET_ALL_KANBAN_BOARDS_FAIL:

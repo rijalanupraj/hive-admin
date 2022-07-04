@@ -15,7 +15,7 @@ import { SkeletonKanbanColumn } from "../../components/skeleton";
 import { KanbanColumn, KanbanColumnAdd } from "../../sections/@dashboard/kanban";
 import { useParams, useNavigate } from "react-router";
 
-import { getBoardById } from "../../redux/actions/kanbanActions";
+import { getBoardById, getAllBoardList } from "../../redux/actions/kanbanActions";
 
 // ----------------------------------------------------------------------
 
@@ -27,6 +27,7 @@ export default function Kanban() {
 
   useEffect(() => {
     dispatch(getBoardById(id));
+    dispatch(getAllBoardList(id));
   }, []);
 
   // If page is not found then redirect to dashboard
@@ -37,10 +38,6 @@ export default function Kanban() {
   if (!kanban.isLoading && !kanban.board) {
     navigate("/dashboard/kanban");
   }
-
-  // useEffect(() => {
-  //   dispatch(getBoard());
-  // }, [dispatch]);
 
   // const onDragEnd = (result) => {
   //   // Reorder card
@@ -117,31 +114,42 @@ export default function Kanban() {
             { name: "Kanbans" }
           ]}
         />
-        {/* <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="all-columns" direction="horizontal" type="column">
-            {(provided) => (
+        <DragDropContext>
+          {/* <DragDropContext onDragEnd={onDragEnd}> */}
+          <Droppable droppableId='all-columns' direction='horizontal' type='column'>
+            {provided => (
               <Stack
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                direction="row"
-                alignItems="flex-start"
+                direction='row'
+                alignItems='flex-start'
                 spacing={3}
-                sx={{ height: 'calc(100% - 32px)', overflowY: 'hidden' }}
+                sx={{ height: "calc(100% - 32px)", overflowY: "hidden" }}
               >
-                {!board.columnOrder.length ? (
+                {/* {!board.columnOrder.length ? (
                   <SkeletonKanbanColumn />
                 ) : (
-                  board.columnOrder.map((columnId, index) => (
+                  .columnOrder.map((columnId, index) => (
                     <KanbanColumn index={index} key={columnId} column={board.columns[columnId]} />
                   ))
                 )}
 
+                {provided.placeholder} */}
+
+                {!kanban.boardList.length ? (
+                  <SkeletonKanbanColumn />
+                ) : (
+                  kanban.boardList.map((list, index) => (
+                    <KanbanColumn index={index} key={list._id} column={list} boardId={id} />
+                  ))
+                )}
+
                 {provided.placeholder}
-                <KanbanColumnAdd />
+                <KanbanColumnAdd boardId={id} />
               </Stack>
             )}
           </Droppable>
-        </DragDropContext> */}
+        </DragDropContext>
       </Container>
     </Page>
   );

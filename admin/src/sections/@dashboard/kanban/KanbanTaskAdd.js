@@ -1,31 +1,40 @@
-import PropTypes from 'prop-types';
-import { format, isSameDay, isSameMonth } from 'date-fns';
-import { useState } from 'react';
+import PropTypes from "prop-types";
+import { format, isSameDay, isSameMonth } from "date-fns";
+import { useState } from "react";
 // @mui
-import { Box, Paper, Stack, Tooltip, Checkbox, IconButton, OutlinedInput, ClickAwayListener } from '@mui/material';
-import { MobileDateRangePicker } from '@mui/lab';
+import {
+  Box,
+  Paper,
+  Stack,
+  Tooltip,
+  Checkbox,
+  IconButton,
+  OutlinedInput,
+  ClickAwayListener
+} from "@mui/material";
+import { MobileDateRangePicker } from "@mui/lab";
 // utils
-import uuidv4 from '../../../utils/uuidv4';
+import uuidv4 from "../../../utils/uuidv4";
 // components
-import Iconify from '../../../components/Iconify';
+import Iconify from "../../../components/Iconify";
 
 // ----------------------------------------------------------------------
 
 const defaultTask = {
   attachments: [],
   comments: [],
-  description: '',
+  description: "",
   due: [null, null],
-  assignee: [],
+  assignee: []
 };
 
 KanbanTaskAdd.propTypes = {
   onAddTask: PropTypes.func,
-  onCloseAddTask: PropTypes.func,
+  onCloseAddTask: PropTypes.func
 };
 
 export default function KanbanTaskAdd({ onAddTask, onCloseAddTask }) {
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
   const [completed, setCompleted] = useState(false);
   const {
     dueDate,
@@ -36,47 +45,47 @@ export default function KanbanTaskAdd({ onAddTask, onCloseAddTask }) {
     onChangeDueDate,
     openPicker,
     onOpenPicker,
-    onClosePicker,
+    onClosePicker
   } = useDatePicker({
-    date: [null, null],
+    date: [null, null]
   });
 
-  const handleKeyUpAddTask = (event) => {
-    if (event.key === 'Enter') {
-      if (name.trim() !== '') {
-        onAddTask({ ...defaultTask, id: uuidv4(), name, due: dueDate, completed });
+  const handleKeyUpAddTask = event => {
+    if (event.key === "Enter") {
+      if (name.trim() !== "") {
+        onAddTask({ title: name });
       }
     }
   };
 
   const handleClickAddTask = () => {
     if (name) {
-      onAddTask({ ...defaultTask, id: uuidv4(), name, due: dueDate, completed });
+      onAddTask({ title: name });
     }
     onCloseAddTask();
   };
 
-  const handleChangeCompleted = (event) => {
+  const handleChangeCompleted = event => {
     setCompleted(event.target.checked);
   };
 
   return (
     <>
       <ClickAwayListener onClickAway={handleClickAddTask}>
-        <Paper variant="outlined" sx={{ p: 2 }}>
+        <Paper variant='outlined' sx={{ p: 2 }}>
           <OutlinedInput
             multiline
-            size="small"
-            placeholder="Task name"
+            size='small'
+            placeholder='Task name'
             value={name}
-            onChange={(event) => setName(event.target.value)}
+            onChange={event => setName(event.target.value)}
             onKeyUp={handleKeyUpAddTask}
             sx={{
-              '& input': { p: 0 },
-              '& fieldset': { borderColor: 'transparent !important' },
+              "& input": { p: 0 },
+              "& fieldset": { borderColor: "transparent !important" }
             }}
           />
-
+          {/* 
           <Stack direction="row" justifyContent="space-between">
             <Tooltip title="Mark task complete">
               <Checkbox
@@ -120,7 +129,7 @@ export default function KanbanTaskAdd({ onAddTask, onCloseAddTask }) {
                 renderInput={() => {}}
               />
             </Stack>
-          </Stack>
+          </Stack> */}
         </Paper>
       </ClickAwayListener>
     </>
@@ -133,13 +142,13 @@ export function useDatePicker({ date }) {
   const [dueDate, setDueDate] = useState([date[0], date[1]]);
   const [openPicker, setOpenPicker] = useState(false);
 
-  const startTime = dueDate[0] || '';
-  const endTime = dueDate[1] || '';
+  const startTime = dueDate[0] || "";
+  const endTime = dueDate[1] || "";
 
   const isSameDays = isSameDay(new Date(startTime), new Date(endTime));
   const isSameMonths = isSameMonth(new Date(startTime), new Date(endTime));
 
-  const handleChangeDueDate = (newValue) => {
+  const handleChangeDueDate = newValue => {
     setDueDate(newValue);
   };
 
@@ -160,7 +169,7 @@ export function useDatePicker({ date }) {
     onChangeDueDate: handleChangeDueDate,
     openPicker,
     onOpenPicker: handleOpenPicker,
-    onClosePicker: handleClosePicker,
+    onClosePicker: handleClosePicker
   };
 }
 
@@ -172,28 +181,28 @@ DisplayTime.propTypes = {
   onOpenPicker: PropTypes.func,
   startTime: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)]),
   endTime: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)]),
-  sx: PropTypes.object,
+  sx: PropTypes.object
 };
 
 export function DisplayTime({ startTime, endTime, isSameDays, isSameMonths, onOpenPicker, sx }) {
   const style = {
-    typography: 'caption',
-    cursor: 'pointer',
-    '&:hover': { opacity: 0.72 },
+    typography: "caption",
+    cursor: "pointer",
+    "&:hover": { opacity: 0.72 }
   };
 
   if (isSameMonths) {
     return (
       <Box onClick={onOpenPicker} sx={{ ...style, ...sx }}>
         {isSameDays
-          ? format(new Date(endTime), 'dd MMM')
-          : `${format(new Date(startTime), 'dd')} - ${format(new Date(endTime), 'dd MMM')}`}
+          ? format(new Date(endTime), "dd MMM")
+          : `${format(new Date(startTime), "dd")} - ${format(new Date(endTime), "dd MMM")}`}
       </Box>
     );
   }
   return (
     <Box onClick={onOpenPicker} sx={{ ...style, ...sx }}>
-      {format(new Date(startTime), 'dd MMM')} - {format(new Date(endTime), 'dd MMM')}
+      {format(new Date(startTime), "dd MMM")} - {format(new Date(endTime), "dd MMM")}
     </Box>
   );
 }

@@ -1,20 +1,23 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from "react";
 // @mui
-import { OutlinedInput, Paper, Button, ClickAwayListener } from '@mui/material';
+import { OutlinedInput, Paper, Button, ClickAwayListener } from "@mui/material";
 // redux
-import { useDispatch } from '../../../redux/store';
-import { createColumn } from '../../../redux/slices/kanban';
+import { useDispatch } from "../../../redux/store";
+import { createColumn } from "../../../redux/slices/kanban";
 // components
-import Iconify from '../../../components/Iconify';
+import Iconify from "../../../components/Iconify";
+import { createKanbanList } from "../../../redux/actions/kanbanActions";
+import { useSnackbar } from "notistack";
 
 // ----------------------------------------------------------------------
 
-export default function KanbanColumnAdd() {
+export default function KanbanColumnAdd({ boardId }) {
   const nameRef = useRef(null);
+  const { enqueueSnackbar } = useSnackbar();
 
   const dispatch = useDispatch();
 
-  const [name, setName] = useState('');
+  const [title, setTitle] = useState("");
 
   const [open, setOpen] = useState(false);
 
@@ -34,15 +37,24 @@ export default function KanbanColumnAdd() {
     setOpen(false);
   };
 
-  const handleChangeName = (event) => {
-    setName(event.target.value);
+  const handleChangeName = event => {
+    setTitle(event.target.value);
   };
 
   const handleCreateColumn = async () => {
     try {
-      if (name) {
-        dispatch(createColumn({ name }));
-        setName('');
+      if (title) {
+        dispatch(
+          createKanbanList(
+            boardId,
+            {
+              title: title
+            },
+            enqueueSnackbar
+          )
+        );
+        // dispatch(createColumn({ title }));
+        setTitle("");
       }
       handleClose();
     } catch (error) {
@@ -50,8 +62,8 @@ export default function KanbanColumnAdd() {
     }
   };
 
-  const handleKeyUp = (event) => {
-    if (event.key === 'Enter') {
+  const handleKeyUp = event => {
+    if (event.key === "Enter") {
       handleCreateColumn();
     }
   };
@@ -61,10 +73,10 @@ export default function KanbanColumnAdd() {
       {!open && (
         <Button
           fullWidth
-          size="large"
-          color="inherit"
-          variant="outlined"
-          startIcon={<Iconify icon={'eva:plus-fill'} width={20} height={20} />}
+          size='large'
+          color='inherit'
+          variant='outlined'
+          startIcon={<Iconify icon={"eva:plus-fill"} width={20} height={20} />}
           onClick={handleOpen}
         >
           Add section
@@ -75,12 +87,12 @@ export default function KanbanColumnAdd() {
         <ClickAwayListener onClickAway={handleCreateColumn}>
           <OutlinedInput
             fullWidth
-            placeholder="New section"
+            placeholder='New section'
             inputRef={nameRef}
-            value={name}
+            value={title}
             onChange={handleChangeName}
             onKeyUp={handleKeyUp}
-            sx={{ typography: 'h6' }}
+            sx={{ typography: "h6" }}
           />
         </ClickAwayListener>
       )}
