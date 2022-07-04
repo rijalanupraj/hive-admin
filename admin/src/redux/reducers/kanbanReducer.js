@@ -84,10 +84,68 @@ export default function KanbanReducer(state = initialState, { type, payload }) {
         isLoading: false,
         boardList: state.boardList.map(list => {
           if (list._id === payload.list._id) {
-            return payload.list;
+            return {
+              ...list,
+              title: payload.list.title
+            };
           }
           return list;
         })
+      };
+
+    case TYPES.DELETE_KANBAN_BOARD_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        boards: state.boards.filter(board => board._id !== payload.boardId),
+        error: null
+      };
+
+    case TYPES.MOVE_KANBAN_LIST_SUCCESS:
+      const { boardId, listId } = payload.data;
+      console.log(payload.data);
+      const toIndex = payload.data.toIndex ? payload.data.toIndex : 0;
+
+      let newBoardList = [...state.boardList];
+
+      const list = newBoardList.find(list => list._id === listId);
+      const listIndex = newBoardList.findIndex(list => list._id === listId);
+
+      newBoardList.splice(listIndex, 1);
+      newBoardList.splice(toIndex, 0, list);
+
+      return {
+        ...state,
+        isLoading: false,
+        boardList: [...newBoardList]
+      };
+
+    case TYPES.MOVE_KANBAN_CARD_SUCCESS:
+      const { fromId, toId, toIndexes } = payload.data;
+      const cardId = payload.cardId;
+      let newList = [...state.boardList];
+
+      const fromList = newList.find(list => list._id === fromId);
+      const fromListIndex = newList.findIndex(list => list._id === fromId);
+
+      const toList = newList.find(list => list._id === toId);
+      const toListIndex = newList.findIndex(list => list._id === toId);
+
+      const card = fromList.cards.find(card => card._id === cardId);
+
+      fromList.cards.splice(
+        fromList.cards.findIndex(card => card._id === cardId),
+        1
+      );
+      toList.cards.splice(toIndexes, 0, card);
+
+      newList[fromListIndex] = fromList;
+      newList[toListIndex] = toList;
+
+      return {
+        ...state,
+        isLoading: false,
+        boardList: [...newList]
       };
 
     case TYPES.DELETE_KANBAN_LIST_SUCCESS:

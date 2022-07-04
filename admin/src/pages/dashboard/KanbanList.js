@@ -31,7 +31,8 @@ import { KanbanListHead } from "../../sections/@dashboard/kanbanList";
 import {
   getAllKanbanBoards,
   createKanbanBoard,
-  editKanbanBoard
+  editKanbanBoard,
+  deleteKanbanBoard
 } from "../../redux/actions/kanbanActions";
 
 const TABLE_HEAD = [{ id: "name", label: "Name", alignRight: false }];
@@ -44,6 +45,7 @@ function KanbanList() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const kanban = useSelector(state => state.kanban);
   const [boardsList, setBoardsList] = useState([]);
+  const enqueueSnackbar = useSnackbar();
 
   useEffect(() => {
     dispatch(getAllKanbanBoards());
@@ -64,6 +66,11 @@ function KanbanList() {
     }
     setDialogOpen(true);
   };
+
+  const handleDeleteBoard = board => {
+    dispatch(deleteKanbanBoard(board._id, enqueueSnackbar));
+  };
+
   return (
     <Page title='Kanban' sx={{ height: 1 }}>
       <BoardPopUpDialog
@@ -105,6 +112,9 @@ function KanbanList() {
                     board={board}
                     onEdit={() => {
                       handleCreateEditBoard(true, board);
+                    }}
+                    onDelete={() => {
+                      handleDeleteBoard(board);
                     }}
                   />
                   {boardsList.length - 1 !== index && <br />}

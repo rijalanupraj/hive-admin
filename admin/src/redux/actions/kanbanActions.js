@@ -176,6 +176,60 @@ export const updateKanbanList = (listId, data, enqueueSnackbar) => async (dispat
   }
 };
 
+export const moveKanbanList = (data, enqueueSnackbar) => async (dispatch, getState) => {
+  dispatch({ type: TYPES.MOVE_KANBAN_LIST_LOADING });
+
+  try {
+    const options = attachTokenToHeaders(getState);
+
+    const response = await axios.patch(`${API_URL}/admin/kanban/list/move`, data, options);
+
+    dispatch({
+      type: TYPES.MOVE_KANBAN_LIST_SUCCESS,
+      payload: { board: response.data.board, data }
+    });
+  } catch (err) {
+    dispatch({
+      type: TYPES.MOVE_KANBAN_LIST_FAIL,
+      payload: { error: err?.response?.data?.message || "Something went wrong" }
+    });
+    enqueueSnackbar(err?.response?.data?.message || "Something went wrong", { variant: "error" });
+  }
+};
+
+export const moveKanbanCard = (cardId, data, enqueueSnackbar) => async (dispatch, getState) => {
+  dispatch({ type: TYPES.MOVE_KANBAN_CARD_LOADING });
+
+  try {
+    const options = attachTokenToHeaders(getState);
+
+    const response = await axios.patch(
+      `${API_URL}/admin/kanban/card/move/${cardId}`,
+      data,
+      options
+    );
+
+    dispatch({
+      type: TYPES.MOVE_KANBAN_CARD_SUCCESS,
+      payload: {
+        fromList: response.data.fromList,
+        toList: response.data.toList,
+        data: data,
+        cardId: cardId
+      }
+    });
+  } catch (err) {
+    console.log(err);
+    dispatch({
+      type: TYPES.MOVE_KANBAN_CARD_FAIL,
+      payload: { error: err?.response?.data?.message || "Something went wrong" }
+    });
+    // if (enqueueSnackbar) {
+    //   enqueueSnackbar(err?.response?.data?.message || "Something went wrong", { variant: "error" });
+    // }
+  }
+};
+
 export const deleteKanbanList =
   (boardId, listId, enqueueSnackbar) => async (dispatch, getState) => {
     dispatch({ type: TYPES.DELETE_KANBAN_LIST_LOADING });
