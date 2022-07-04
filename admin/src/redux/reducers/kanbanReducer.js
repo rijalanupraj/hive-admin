@@ -121,26 +121,40 @@ export default function KanbanReducer(state = initialState, { type, payload }) {
       };
 
     case TYPES.MOVE_KANBAN_CARD_SUCCESS:
-      const { fromId, toId, toIndexes } = payload.data;
+      const { fromId, toId } = payload.data;
+      const toIndexes = payload.data.toIndex ? payload.data.toIndex : 0;
       const cardId = payload.cardId;
       let newList = [...state.boardList];
 
-      const fromList = newList.find(list => list._id === fromId);
-      const fromListIndex = newList.findIndex(list => list._id === fromId);
+      if (fromId === toId) {
+        const list = newList.find(list => list._id === fromId);
+        const listIndex = newList.findIndex(list => list._id === fromId);
 
-      const toList = newList.find(list => list._id === toId);
-      const toListIndex = newList.findIndex(list => list._id === toId);
+        const card = list.cards.find(card => card._id === cardId);
+        const cardIndex = list.cards.findIndex(card => card._id === cardId);
 
-      const card = fromList.cards.find(card => card._id === cardId);
+        list.cards.splice(cardIndex, 1);
+        list.cards.splice(toIndexes.toIndex, 0, card);
 
-      fromList.cards.splice(
-        fromList.cards.findIndex(card => card._id === cardId),
-        1
-      );
-      toList.cards.splice(toIndexes, 0, card);
+        newList[listIndex] = list;
+      } else {
+        const fromList = newList.find(list => list._id === fromId);
+        const fromListIndex = newList.findIndex(list => list._id === fromId);
 
-      newList[fromListIndex] = fromList;
-      newList[toListIndex] = toList;
+        const toList = newList.find(list => list._id === toId);
+        const toListIndex = newList.findIndex(list => list._id === toId);
+
+        const card = fromList.cards.find(card => card._id === cardId);
+
+        fromList.cards.splice(
+          fromList.cards.findIndex(card => card._id === cardId),
+          1
+        );
+        toList.cards.splice(toIndexes, 0, card);
+
+        newList[fromListIndex] = fromList;
+        newList[toListIndex] = toList;
+      }
 
       return {
         ...state,

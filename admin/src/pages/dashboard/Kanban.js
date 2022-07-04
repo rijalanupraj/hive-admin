@@ -50,6 +50,7 @@ export default function Kanban() {
   const onDragEnd = result => {
     // Reorder card
     const { destination, source, draggableId, type } = result;
+    console.log(result);
 
     if (!destination) return;
 
