@@ -146,6 +146,15 @@ export default function Router() {
           ]
         },
 
+        //badge
+        {
+          path: "badge",
+          children: [
+            { element: <Navigate to='/dashboard/badge/list' replace />, index: true },
+            { path: "list", element: <BadgeList /> }
+          ]
+        },
+
         //reportsolution
         {
           path: "reportsolution",
@@ -232,6 +241,7 @@ const QuestionList = Loadable(lazy(() => import("../pages/dashboard/QuestionList
 const SolutionList = Loadable(lazy(() => import("../pages/dashboard/SolutionList")));
 
 const CommentList = Loadable(lazy(() => import("../pages/dashboard/CommentList")));
+const BadgeList =  Loadable(lazy(() => import("../pages/dashboard/BadgeList")));
 
 const ReportSolutionList = Loadable(lazy(() => import("../pages/dashboard/ReportSolutionList")));
 
