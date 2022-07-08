@@ -1,17 +1,17 @@
-import merge from 'lodash/merge';
-import ReactApexChart from 'react-apexcharts';
+import merge from 'lodash/merge'
+import ReactApexChart from 'react-apexcharts'
 // @mui
-import { useTheme, styled } from '@mui/material/styles';
-import { Card, CardHeader } from '@mui/material';
+import { useTheme, styled } from '@mui/material/styles'
+import { Card, CardHeader } from '@mui/material'
 // utils
-import { fNumber } from '../../../../utils/formatNumber';
+import { fNumber } from '../../../../utils/formatNumber'
 //
-import { BaseOptionChart } from '../../../../components/chart';
+import { BaseOptionChart } from '../../../../components/chart'
 
 // ----------------------------------------------------------------------
 
-const CHART_HEIGHT = 392;
-const LEGEND_HEIGHT = 72;
+const CHART_HEIGHT = 392
+const LEGEND_HEIGHT = 72
 
 const ChartWrapperStyle = styled('div')(({ theme }) => ({
   height: CHART_HEIGHT,
@@ -27,14 +27,14 @@ const ChartWrapperStyle = styled('div')(({ theme }) => ({
     borderTop: `solid 1px ${theme.palette.divider}`,
     top: `calc(${CHART_HEIGHT - LEGEND_HEIGHT}px) !important`,
   },
-}));
+}))
 
 // ----------------------------------------------------------------------
 
-const CHART_DATA = [25, 75];
+export default function QuestionSummary({ stats }) {
+  const theme = useTheme()
 
-export default function QuestionSummary() {
-  const theme = useTheme();
+  const CHART_DATA = [(stats.totalUnansweredQuestions / stats.totalSolutions) * 100, ((stats.totalSolutions - stats.totalUnansweredQuestions) / stats.totalSolutions) * 100]
 
   const chartOptions = merge(BaseOptionChart(), {
     labels: ['Unanswered Question', 'Answered Question'],
@@ -72,19 +72,19 @@ export default function QuestionSummary() {
         dataLabels: {
           value: { offsetY: 16 },
           total: {
-            formatter: () => fNumber(2324),
+            formatter: () => fNumber(stats.totalSolutions),
           },
         },
       },
     },
-  });
+  })
 
   return (
     <Card>
-      <CardHeader title="Questions" />
-      <ChartWrapperStyle dir="ltr">
-        <ReactApexChart type="radialBar" series={CHART_DATA} options={chartOptions} height={310} />
+      <CardHeader title='Questions' />
+      <ChartWrapperStyle dir='ltr'>
+        <ReactApexChart type='radialBar' series={CHART_DATA} options={chartOptions} height={310} />
       </ChartWrapperStyle>
     </Card>
-  );
+  )
 }
