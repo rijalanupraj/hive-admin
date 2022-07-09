@@ -15,6 +15,7 @@ import CategoryReducer from './reducers/categoryReducer'
 import CommentReducer from './reducers/commentReducer'
 import KanbanReducer from './reducers/kanbanReducer'
 import DashboardReducer from './reducers/dashboardReducer'
+import BadgeReducer from './reducers/badgeReducer'
 
 // ----------------------------------------------------------------------
 
@@ -45,6 +46,7 @@ const rootReducer = combineReducers({
   comment: CommentReducer,
   kanban: KanbanReducer,
   dashboard: DashboardReducer,
+  badge: BadgeReducer,
 })
 
 export { rootPersistConfig, rootReducer }
