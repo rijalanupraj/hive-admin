@@ -8,6 +8,8 @@ import { Box, Divider, Typography, Stack, MenuItem, FormGroup, FormControlLabel,
 import { PATH_DASHBOARD } from "../../../routes/paths";
 // hooks
 
+import { useSelector } from "react-redux";
+
 import useIsMountedRef from "../../../hooks/useIsMountedRef";
 // components
 import MyAvatar from "../../../components/MyAvatar";
@@ -87,6 +89,8 @@ export default function AccountPopover() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const auth = useSelector(state => state.auth);
+
   const isMountedRef = useIsMountedRef();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -154,10 +158,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {/* {user?.displayName} */} Mamba
+            Admin
           </Typography>
           <Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
-            {/* {user?.email} */} mamba@gmail.com
+            {auth?.me?.email}
           </Typography>
         </Box>
 

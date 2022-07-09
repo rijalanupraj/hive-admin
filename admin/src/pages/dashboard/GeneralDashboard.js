@@ -60,13 +60,7 @@ export default function GeneralDashboard() {
             <UserWidgetSummary title='User Report' total={5} icon={<Iconify icon={'ic:outline-bug-report'} color='#1877F2' width={50} height={115} ml={4} />} />
           </Grid>
 
-          <Grid item xs={12} md={6} lg={4}>
-            <QuestionSummary stats={stats} />
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={8}>
-            <WebsiteVisit />
-          </Grid>
+          
         </Grid>
       </Container>
     </Page>
