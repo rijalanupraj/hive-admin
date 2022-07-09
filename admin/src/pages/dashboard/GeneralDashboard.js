@@ -57,10 +57,8 @@ export default function GeneralDashboard() {
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <UserWidgetSummary title='User Report' total={5} icon={<Iconify icon={'ic:outline-bug-report'} color='#1877F2' width={50} height={115} ml={4} />} />
+            <UserWidgetSummary title='Draft Solutions' total={stats?.totalDraftSolutions} icon={<Iconify icon='fluent:drafts-16-filled' color='#1877F2' width={50} height={115} ml={4} />} />
           </Grid>
-
-          
         </Grid>
       </Container>
     </Page>
