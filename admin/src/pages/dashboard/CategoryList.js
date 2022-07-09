@@ -183,7 +183,7 @@ export default function CategoryList() {
       />
       <Container maxWidth={themeStretch ? false : "lg"}>
         <HeaderBreadcrumbs
-          heading='Question List'
+          heading='Category List'
           links={[
             { name: "Dashboard", href: "/" },
             { name: "Category", href: "/" },

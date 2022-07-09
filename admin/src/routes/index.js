@@ -11,6 +11,7 @@ import DashboardLayout from "../layouts/dashboard";
 // components
 import LoadingScreen from "../components/LoadingScreen";
 import { loadMe } from "../redux/actions/authActions";
+import KanbanList from "../pages/dashboard/KanbanList";
 
 // ----------------------------------------------------------------------
 
@@ -145,6 +146,15 @@ export default function Router() {
           ]
         },
 
+        //badge
+        {
+          path: "badge",
+          children: [
+            { element: <Navigate to='/dashboard/badge/list' replace />, index: true },
+            { path: "list", element: <BadgeList /> }
+          ]
+        },
+
         //reportsolution
         {
           path: "reportsolution",
@@ -179,11 +189,9 @@ export default function Router() {
             },
             { path: "reportuserlist", element: <ReportUserList /> },
             { path: "warnuserlist", element: <WarnUserList /> },
-            { path: "ticketuserlist", element: <TicketUser /> },
+            { path: "ticketuserlist", element: <TicketUser /> }
           ]
         },
-
-
 
         {
           path: "chat",
@@ -194,7 +202,8 @@ export default function Router() {
           ]
         },
         { path: "calendar", element: <Calendar /> },
-        { path: "kanban", element: <Kanban /> }
+        { path: "kanban", element: <KanbanList /> },
+        { path: "kanban/:id", element: <Kanban /> }
       ]
     }
   ]);
@@ -232,6 +241,7 @@ const QuestionList = Loadable(lazy(() => import("../pages/dashboard/QuestionList
 const SolutionList = Loadable(lazy(() => import("../pages/dashboard/SolutionList")));
 
 const CommentList = Loadable(lazy(() => import("../pages/dashboard/CommentList")));
+const BadgeList =  Loadable(lazy(() => import("../pages/dashboard/BadgeList")));
 
 const ReportSolutionList = Loadable(lazy(() => import("../pages/dashboard/ReportSolutionList")));
 

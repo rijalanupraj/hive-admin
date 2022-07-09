@@ -61,6 +61,11 @@ export const PATH_DASHBOARD = {
     list: path(ROOTS_DASHBOARD, "/comment/list"),
   },
 
+  badge:{
+    root: path(ROOTS_DASHBOARD, "/badge"),
+    list: path(ROOTS_DASHBOARD, "/badge/list"),
+  },
+
   adminuser: {
     root: path(ROOTS_DASHBOARD, "/adminuser"),
     list: path(ROOTS_DASHBOARD, "/adminuser/list"),
